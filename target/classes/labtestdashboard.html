@@ -1,0 +1,1604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediLab Pro - Laboratory Management System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="shortcut icon" href="LOGO.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2c6bac;
+            --primary-light: #5a8ec9;
+            --primary-dark: #1a4f82;
+            --secondary: #6c757d;
+            --success: #28a745;
+            --info: #17a2b8;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --sidebar-width: 250px;
+            --header-height: 70px;
+        }
+        
+        body {
+            background-color: #f5f7f9;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+            color: #495057;
+        }
+        
+        /* Header */
+        .dashboard-header {
+            background: linear-gradient(to right, var(--primary), var(--primary-light));
+            color: white;
+            height: var(--header-height);
+            position: fixed;
+            top: 0;
+            left: var(--sidebar-width);
+            right: 0;
+            z-index: 900;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 0 20px;
+            transition: left 0.3s;
+        }
+        
+        /* Sidebar */
+        .dashboard-sidebar {
+            background: linear-gradient(to bottom, var(--primary-dark), var(--primary));
+            color: white;
+            min-height: 100vh;
+            width: var(--sidebar-width);
+            position: fixed;
+            top: 0;
+            padding: 0;
+            box-shadow: 3px 0 15px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            transition: width 0.3s;
+        }
+        
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            height: var(--header-height);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .nav-link {
+            color: rgba(255, 255, 255, 0.85);
+            padding: 14px 20px;
+            border-left: 4px solid transparent;
+            transition: all 0.3s;
+            margin: 4px 10px;
+            border-radius: 8px;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-left-color: #ffc107;
+        }
+        
+        .nav-link i {
+            width: 24px;
+            text-align: center;
+            margin-right: 12px;
+        }
+        
+        /* Main Content */
+        .dashboard-content {
+            margin-left: var(--sidebar-width);
+            margin-top: var(--header-height);
+            padding: 25px;
+            width: calc(100% - var(--sidebar-width));
+            transition: margin-left 0.3s;
+        }
+        
+        /* Cards */
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 7px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            margin-bottom: 24px;
+            overflow: hidden;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .stats-card {
+            text-align: center;
+            padding: 25px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stats-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary-light), var(--primary));
+        }
+        
+        .stats-number {
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+        
+        .stats-label {
+            color: var(--secondary);
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+        
+        /* Test Cards */
+        .test-card {
+            height: 100%;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .test-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+        }
+        
+        /* Table Styles */
+        .table th {
+            border-top: none;
+            font-weight: 600;
+            color: var(--secondary);
+            background-color: #f8f9fa;
+            padding: 12px 15px;
+        }
+        
+        .table td {
+            padding: 12px 15px;
+            vertical-align: middle;
+        }
+        
+        /* Status Badges */
+        .status-badge {
+            padding: 7px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        
+        .status-pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-completed {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .status-processing {
+            background-color: #cce5ff;
+            color: #004085;
+        }
+        
+        .status-cancelled {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        
+        /* Buttons */
+        .btn-primary {
+            background: linear-gradient(to right, var(--primary), var(--primary-light));
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(44, 107, 172, 0.4);
+        }
+        
+        .btn-success {
+            background: linear-gradient(to right, #28a745, #35ce5f);
+            border: none;
+            border-radius: 6px;
+            padding: 6px 14px;
+            font-weight: 500;
+        }
+        
+        .btn-danger {
+            background: linear-gradient(to right, #dc3545, #e9717d);
+            border: none;
+            border-radius: 6px;
+            padding: 6px 14px;
+            font-weight: 500;
+        }
+        
+        .btn-outline-primary {
+            border-radius: 6px;
+            padding: 6px 14px;
+            font-weight: 500;
+        }
+        
+        /* Tabs */
+        .nav-tabs {
+            border-bottom: 2px solid #e9ecef;
+        }
+        
+        .nav-tabs .nav-link {
+            color: var(--secondary);
+            font-weight: 500;
+            border: none;
+            padding: 12px 24px;
+            margin: 0;
+            border-radius: 0;
+            background: transparent;
+        }
+        
+        .nav-tabs .nav-link.active {
+            color: var(--primary);
+            border-bottom: 3px solid var(--primary);
+            background: transparent;
+        }
+        
+        /* Search Box */
+        .search-box {
+            position: relative;
+        }
+        
+        .search-box .form-control {
+            padding-left: 45px;
+            border-radius: 8px;
+            border: 1px solid #e1e5eb;
+            height: 45px;
+        }
+        
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 13px;
+            color: var(--secondary);
+        }
+        
+        /* Action buttons */
+        .action-buttons .btn {
+            margin-left: 5px;
+        }
+        
+        /* Modal Styles */
+        .modal-content {
+            border-radius: 12px;
+            border: none;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .modal-header {
+            background: linear-gradient(to right, var(--primary), var(--primary-light));
+            color: white;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+        }
+        
+        /* Forms */
+        .form-label {
+            font-weight: 500;
+            color: var(--secondary);
+            margin-bottom: 8px;
+        }
+        
+        .form-control, .form-select {
+            border-radius: 8px;
+            padding: 10px 15px;
+            border: 1px solid #e1e5eb;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            box-shadow: 0 0 0 3px rgba(44, 107, 172, 0.2);
+            border-color: var(--primary-light);
+        }
+        
+        /* Loading Spinner */
+        .spinner-border-sm {
+            width: 1rem;
+            height: 1rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 992px) {
+            .dashboard-sidebar {
+                width: 70px;
+            }
+            
+            .sidebar-header h4 {
+                display: none;
+            }
+            
+            .nav-link span {
+                display: none;
+            }
+            
+            .nav-link i {
+                margin-right: 0;
+                font-size: 1.3rem;
+            }
+            
+            .dashboard-header {
+                left: 70px;
+            }
+            
+            .dashboard-content {
+                margin-left: 70px;
+                width: calc(100% - 70px);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard-sidebar {
+                width: 100%;
+                height: auto;
+                min-height: auto;
+                position: relative;
+            }
+            
+            .sidebar-header {
+                padding: 15px;
+            }
+            
+            .nav {
+                flex-direction: row;
+                overflow-x: auto;
+            }
+            
+            .nav-link {
+                padding: 12px 16px;
+                border-left: none;
+                border-bottom: 3px solid transparent;
+                margin: 2px 5px;
+            }
+            
+            .nav-link.active {
+                border-left: none;
+                border-bottom: 3px solid #ffc107;
+            }
+            
+            .dashboard-header {
+                left: 0;
+                position: relative;
+            }
+            
+            .dashboard-content {
+                margin-left: 0;
+                width: 100%;
+                margin-top: 0;
+            }
+        }
+        
+        /* Animation for alerts */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .alert-animate {
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        /* Custom checkbox */
+        .form-check-input:checked {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+        
+        /* Hover effects */
+        .table-hover tbody tr {
+            transition: all 0.2s;
+        }
+        
+        .table-hover tbody tr:hover {
+            background-color: rgba(44, 107, 172, 0.05);
+            transform: scale(1.01);
+        }
+        
+        /* Loading overlay */
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            border-radius: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-sidebar">
+        <div class="sidebar-header">
+            <h4><i class="fas fa-flask me-2"></i> MediLab Pro</h4>
+        </div>
+        <ul class="nav flex-column mt-4">
+            <li class="nav-item">
+                <a class="nav-link active" href="#"><i class="fas fa-home"></i> <span>Dashboard</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#"><i class="fas fa-vial"></i> <span>Test Catalog</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#"><i class="fas fa-clipboard-list"></i> <span>Test Orders</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#"><i class="fas fa-file-medical"></i> <span>Reports</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#"><i class="fas fa-user-injured"></i> <span>Patients</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#"><i class="fas fa-user-md"></i> <span>Doctors</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#"><i class="fas fa-chart-bar"></i> <span>Analytics</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#"><i class="fas fa-cog"></i> <span>Settings</span></a>
+            </li>
+            <li class="nav-item mt-4">
+                <a class="nav-link" href="#"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a>
+            </li>
+        </ul>
+    </div>
+    
+    <div class="dashboard-header d-flex justify-content-between align-items-center">
+        <div>
+            <h4 class="mb-0">Laboratory Management System</h4>
+        </div>
+        <div class="d-flex align-items-center">
+            <div class="search-box me-3">
+                <i class="fas fa-search"></i>
+                <input type="text" class="form-control" placeholder="Search tests, patients..." id="globalSearch">
+            </div>
+            <div class="dropdown">
+                <button class="btn btn-light dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown">
+                    <i class="fas fa-user-circle me-2"></i> Dr. Technician
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i> Profile</a></li>
+                    <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i> Settings</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt me-2"></i> Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <div class="dashboard-content">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="mb-1">Laboratory Dashboard</h2>
+                <p class="text-muted">Manage lab tests, results, and patient reports</p>
+            </div>
+            <div class="d-flex">
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addTestBookingModal">
+                    <i class="fas fa-plus me-2"></i> New Test
+                </button>
+            </div>
+        </div>
+        
+        <!-- Stats Cards -->
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card stats-card">
+                    <div class="stats-number" id="testsToday">0</div>
+                    <div class="stats-label">Tests Today</div>
+                    <div class="text-success small mt-2">
+                        <i class="fas fa-arrow-up"></i> <span id="testsChange">0%</span> from yesterday
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stats-card">
+                    <div class="stats-number" id="pendingResults">0</div>
+                    <div class="stats-label">Pending Results</div>
+                    <div class="text-warning small mt-2">
+                        <i class="fas fa-clock"></i> <span id="urgentCount">0</span> urgent
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stats-card">
+                    <div class="stats-number" id="completedToday">0</div>
+                    <div class="stats-label">Completed Today</div>
+                    <div class="text-success small mt-2">
+                        <i class="fas fa-check-circle"></i> <span id="onTimeRate">0%</span> on time
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stats-card">
+                    <div class="stats-number" id="criticalResults">0</div>
+                    <div class="stats-label">Critical Results</div>
+                    <div class="text-danger small mt-2">
+                        <i class="fas fa-exclamation-triangle"></i> Needs attention
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tabs -->
+        <ul class="nav nav-tabs mb-4 mt-4" id="labTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="pending-tab" data-bs-toggle="tab" data-bs-target="#pending" type="button" role="tab">
+                    <i class="fas fa-clock me-2"></i> Pending Tests
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="completed-tab" data-bs-toggle="tab" data-bs-target="#completed" type="button" role="tab">
+                    <i class="fas fa-check-circle me-2"></i> Completed Tests
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="all-tab" data-bs-toggle="tab" data-bs-target="#all" type="button" role="tab">
+                    <i class="fas fa-list me-2"></i> All Tests
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="critical-tab" data-bs-toggle="tab" data-bs-target="#critical" type="button" role="tab">
+                    <i class="fas fa-exclamation-triangle me-2"></i> Critical Results
+                </button>
+            </li>
+        </ul>
+        
+        <!-- Tab Content -->
+        <div class="tab-content" id="labTabsContent">
+            <!-- Pending Tests Tab -->
+            <div class="tab-pane fade show active" id="pending" role="tabpanel">
+                <div class="card">
+                    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0"><i class="fas fa-clock text-warning me-2"></i> Pending Laboratory Tests</h5>
+                        <div class="d-flex">
+                            <select class="form-select form-select-sm me-2" id="departmentFilter">
+                                <option value="">All Departments</option>
+                                <option value="Hematology">Hematology</option>
+                                <option value="Biochemistry">Biochemistry</option>
+                                <option value="Microbiology">Microbiology</option>
+                                <option value="Immunology">Immunology</option>
+                            </select>
+                            <button class="btn btn-sm btn-outline-secondary" id="applyFilterBtn">
+                                <i class="fas fa-filter"></i> Filter
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body position-relative">
+                        <div class="loading-overlay" id="pendingLoading">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="selectAll">
+                                            </div>
+                                        </th>
+                                        <th>Test ID</th>
+                                        <th>Patient</th>
+                                        <th>Test Name</th>
+                                        <th>Ordered By</th>
+                                        <th>Order Date</th>
+                                        <th>Priority</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="pendingTestsTable">
+                                    <!-- Data will be populated by JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            <div>
+                                <button class="btn btn-sm btn-outline-success me-2" id="completeSelectedBtn">
+                                    <i class="fas fa-check-double me-1"></i> Complete Selected
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger" id="cancelSelectedBtn">
+                                    <i class="fas fa-times-circle me-1"></i> Cancel Selected
+                                </button>
+                            </div>
+                            <nav aria-label="Page navigation">
+                                <ul class="pagination justify-content-center mb-0">
+                                    <li class="page-item disabled">
+                                        <a class="page-link" href="#">Previous</a>
+                                    </li>
+                                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#">Next</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Completed Tests Tab -->
+            <div class="tab-pane fade" id="completed" role="tabpanel">
+                <div class="card">
+                    <div class="card-header bg-white">
+                        <h5 class="mb-0"><i class="fas fa-check-circle text-success me-2"></i> Completed Tests</h5>
+                    </div>
+                    <div class="card-body position-relative">
+                        <div class="loading-overlay" id="completedLoading">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Test ID</th>
+                                        <th>Patient</th>
+                                        <th>Test Name</th>
+                                        <th>Ordered By</th>
+                                        <th>Order Date</th>
+                                        <th>Completed Date</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="completedTestsTable">
+                                    <!-- Data will be populated by JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- All Tests Tab -->
+            <div class="tab-pane fade" id="all" role="tabpanel">
+                <div class="card">
+                    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0"><i class="fas fa-list text-primary me-2"></i> All Laboratory Tests</h5>
+                        <div class="d-flex">
+                            <input type="text" class="form-control form-control-sm me-2" placeholder="Search..." id="allTestsSearch">
+                            <button class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body position-relative">
+                        <div class="loading-overlay" id="allTestsLoading">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Test ID</th>
+                                        <th>Patient</th>
+                                        <th>Test Name</th>
+                                        <th>Ordered By</th>
+                                        <th>Order Date</th>
+                                        <th>Priority</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="allTestsTable">
+                                    <!-- Data will be populated by JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Critical Results Tab -->
+            <div class="tab-pane fade" id="critical" role="tabpanel">
+                <div class="card">
+                    <div class="card-header bg-white">
+                        <h5 class="mb-0"><i class="fas fa-exclamation-triangle text-danger me-2"></i> Critical Results</h5>
+                    </div>
+                    <div class="card-body position-relative">
+                        <div class="loading-overlay" id="criticalLoading">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Test ID</th>
+                                        <th>Patient</th>
+                                        <th>Test Name</th>
+                                        <th>Ordered By</th>
+                                        <th>Order Date</th>
+                                        <th>Priority</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="criticalTestsTable">
+                                    <!-- Data will be populated by JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Recent Activities -->
+        <div class="row mt-4">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header bg-white">
+                        <h5 class="mb-0">Test Statistics</h5>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="testStatsChart" height="250"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header bg-white">
+                        <h5 class="mb-0">Department Distribution</h5>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="departmentChart" height="250"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Test Booking Modal -->
+    <div class="modal fade" id="addTestBookingModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add New Test Booking</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="testBookingForm">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="patientName" class="form-label">Patient Name</label>
+                                <input type="text" class="form-control" id="patientName" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="doctorName" class="form-label">Doctor Name</label>
+                                <input type="text" class="form-control" id="doctorName" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="testDate" class="form-label">Test Date</label>
+                                <input type="date" class="form-control" id="testDate" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="testTime" class="form-label">Test Time</label>
+                                <input type="time" class="form-control" id="testTime" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="priority" class="form-label">Priority</label>
+                                <select class="form-select" id="priority" required>
+                                    <option value="">Select Priority</option>
+                                    <option value="STAT">STAT</option>
+                                    <option value="High">High</option>
+                                    <option value="Routine">Routine</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="status" class="form-label">Status</label>
+                                <select class="form-select" id="status" required>
+                                    <option value="">Select Status</option>
+                                    <option value="Pending">Pending</option>
+                                    <option value="Processing">Processing</option>
+                                    <option value="Completed">Completed</option>
+                                    <option value="Cancelled">Cancelled</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="testType" class="form-label">Test Type</label>
+                            <input type="text" class="form-control" id="testType" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="notes" class="form-label">Notes</label>
+                            <textarea class="form-control" id="notes" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="saveTestBookingBtn">Save Test Booking</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Test Booking Modal -->
+    <div class="modal fade" id="editTestBookingModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Test Booking</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editTestBookingForm">
+                        <input type="hidden" id="editId">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="editPatientName" class="form-label">Patient Name</label>
+                                <input type="text" class="form-control" id="editPatientName" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="editDoctorName" class="form-label">Doctor Name</label>
+                                <input type="text" class="form-control" id="editDoctorName" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="editTestDate" class="form-label">Test Date</label>
+                                <input type="date" class="form-control" id="editTestDate" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="editTestTime" class="form-label">Test Time</label>
+                                <input type="time" class="form-control" id="editTestTime" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="editPriority" class="form-label">Priority</label>
+                                <select class="form-select" id="editPriority" required>
+                                    <option value="">Select Priority</option>
+                                    <option value="STAT">STAT</option>
+                                    <option value="High">High</option>
+                                    <option value="Routine">Routine</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="editStatus" class="form-label">Status</label>
+                                <select class="form-select" id="editStatus" required>
+                                    <option value="">Select Status</option>
+                                    <option value="Pending">Pending</option>
+                                    <option value="Processing">Processing</option>
+                                    <option value="Completed">Completed</option>
+                                    <option value="Cancelled">Cancelled</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editTestType" class="form-label">Test Type</label>
+                            <input type="text" class="form-control" id="editTestType" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editNotes" class="form-label">Notes</label>
+                            <textarea class="form-control" id="editNotes" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="updateTestBookingBtn">Update Test Booking</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap & Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <script>
+        // API Base URL
+        const API_BASE_URL = 'http://localhost:8080/api/test-bookings';
+        
+        // Global variables
+        let allTestBookings = [];
+        let pendingTestBookings = [];
+        let completedTestBookings = [];
+        let criticalTestBookings = [];
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize the application
+            initApp();
+            
+            // Set up event listeners
+            setupEventListeners();
+        });
+        
+        function initApp() {
+            // Load initial data
+            loadDashboardStats();
+            loadPendingTests();
+            loadCompletedTests();
+            loadAllTests();
+            loadCriticalTests();
+            
+            // Initialize charts
+            initCharts();
+        }
+        
+        function setupEventListeners() {
+            // Tab change events
+            const tabEls = document.querySelectorAll('button[data-bs-toggle="tab"]');
+            tabEls.forEach(tab => {
+                tab.addEventListener('shown.bs.tab', function(event) {
+                    const target = event.target.getAttribute('data-bs-target');
+                    if (target === '#pending') {
+                        loadPendingTests();
+                    } else if (target === '#completed') {
+                        loadCompletedTests();
+                    } else if (target === '#all') {
+                        loadAllTests();
+                    } else if (target === '#critical') {
+                        loadCriticalTests();
+                    }
+                });
+            });
+            
+            // Search functionality
+            document.getElementById('globalSearch').addEventListener('keyup', function(e) {
+                if (e.key === 'Enter') {
+                    searchTestBookings(this.value);
+                }
+            });
+            
+            // Filter button
+            document.getElementById('applyFilterBtn').addEventListener('click', function() {
+                const department = document.getElementById('departmentFilter').value;
+                filterTestsByDepartment(department);
+            });
+            
+            // Select all checkbox
+            document.getElementById('selectAll').addEventListener('change', function() {
+                const checkboxes = document.querySelectorAll('#pendingTestsTable .row-checkbox');
+                checkboxes.forEach(checkbox => {
+                    checkbox.checked = this.checked;
+                });
+            });
+            
+            // Complete selected button
+            document.getElementById('completeSelectedBtn').addEventListener('click', function() {
+                const selectedIds = getSelectedTestIds();
+                if (selectedIds.length > 0) {
+                    updateTestStatuses(selectedIds, 'Completed');
+                } else {
+                    showAlert('Please select at least one test to complete', 'warning');
+                }
+            });
+            
+            // Cancel selected button
+            document.getElementById('cancelSelectedBtn').addEventListener('click', function() {
+                const selectedIds = getSelectedTestIds();
+                if (selectedIds.length > 0) {
+                    updateTestStatuses(selectedIds, 'Cancelled');
+                } else {
+                    showAlert('Please select at least one test to cancel', 'warning');
+                }
+            });
+            
+            // Save test booking button
+            document.getElementById('saveTestBookingBtn').addEventListener('click', function() {
+                createTestBooking();
+            });
+            
+            // Update test booking button
+            document.getElementById('updateTestBookingBtn').addEventListener('click', function() {
+                updateTestBooking();
+            });
+            
+            // Refresh button (if added)
+            const refreshBtn = document.getElementById('refreshBtn');
+            if (refreshBtn) {
+                refreshBtn.addEventListener('click', function() {
+                    initApp();
+                });
+            }
+        }
+        
+        // API Service Functions
+        async function fetchAllTestBookings() {
+            try {
+                showLoading('allTestsLoading');
+                const response = await fetch(API_BASE_URL);
+                if (!response.ok) throw new Error('Failed to fetch test bookings');
+                
+                allTestBookings = await response.json();
+                hideLoading('allTestsLoading');
+                return allTestBookings;
+            } catch (error) {
+                console.error('Error fetching test bookings:', error);
+                hideLoading('allTestsLoading');
+                showAlert('Failed to load test bookings: ' + error.message, 'danger');
+                return [];
+            }
+        }
+        
+        async function fetchTestBookingsByStatus(status) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/status/${status}`);
+                if (!response.ok) throw new Error(`Failed to fetch ${status} tests`);
+                
+                return await response.json();
+            } catch (error) {
+                console.error(`Error fetching ${status} tests:`, error);
+                showAlert(`Failed to load ${status} tests: ` + error.message, 'danger');
+                return [];
+            }
+        }
+        
+        async function createTestBooking() {
+            try {
+                const formData = {
+                    patientName: document.getElementById('patientName').value,
+                    doctorName: document.getElementById('doctorName').value,
+                    testDate: document.getElementById('testDate').value,
+                    testTime: document.getElementById('testTime').value,
+                    priority: document.getElementById('priority').value,
+                    status: document.getElementById('status').value,
+                    testType: document.getElementById('testType').value,
+                    notes: document.getElementById('notes').value
+                };
+                
+                const response = await fetch(API_BASE_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                if (!response.ok) throw new Error('Failed to create test booking');
+                
+                const newBooking = await response.json();
+                
+                // Close modal and reset form
+                bootstrap.Modal.getInstance(document.getElementById('addTestBookingModal')).hide();
+                document.getElementById('testBookingForm').reset();
+                
+                // Refresh data
+                initApp();
+                
+                showAlert('Test booking created successfully!', 'success');
+                
+            } catch (error) {
+                console.error('Error creating test booking:', error);
+                showAlert('Failed to create test booking: ' + error.message, 'danger');
+            }
+        }
+        
+        async function updateTestBooking() {
+            try {
+                const id = document.getElementById('editId').value;
+                const formData = {
+                    patientName: document.getElementById('editPatientName').value,
+                    doctorName: document.getElementById('editDoctorName').value,
+                    testDate: document.getElementById('editTestDate').value,
+                    testTime: document.getElementById('editTestTime').value,
+                    priority: document.getElementById('editPriority').value,
+                    status: document.getElementById('editStatus').value,
+                    testType: document.getElementById('editTestType').value,
+                    notes: document.getElementById('editNotes').value
+                };
+                
+                const response = await fetch(`${API_BASE_URL}/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                if (!response.ok) throw new Error('Failed to update test booking');
+                
+                const updatedBooking = await response.json();
+                
+                // Close modal
+                bootstrap.Modal.getInstance(document.getElementById('editTestBookingModal')).hide();
+                
+                // Refresh data
+                initApp();
+                
+                showAlert('Test booking updated successfully!', 'success');
+                
+            } catch (error) {
+                console.error('Error updating test booking:', error);
+                showAlert('Failed to update test booking: ' + error.message, 'danger');
+            }
+        }
+        
+        async function updateTestStatus(id, status) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/${id}/status?status=${status}`, {
+                    method: 'PATCH'
+                });
+                
+                if (!response.ok) throw new Error('Failed to update test status');
+                
+                return await response.json();
+            } catch (error) {
+                console.error('Error updating test status:', error);
+                showAlert('Failed to update test status: ' + error.message, 'danger');
+                throw error;
+            }
+        }
+        
+        async function deleteTestBooking(id) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/${id}`, {
+                    method: 'DELETE'
+                });
+                
+                if (!response.ok) throw new Error('Failed to delete test booking');
+                
+                return true;
+            } catch (error) {
+                console.error('Error deleting test booking:', error);
+                showAlert('Failed to delete test booking: ' + error.message, 'danger');
+                throw error;
+            }
+        }
+        
+        // Data Loading Functions
+        async function loadDashboardStats() {
+            try {
+                const today = new Date().toISOString().split('T')[0];
+                const yesterday = new Date();
+                yesterday.setDate(yesterday.getDate() - 1);
+                const yesterdayStr = yesterday.toISOString().split('T')[0];
+                
+                // Fetch today's tests
+                const todayResponse = await fetch(`${API_BASE_URL}/date-range?startDate=${today}&endDate=${today}`);
+                const todayTests = todayResponse.ok ? await todayResponse.json() : [];
+                
+                // Fetch yesterday's tests
+                const yesterdayResponse = await fetch(`${API_BASE_URL}/date-range?startDate=${yesterdayStr}&endDate=${yesterdayStr}`);
+                const yesterdayTests = yesterdayResponse.ok ? await yesterdayResponse.json() : [];
+                
+                // Calculate stats
+                const testsToday = todayTests.length;
+                const testsYesterday = yesterdayTests.length;
+                const testsChange = testsYesterday > 0 ? 
+                    Math.round(((testsToday - testsYesterday) / testsYesterday) * 100) : 100;
+                
+                // Include "Scheduled" status in pending tests
+                const pendingTests = todayTests.filter(test => 
+                    test.status === 'Pending' || test.status === 'Processing' || test.status === 'Scheduled').length;
+                
+                const urgentTests = todayTests.filter(test => 
+                    test.priority === 'STAT' && (test.status === 'Pending' || test.status === 'Processing' || test.status === 'Scheduled')).length;
+                
+                const completedTests = todayTests.filter(test => test.status === 'Completed').length;
+                const criticalTests = todayTests.filter(test => test.priority === 'STAT').length;
+                
+                // Update UI
+                document.getElementById('testsToday').textContent = testsToday;
+                document.getElementById('testsChange').textContent = `${testsChange}%`;
+                document.getElementById('pendingResults').textContent = pendingTests;
+                document.getElementById('urgentCount').textContent = urgentTests;
+                document.getElementById('completedToday').textContent = completedTests;
+                document.getElementById('onTimeRate').textContent = completedTests > 0 ? '94%' : '0%';
+                document.getElementById('criticalResults').textContent = criticalTests;
+                
+            } catch (error) {
+                console.error('Error loading dashboard stats:', error);
+            }
+        }
+        
+        async function loadPendingTests() {
+            showLoading('pendingLoading');
+            
+            // Fetch tests with different statuses that should be considered "pending"
+            const pending = await fetchTestBookingsByStatus('Pending');
+            const processing = await fetchTestBookingsByStatus('Processing');
+            const scheduled = await fetchTestBookingsByStatus('Scheduled'); // Add Scheduled status
+            
+            // Combine all pending status tests
+            pendingTestBookings = [...pending, ...processing, ...scheduled];
+            
+            renderTestBookingsTable(pendingTestBookings, 'pendingTestsTable', true);
+            hideLoading('pendingLoading');
+        }
+        
+        async function loadCompletedTests() {
+            showLoading('completedLoading');
+            completedTestBookings = await fetchTestBookingsByStatus('Completed');
+            renderTestBookingsTable(completedTestBookings, 'completedTestsTable', false);
+            hideLoading('completedLoading');
+        }
+        
+        async function loadAllTests() {
+            showLoading('allTestsLoading');
+            allTestBookings = await fetchAllTestBookings();
+            renderTestBookingsTable(allTestBookings, 'allTestsTable', false);
+            hideLoading('allTestsLoading');
+        }
+        
+        async function loadCriticalTests() {
+            showLoading('criticalLoading');
+            // For critical tests, we'll filter by priority
+            const allTests = await fetchAllTestBookings();
+            criticalTestBookings = allTests.filter(test => test.priority === 'STAT');
+            renderTestBookingsTable(criticalTestBookings, 'criticalTestsTable', false);
+            hideLoading('criticalLoading');
+        }
+        
+        // UI Rendering Functions
+        function renderTestBookingsTable(testBookings, tableId, showCheckboxes) {
+            const tableBody = document.getElementById(tableId);
+            tableBody.innerHTML = '';
+            
+            if (testBookings.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="${showCheckboxes ? 9 : 8}" class="text-center py-4">
+                            <i class="fas fa-inbox fs-1 text-muted"></i>
+                            <p class="mt-2 text-muted">No test bookings found</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            testBookings.forEach(booking => {
+                const row = document.createElement('tr');
+                
+                // Format date for display
+                const bookingDate = new Date(booking.testDate);
+                const formattedDate = bookingDate.toLocaleDateString() + ' ' + 
+                                    bookingDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                
+                if (showCheckboxes) {
+                    row.innerHTML = `
+                        <td>
+                            <div class="form-check">
+                                <input class="form-check-input row-checkbox" type="checkbox" value="${booking.id}">
+                            </div>
+                        </td>
+                        <td><span class="fw-bold">LT-${booking.id}</span></td>
+                        <td>${booking.patientName}</td>
+                        <td>${booking.testType}</td>
+                        <td>${booking.doctorName}</td>
+                        <td>${formattedDate}</td>
+                        <td>${renderPriorityBadge(booking.priority)}</td>
+                        <td>${renderStatusBadge(booking.status)}</td>
+                        <td class="action-buttons">
+                            ${booking.status !== 'Completed' && booking.status !== 'Cancelled' ? `
+                                <button class="btn btn-sm btn-success complete-btn" data-id="${booking.id}" data-bs-toggle="tooltip" title="Mark as Complete">
+                                    <i class="fas fa-check"></i>
+                                </button>
+                            ` : ''}
+                            ${booking.status !== 'Cancelled' ? `
+                                <button class="btn btn-sm btn-danger cancel-btn" data-id="${booking.id}" data-bs-toggle="tooltip" title="Cancel Test">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            ` : ''}
+                            <button class="btn btn-sm btn-outline-primary edit-btn" data-id="${booking.id}" data-bs-toggle="tooltip" title="Edit">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger delete-btn" data-id="${booking.id}" data-bs-toggle="tooltip" title="Delete">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    `;
+                } else {
+                    row.innerHTML = `
+                        <td><span class="fw-bold">LT-${booking.id}</span></td>
+                        <td>${booking.patientName}</td>
+                        <td>${booking.testType}</td>
+                        <td>${booking.doctorName}</td>
+                        <td>${formattedDate}</td>
+                        ${tableId === 'completedTestsTable' ? `
+                            <td>${booking.status === 'Completed' ? new Date().toLocaleDateString() : ''}</td>
+                        ` : `
+                            <td>${renderPriorityBadge(booking.priority)}</td>
+                        `}
+                        <td>${renderStatusBadge(booking.status)}</td>
+                        <td class="action-buttons">
+                            <button class="btn btn-sm btn-outline-primary edit-btn" data-id="${booking.id}" data-bs-toggle="tooltip" title="Edit">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger delete-btn" data-id="${booking.id}" data-bs-toggle="tooltip" title="Delete">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    `;
+                }
+                
+                tableBody.appendChild(row);
+            });
+            
+            // Add event listeners to action buttons
+            addActionButtonListeners(tableId);
+        }
+        
+        function renderPriorityBadge(priority) {
+            const priorityClass = {
+                'STAT': 'bg-danger',
+                'High': 'bg-warning',
+                'Routine': 'bg-info'
+            }[priority] || 'bg-secondary';
+            
+            return `<span class="badge ${priorityClass}">${priority}</span>`;
+        }
+        
+        function renderStatusBadge(status) {
+            const statusClass = {
+                'Pending': 'status-pending',
+                'Processing': 'status-processing',
+                'Scheduled': 'status-processing', // Use same style as Processing for Scheduled
+                'Completed': 'status-completed',
+                'Cancelled': 'status-cancelled'
+            }[status] || 'status-pending';
+            
+            return `<span class="status-badge ${statusClass}">${status}</span>`;
+        }
+        
+        function addActionButtonListeners(tableId) {
+            // Complete buttons
+            document.querySelectorAll(`#${tableId} .complete-btn`).forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = this.getAttribute('data-id');
+                    updateTestStatus(id, 'Completed')
+                        .then(() => {
+                            showAlert('Test marked as completed!', 'success');
+                            initApp(); // Refresh data
+                        })
+                        .catch(error => console.error('Error completing test:', error));
+                });
+            });
+            
+            // Cancel buttons
+            document.querySelectorAll(`#${tableId} .cancel-btn`).forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = this.getAttribute('data-id');
+                    updateTestStatus(id, 'Cancelled')
+                        .then(() => {
+                            showAlert('Test cancelled!', 'success');
+                            initApp(); // Refresh data
+                        })
+                        .catch(error => console.error('Error cancelling test:', error));
+                });
+            });
+            
+            // Edit buttons
+            document.querySelectorAll(`#${tableId} .edit-btn`).forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = this.getAttribute('data-id');
+                    openEditModal(id);
+                });
+            });
+            
+            // Delete buttons
+            document.querySelectorAll(`#${tableId} .delete-btn`).forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = this.getAttribute('data-id');
+                    if (confirm('Are you sure you want to delete this test booking?')) {
+                        deleteTestBooking(id)
+                            .then(() => {
+                                showAlert('Test booking deleted!', 'success');
+                                initApp(); // Refresh data
+                            })
+                            .catch(error => console.error('Error deleting test:', error));
+                    }
+                });
+            });
+        }
+        
+        async function openEditModal(id) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/${id}`);
+                if (!response.ok) throw new Error('Failed to fetch test booking');
+                
+                const booking = await response.json();
+                
+                // Populate form
+                document.getElementById('editId').value = booking.id;
+                document.getElementById('editPatientName').value = booking.patientName;
+                document.getElementById('editDoctorName').value = booking.doctorName;
+                document.getElementById('editTestDate').value = booking.testDate;
+                document.getElementById('editTestTime').value = booking.testTime;
+                document.getElementById('editPriority').value = booking.priority;
+                document.getElementById('editStatus').value = booking.status;
+                document.getElementById('editTestType').value = booking.testType;
+                document.getElementById('editNotes').value = booking.notes || '';
+                
+                // Show modal
+                const editModal = new bootstrap.Modal(document.getElementById('editTestBookingModal'));
+                editModal.show();
+                
+            } catch (error) {
+                console.error('Error opening edit modal:', error);
+                showAlert('Failed to load test booking details: ' + error.message, 'danger');
+            }
+        }
+        
+        // Utility Functions
+        function getSelectedTestIds() {
+            const checkboxes = document.querySelectorAll('#pendingTestsTable .row-checkbox:checked');
+            return Array.from(checkboxes).map(checkbox => checkbox.value);
+        }
+        
+        async function updateTestStatuses(ids, status) {
+            try {
+                const promises = ids.map(id => updateTestStatus(id, status));
+                await Promise.all(promises);
+                
+                showAlert(`Selected tests ${status.toLowerCase()} successfully!`, 'success');
+                initApp(); // Refresh data
+                
+            } catch (error) {
+                console.error('Error updating test statuses:', error);
+                showAlert('Failed to update test statuses: ' + error.message, 'danger');
+            }
+        }
+        
+        function filterTestsByDepartment(department) {
+            // This would typically filter by department, but since our API doesn't have department field,
+            // we'll just reload the pending tests for now
+            loadPendingTests();
+        }
+        
+        function searchTestBookings(query) {
+            // This would search across all test bookings
+            // For now, we'll just filter the all tests table
+            const filtered = allTestBookings.filter(booking => 
+                booking.patientName.toLowerCase().includes(query.toLowerCase()) ||
+                booking.doctorName.toLowerCase().includes(query.toLowerCase()) ||
+                booking.testType.toLowerCase().includes(query.toLowerCase())
+            );
+            
+            renderTestBookingsTable(filtered, 'allTestsTable', false);
+        }
+        
+        function showLoading(loaderId) {
+            document.getElementById(loaderId).style.display = 'flex';
+        }
+        
+        function hideLoading(loaderId) {
+            document.getElementById(loaderId).style.display = 'none';
+        }
+        
+        function showAlert(message, type) {
+            // Remove any existing alerts first
+            const existingAlerts = document.querySelectorAll('.custom-alert');
+            existingAlerts.forEach(alert => alert.remove());
+            
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type} alert-dismissible fade show custom-alert alert-animate`;
+            alert.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            alert.style.position = 'fixed';
+            alert.style.top = '20px';
+            alert.style.right = '20px';
+            alert.style.zIndex = '1100';
+            alert.style.minWidth = '300px';
+            
+            document.body.appendChild(alert);
+            
+            // Remove alert after 3 seconds
+            setTimeout(() => {
+                if (alert.parentNode) {
+                    alert.parentNode.removeChild(alert);
+                }
+            }, 3000);
+        }
+        
+        function initCharts() {
+            // Test Statistics Chart
+            const testStatsCtx = document.getElementById('testStatsChart').getContext('2d');
+            const testStatsChart = new Chart(testStatsCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    datasets: [{
+                        label: 'Tests Ordered',
+                        data: [120, 145, 132, 158, 140, 95, 70],
+                        backgroundColor: 'rgba(44, 107, 172, 0.7)',
+                        borderColor: 'rgba(44, 107, 172, 1)',
+                        borderWidth: 1
+                    }, {
+                        label: 'Tests Completed',
+                        data: [110, 130, 125, 145, 135, 85, 65],
+                        backgroundColor: 'rgba(40, 167, 69, 0.7)',
+                        borderColor: 'rgba(40, 167, 69, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+            
+            // Department Distribution Chart
+            const departmentCtx = document.getElementById('departmentChart').getContext('2d');
+            const departmentChart = new Chart(departmentCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Hematology', 'Biochemistry', 'Microbiology', 'Immunology', 'Pathology'],
+                    datasets: [{
+                        data: [35, 25, 20, 15, 5],
+                        backgroundColor: [
+                            'rgba(44, 107, 172, 0.7)',
+                            'rgba(40, 167, 69, 0.7)',
+                            'rgba(23, 162, 184, 0.7)',
+                            'rgba(255, 193, 7, 0.7)',
+                            'rgba(220, 53, 69, 0.7)'
+                        ],
+                        borderColor: [
+                            'rgba(44, 107, 172, 1)',
+                            'rgba(40, 167, 69, 1)',
+                            'rgba(23, 162, 184, 1)',
+                            'rgba(255, 193, 7, 1)',
+                            'rgba(220, 53, 69, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+            
+            // Tab functionality
+            const triggerTabList = document.querySelectorAll('#labTabs button');
+            triggerTabList.forEach(triggerEl => {
+                new bootstrap.Tab(triggerEl);
+            });
+            
+            // Tooltip initialization
+            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        }
+    </script>
+    </body>
+    </html>

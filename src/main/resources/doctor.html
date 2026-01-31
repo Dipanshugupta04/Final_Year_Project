@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Doctor Registration</title>
+    <link rel="shortcut icon" href="LOGO.png" type="image/x-icon">
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        margin: 0;
+        padding: 20px;
+        background-color: #f5f5f5;
+      }
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: white;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        text-align: center;
+        color: #2c3e50;
+        margin-bottom: 30px;
+      }
+      .form-group {
+        margin-bottom: 20px;
+      }
+      label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+      input[type="text"],
+      input[type="email"],
+      input[type="number"],
+      select,
+      textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 16px;
+      }
+      .file-upload {
+        margin-top: 5px;
+      }
+      button {
+        background-color: #3498db;
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        width: 100%;
+        margin-top: 10px;
+      }
+      button:hover {
+        background-color: #2980b9;
+      }
+      .form-row {
+        display: flex;
+        gap: 20px;
+      }
+      .form-row .form-group {
+        flex: 1;
+      }
+      @media (max-width: 600px) {
+        .form-row {
+          flex-direction: column;
+          gap: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Doctor Registration</h1>
+      <form id="doctorForm" enctype="multipart/form-data">
+        <div class="form-row">
+          <!-- <div class="form-group">
+                    <label for="doctorId">Doctor ID*</label>
+                    <input type="text" id="doctorId" name="doctorId" required>
+                </div> -->
+          <div class="form-group">
+            <label for="email">Email*</label>
+            <input type="email" id="email" name="email" required />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="firstName">First Name</label>
+            <input type="text" id="firstName" name="firstName" />
+          </div>
+          <div class="form-group">
+            <label for="lastName">Last Name*</label>
+            <input type="text" id="lastName" name="lastName" required />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="specialization">Specialization</label>
+            <input type="text" id="specialization" name="specialization" />
+          </div>
+          <div class="form-group">
+            <label for="licenseNumber">License Number</label>
+            <input type="text" id="licenseNumber" name="licenseNumber" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="experience">Experience (years)</label>
+          <input
+            type="text"
+            id="experience"
+            name="experience"
+            placeholder="e.g., 5 years"
+          />
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Profile Picture</label>
+            <input
+              type="file"
+              id="profilePicture"
+              name="profilePicture"
+              accept="image/*"
+              class="file-upload"
+            />
+          </div>
+          <div class="form-group">
+            <label>Doctor Stamp/Signature</label>
+            <input
+              type="file"
+              id="doctorStamp"
+              name="doctorStamp"
+              accept="image/*"
+              class="file-upload"
+            />
+          </div>
+        </div>
+
+        <button type="submit" id="submitButton">Register Doctor</button>
+      </form>
+    </div>
+
+    <script>
+        // Wait for DOM to be fully loaded before executing
+document.addEventListener('DOMContentLoaded', function() {
+    const doctorForm = document.getElementById('doctorForm');
+    const submitButton = document.getElementById('submitButton');
+
+    // Check if elements exist before adding event listeners
+    if (!doctorForm || !submitButton) {
+        console.error('Form or submit button not found!');
+        return;
+    }
+
+    // Prevent form submission on Enter key
+    doctorForm.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+        }
+    });
+
+    // Handle button click
+    submitButton.addEventListener('click', async function(e) {
+        e.preventDefault();
+        
+        const doctorData = {
+            email: document.getElementById('email').value,
+            firstName: document.getElementById('firstName').value,
+            lastName: document.getElementById('lastName').value,
+            specialization: document.getElementById('specialization').value,
+            licenseNumber: document.getElementById('licenseNumber').value,
+            experience: document.getElementById('experience').value
+        };
+
+        // Get files
+        const profilePic = document.getElementById('profilePicture').files[0];
+        const doctorStamp = document.getElementById('doctorStamp').files[0];
+
+        try {
+            // First create the doctor record
+            const createResponse = await fetch("http://localhost:8080/api/doctors", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer eyJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJkaXBhbnNodTIzQGdtYWlsLmNvbSIsImlhdCI6MTc1MjUwODg3MiwiZXhwIjoxNzUyNTEyNDcyfQ.E8Ngzp2Yz59wVvoOFZozWudmeFhcdTFat5_pujPqfgw`
+                },
+                body: JSON.stringify(doctorData)
+            });
+
+            if (!createResponse.ok) {
+                throw new Error('Failed to create doctor record');
+            }
+
+            const createdDoctor = await createResponse.json();
+            const email = createdDoctor.email;
+
+            // Then upload files if they exist
+            if (profilePic) {
+                await uploadFile(`http://localhost:8080/api/doctors/email/${email}/profile-picture`, profilePic);
+            }
+            
+            if (doctorStamp) {
+                await uploadFile(`http://localhost:8080/api/doctors/email/${email}/stamp`, doctorStamp);
+            }
+
+            alert('Doctor registered successfully with all files!');
+            doctorForm.reset();
+        } catch (error) {
+            console.error('Error:', error);
+            alert(`Registration failed: ${error.message}`);
+        }
+    });
+
+    // Helper function for file uploads
+    async function uploadFile(url, file) {
+        const formData = new FormData();
+        formData.append('file', file);
+        
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer eyJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJkaXBhbnNodTIzQGdtYWlsLmNvbSIsImlhdCI6MTc1MjUwODg3MiwiZXhwIjoxNzUyNTEyNDcyfQ.E8Ngzp2Yz59wVvoOFZozWudmeFhcdTFat5_pujPqfgw`
+            },
+            body: formData
+        });
+        
+        if (!response.ok) {
+            throw new Error(`File upload failed: ${response.status}`);
+        }
+        
+        return response.json();
+    }
+});
+    </script>
+  </body>
+</html>

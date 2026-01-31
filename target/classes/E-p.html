@@ -1,0 +1,1389 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MediPlus - E-Prescription System</title>
+    <link rel="shortcut icon" href="LOGO.png" type="image/x-icon">
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Custom CSS -->
+    <style>
+      :root {
+        --primary-color: #0d6efd;
+        --secondary-color: #6c757d;
+        --dark-color: #212529;
+        --light-color: #f8f9fa;
+        --accent-color: #20c997;
+        --danger-color: #dc3545;
+        --success-color: #198754;
+      }
+
+      body {
+        font-family: "Poppins", sans-serif;
+        color: var(--dark-color);
+        overflow-x: hidden;
+      }
+
+      .header-area {
+        padding: 15px 0;
+        position: fixed;
+        width: 100%;
+        top: 0;
+        left: 0;
+        z-index: 999;
+        background-color: white;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+      }
+
+      .navbar-brand img {
+        height: 40px;
+      }
+
+      .nav-link {
+        font-weight: 500;
+        padding: 8px 15px !important;
+        color: var(--dark-color);
+      }
+
+      .nav-link:hover,
+      .nav-link.active {
+        color: var(--primary-color);
+      }
+
+      .dropdown-menu {
+        border: none;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .btn-primary {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+        padding: 8px 20px;
+        font-weight: 500;
+        border-radius: 50px;
+      }
+
+      .btn-primary:hover {
+        background-color: #0b5ed7;
+        border-color: #0a58ca;
+      }
+
+      .btn-outline-primary {
+        color: var(--primary-color);
+        border-color: var(--primary-color);
+      }
+
+      .btn-outline-primary:hover {
+        background-color: var(--primary-color);
+        color: white;
+      }
+
+      .hero-section {
+        padding: 180px 0 100px;
+        background: linear-gradient(135deg, #f0f8ff 0%, #e6f0ff 100%);
+        margin-top: 70px;
+      }
+
+      .section {
+        padding: 80px 0;
+      }
+
+      .section-title {
+        text-align: center;
+        margin-bottom: 50px;
+      }
+
+      .section-title h2 {
+        font-size: 36px;
+        font-weight: 700;
+        margin-bottom: 15px;
+        position: relative;
+        display: inline-block;
+      }
+
+      .section-title h2:after {
+        content: "";
+        position: absolute;
+        width: 60px;
+        height: 3px;
+        background-color: var(--primary-color);
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      .feature-card {
+        padding: 30px;
+        border-radius: 10px;
+        background-color: white;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        margin-bottom: 30px;
+        transition: all 0.3s ease;
+        height: 100%;
+      }
+
+      .feature-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+      }
+
+      .feature-icon {
+        width: 70px;
+        height: 70px;
+        background-color: rgba(13, 110, 253, 0.1);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+        color: var(--primary-color);
+        font-size: 30px;
+      }
+
+      .dashboard-sidebar {
+        background-color: var(--light-color);
+        height: 100vh;
+        position: fixed;
+        padding-top: 20px;
+        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .dashboard-content {
+        margin-left: 250px;
+        padding: 20px;
+      }
+
+      .sidebar-menu {
+        list-style: none;
+        padding: 0;
+      }
+
+      .sidebar-menu li {
+        margin-bottom: 5px;
+      }
+
+      .sidebar-menu a {
+        display: block;
+        padding: 10px 15px;
+        color: var(--dark-color);
+        text-decoration: none;
+        border-radius: 5px;
+        transition: all 0.3s ease;
+      }
+
+      .sidebar-menu a:hover,
+      .sidebar-menu a.active {
+        background-color: rgba(13, 110, 253, 0.1);
+        color: var(--primary-color);
+      }
+
+      .sidebar-menu a i {
+        width: 20px;
+        margin-right: 10px;
+        text-align: center;
+      }
+
+      .signature-container {
+        position: relative;
+      }
+      .stamp-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .stamp-overlay img {
+        max-width: 80%;
+        max-height: 80%;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 991px) {
+        .dashboard-sidebar {
+          width: 100%;
+          height: auto;
+          position: relative;
+        }
+
+        .dashboard-content {
+          margin-left: 0;
+        }
+      }
+
+      @media (max-width: 767px) {
+        .hero-section {
+          padding: 120px 0 60px;
+          text-align: center;
+        }
+
+        .section-title h2 {
+          font-size: 30px;
+        }
+      }
+
+      .loading-spinner {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 9999;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .spinner-border {
+        width: 3rem;
+        height: 3rem;
+      }
+
+      .search-container {
+        position: relative;
+      }
+
+      .search-results {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 0 0 4px 4px;
+        z-index: 1000;
+        display: none;
+      }
+
+      .search-result-item {
+        padding: 8px 12px;
+        cursor: pointer;
+      }
+
+      .search-result-item:hover {
+        background-color: #f5f5f5;
+      }
+
+      .img-thumbnail {
+        padding: 0.25rem;
+        background-color: #fff;
+        border: 1px solid #dee2e6;
+        border-radius: 0.25rem;
+        max-width: 100%;
+        height: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Loading Spinner -->
+    <div class="loading-spinner">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+
+    <div class="d-flex">
+      <!-- Sidebar -->
+      <div class="dashboard-sidebar col-md-3 col-lg-2">
+        <div class="px-3">
+          <h4 class="text-center mb-4">MediPlus</h4>
+          <ul class="sidebar-menu">
+            <li>
+              <a href="#" class="active"
+                ><i class="fas fa-home"></i> Dashboard</a
+              >
+            </li>
+            <li>
+              <a href="doctordashboard.html"><i class="fas fa-user-md"></i> Doctors</a>
+            </li>
+            <li>
+              <a href="patientdashboard.html"><i class="fas fa-procedures"></i> Patients</a>
+            </li>
+            <li>
+              <a href="E-p.html"><i class="fas fa-prescription"></i> Prescriptions</a>
+            </li>
+            <li>
+              <a href="medicine.html"><i class="fas fa-pills"></i> Medications</a>
+            </li>
+            <li>
+              <a href="appintmentmanage.html"><i class="fas fa-calendar-alt"></i> Appointments</a>
+            </li>
+            <li>
+              <a href="#"><i class="fas fa-cog"></i> Settings</a>
+            </li>
+            <li>
+              <a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="dashboard-content col-md-9 col-lg-10">
+        <div class="container-fluid py-4">
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>E-Prescription Management</h2>
+            <button
+              class="btn btn-primary"
+              data-bs-toggle="modal"
+              data-bs-target="#newPrescriptionModal"
+            >
+              <i class="fas fa-plus me-2"></i> New Prescription
+            </button>
+          </div>
+
+          <!-- Prescription List -->
+          <div class="card mb-4">
+            <div class="card-header">
+              <h5>Your Prescriptions</h5>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>Prescription ID</th>
+                      <th>Patient</th>
+                      <th>Doctor</th>
+                      <th>Date</th>
+                     <th>Valid Until</th>
+                      <th>Status</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="prescriptionTableBody">
+                    <!-- Prescriptions will be loaded here via API -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- New Prescription Modal -->
+    <div
+      class="modal fade"
+      id="newPrescriptionModal"
+      tabindex="-1"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Create New E-Prescription</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form id="prescriptionForm" enctype="multipart/form-data">
+              <div class="row mb-3">
+                <!-- Doctor Information -->
+                <div class="col-md-6">
+                  <label class="form-label">Doctor Name</label>
+                  <div class="search-container">
+                    <div class="input-group">
+                      <input
+                        type="text"
+                        id="doctorSearch"
+                        class="form-control"
+                        placeholder="Enter doctor name"
+                        required
+                      />
+                      <button
+                        class="btn btn-outline-secondary"
+                        type="button"
+                        onclick="clearDoctorSearch()"
+                      >
+                        <i class="fas fa-times"></i>
+                      </button>
+                    </div>
+                    <div class="search-results" id="doctorResults"></div>
+                  </div>
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-primary mt-2"
+                    onclick="fetchDoctorDetails()"
+                  >
+                    <i class="fas fa-search me-1"></i> Fetch Doctor Details
+                  </button>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Doctor ID</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="doctorId"
+                    readonly
+                  />
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <!-- Patient Information -->
+                <div class="col-md-6">
+                  <label class="form-label">Patient Name</label>
+                  <div class="search-container">
+                    <div class="input-group">
+                      <input
+                        type="text"
+                        id="patientSearch"
+                        class="form-control"
+                        placeholder="Enter patient name"
+                        required
+                      />
+                      <button
+                        class="btn btn-outline-secondary"
+                        type="button"
+                        onclick="clearPatientSearch()"
+                      >
+                        <i class="fas fa-times"></i>
+                      </button>
+                    </div>
+                    <div class="search-results" id="patientResults"></div>
+                  </div>
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-primary mt-2"
+                    onclick="fetchPatientDetails()"
+                  >
+                    <i class="fas fa-search me-1"></i> Fetch Patient Details
+                  </button>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Patient ID</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="patientId"
+                    readonly
+                  />
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label class="form-label">Date</label>
+                  <input
+                    type="date"
+                    class="form-control"
+                    id="prescriptionDate"
+                    required
+                    onchange="setValidUntilDate()"
+                  />
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Valid Until</label>
+                  <input
+                    type="date"
+                    class="form-control"
+                    id="validUntil"
+                    required
+                    readonly
+                  />
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Diagnosis</label>
+                <textarea
+                  class="form-control"
+                  id="diagnosis"
+                  rows="3"
+                  placeholder="Enter diagnosis details"
+                  required
+                ></textarea>
+              </div>
+
+              <h6 class="mb-3">Medications</h6>
+              <div id="medication-list">
+                <div class="row medication-item mb-3">
+                  <div class="col-md-4">
+                    <label class="form-label">Medicine Name</label>
+                    <input
+                      type="text"
+                      class="form-control medication-name"
+                      placeholder="e.g., Sumatriptan 50mg"
+                      required
+                    />
+                  </div>
+                  <div class="col-md-2">
+                    <label class="form-label">Dosage</label>
+                    <input
+                      type="text"
+                      class="form-control medication-dosage"
+                      placeholder="e.g., 1 Tablet"
+                      required
+                    />
+                  </div>
+                  <div class="col-md-2">
+                    <label class="form-label">Frequency</label>
+                    <input
+                      type="text"
+                      class="form-control medication-frequency"
+                      placeholder="e.g., Twice daily"
+                      required
+                    />
+                  </div>
+                  <div class="col-md-2">
+                    <label class="form-label">Duration</label>
+                    <input
+                      type="text"
+                      class="form-control medication-duration"
+                      placeholder="e.g., 1 month"
+                      required
+                    />
+                  </div>
+                  <div class="col-md-2 d-flex align-items-end">
+                    <button
+                      type="button"
+                      class="btn btn-danger btn-sm remove-medication"
+                    >
+                      <i class="fas fa-times"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                id="add-medication"
+                class="btn btn-sm btn-outline-primary mb-3"
+              >
+                <i class="fas fa-plus me-2"></i> Add Medication
+              </button>
+
+              <div class="mb-3">
+                <label class="form-label">Additional Instructions</label>
+                <textarea
+                  class="form-control"
+                  id="additionalInstructions"
+                  rows="3"
+                  placeholder="Any additional instructions for the patient"
+                ></textarea>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Doctor's Signature/Stamp</label>
+              
+                <!-- File input for uploading the doctor's stamp -->
+                <input 
+                  type="file" 
+                  id="doctorStamp" 
+                  accept="image/*" 
+                  class="form-control"
+                  onchange="previewStamp(event)"
+                />
+              
+                <!-- Preview of the selected stamp -->
+                <div class="mt-2">
+                  <img
+                    id="stampPreview"
+                    src=""
+                    alt="Doctor's Stamp Preview"
+                    class="img-thumbnail"
+                    style="display: none; max-width: 200px; max-height: 150px;"
+                  />
+                </div>
+              
+                <button
+                  type="button"
+                  id="clearStamp"
+                  class="btn btn-sm btn-outline-danger mt-2"
+                  onclick="clearStamp()"
+                  style="display: none;"
+                >
+                  <i class="fas fa-trash me-1"></i> Remove Stamp
+                </button>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Cancel
+            </button>
+            <button type="button" id="savePrescription" class="btn btn-primary">
+              Save Prescription
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- View Prescription Modal -->
+    <div
+      class="modal fade"
+      id="viewPrescriptionModal"
+      tabindex="-1"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Prescription Details</h5>
+            <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+          </div>
+          <div class="modal-body" id="prescriptionDetails">
+            <!-- Prescription details will be loaded here -->
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              onclick="printPrescription()"
+            >
+              <i class="fas fa-print me-2"></i> Print
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+
+    <script>
+      // Global variables
+      let signaturePad;
+      let doctorData = {};
+      let patientData = {};
+      let currentPrescriptionId = null;
+
+      // Initialize when DOM is loaded
+      document.addEventListener("DOMContentLoaded", function () {
+        // Load initial data
+        loadPrescriptions();
+
+        // Event listeners
+        document
+          .getElementById("add-medication")
+          .addEventListener("click", addMedicationField);
+        document
+          .getElementById("savePrescription")
+          .addEventListener("click", savePrescription);
+
+        // Handle medication removal
+        document.addEventListener("click", function (e) {
+          if (e.target.classList.contains("remove-medication")) {
+            e.target.closest(".medication-item").remove();
+          }
+        });
+
+        // Add event listeners for search inputs
+        document
+          .getElementById("doctorSearch")
+          .addEventListener("input", function () {
+            searchDoctors(this.value);
+          });
+
+        document
+          .getElementById("patientSearch")
+          .addEventListener("input", function () {
+            searchPatients(this.value);
+          });
+
+        // Add event listener for Enter key on search inputs
+        document
+          .getElementById("doctorSearch")
+          .addEventListener("keydown", function (e) {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              fetchDoctorDetails();
+            }
+          });
+
+        document
+          .getElementById("patientSearch")
+          .addEventListener("keydown", function (e) {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              fetchPatientDetails();
+            }
+          });
+      });
+
+      // Add new medication field
+      function addMedicationField() {
+        const medicationList = document.getElementById("medication-list");
+        const newMedication = document.createElement("div");
+        newMedication.className = "row medication-item mb-3";
+        newMedication.innerHTML = `
+                <div class="col-md-4">
+                    <label class="form-label">Medicine Name</label>
+                    <input type="text" class="form-control medication-name" placeholder="e.g., Sumatriptan 50mg" required>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Dosage</label>
+                    <input type="text" class="form-control medication-dosage" placeholder="e.g., 1 Tablet" required>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Frequency</label>
+                    <input type="text" class="form-control medication-frequency" placeholder="e.g., Twice daily" required>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Duration</label>
+                    <input type="text" class="form-control medication-duration" placeholder="e.g., 1 month" required>
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button type="button" class="btn btn-danger btn-sm remove-medication">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+        medicationList.appendChild(newMedication);
+      }
+
+      // Preview selected stamp image
+      function previewStamp(event) {
+        const file = event.target.files[0];
+        const preview = document.getElementById('stampPreview');
+        const clearBtn = document.getElementById('clearStamp');
+        
+        if (file) {
+          const reader = new FileReader();
+          
+          reader.onload = function(e) {
+            preview.src = e.target.result;
+            preview.style.display = 'block';
+            clearBtn.style.display = 'inline-block';
+          }
+          
+          reader.readAsDataURL(file);
+        }
+      }
+
+      // Clear the stamp selection
+      function clearStamp() {
+        document.getElementById('doctorStamp').value = '';
+        document.getElementById('stampPreview').src = '';
+        document.getElementById('stampPreview').style.display = 'none';
+        document.getElementById('clearStamp').style.display = 'none';
+      }
+
+      // Search doctors by name
+      async function searchDoctors(query) {
+        const resultsContainer = document.getElementById("doctorResults");
+        resultsContainer.innerHTML = '';
+        
+        if (query.length < 2) {
+          resultsContainer.style.display = "none";
+          return;
+        }
+
+        showLoading();
+
+        try {
+          const response = await fetch(
+            `http://localhost:8080/api/doctors/name/${query}`,
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer eyJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJkaXBhbnNodTIzQGdtYWlsLmNvbSIsImlhdCI6MTc1MjY3ODcxNiwiZXhwIjoxNzUyNjgyMzE2fQ.QtNb1PLq4Y6XXIY-_v_Kfyz0PQ0lNRw6puBlbSdT6A0`
+            }
+        }
+          );
+          
+          if (!response.ok) throw new Error("Network response was not ok");
+          const doctors = await response.json();
+
+          if (doctors.length > 0) {
+            doctors.forEach((doctor) => {
+              const item = document.createElement("div");
+              item.className = "search-result-item";
+              item.textContent = `${doctor.firstName} ${doctor.lastName} (${doctor.specialization})`;
+              item.onclick = function() {
+                document.getElementById("doctorSearch").value = 
+                  `${doctor.firstName} ${doctor.lastName} (${doctor.specialization})`;
+                document.getElementById("doctorId").value = doctor.doctorId;
+                resultsContainer.style.display = "none";
+                doctorData[doctor.doctorId] = doctor;
+                if (doctor.email) {
+                  fetchDoctorStamp(doctor.email);
+                }
+              };
+              resultsContainer.appendChild(item);
+            });
+            resultsContainer.style.display = "block";
+          } else {
+            resultsContainer.style.display = "none";
+          }
+        } catch (error) {
+          console.error("Error searching doctors:", error);
+          alert("Error searching doctors");
+        } finally {
+          hideLoading();
+        }
+      }
+
+      // Search patients by name
+      async function searchPatients(query) {
+        const resultsContainer = document.getElementById("patientResults");
+        resultsContainer.innerHTML = "";
+
+        if (query.length < 2) {
+          resultsContainer.style.display = "none";
+          return;
+        }
+
+        showLoading();
+
+        try {
+          const response = await fetch(
+            `http://localhost:8080/api/patients/search/name/${query}`,
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer eyJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJkaXBhbnNodTIzQGdtYWlsLmNvbSIsImlhdCI6MTc1MjY3ODcxNiwiZXhwIjoxNzUyNjgyMzE2fQ.QtNb1PLq4Y6XXIY-_v_Kfyz0PQ0lNRw6puBlbSdT6A0`
+              }
+            }
+          );
+
+          if (!response.ok) throw new Error("Network response was not ok");
+
+          const data = await response.json();
+          const patients = Array.isArray(data) ? data : [data];
+
+          if (patients.length > 0) {
+            patients.forEach((patient) => {
+              const item = document.createElement("div");
+              item.className = "search-result-item";
+              item.textContent = `${patient.firstName} ${patient.lastName}`;
+              item.onclick = function () {
+                document.getElementById("patientSearch").value = 
+                  `${patient.firstName} ${patient.lastName}`;
+                document.getElementById("patientId").value = patient.patientId;
+                resultsContainer.style.display = "none";
+                patientData[patient.patientId] = patient;
+              };
+              resultsContainer.appendChild(item);
+            });
+            resultsContainer.style.display = "block";
+          } else {
+            resultsContainer.style.display = "none";
+          }
+        } catch (error) {
+          console.error("Error fetching patients:", error);
+          alert("Error searching patients");
+        } finally {
+          hideLoading();
+        }
+      }
+
+      // Fetch doctor details by ID
+      async function fetchDoctorDetails() {
+        const id = document.getElementById("doctorId").value.trim();
+
+        if (!id) {
+          alert("Please select a doctor from the search results");
+          return;
+        }
+
+        showLoading();
+
+        try {
+          const response = await fetch(
+            `http://localhost:8080/api/doctors/${id}`,
+            {
+              headers: {
+                "Authorization": `Bearer eyJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJkaXBhbnNodTIzQGdtYWlsLmNvbSIsImlhdCI6MTc1MjY3ODcxNiwiZXhwIjoxNzUyNjgyMzE2fQ.QtNb1PLq4Y6XXIY-_v_Kfyz0PQ0lNRw6puBlbSdT6A0`
+              }
+            }
+          );
+          if (!response.ok) {
+            throw new Error("Doctor not found");
+          }
+          const doctor = await response.json();
+
+          // Store doctor data
+          doctorData[doctor.doctorId] = doctor;
+
+          // Hide search results
+          document.getElementById("doctorResults").style.display = "none";
+        } catch (error) {
+          console.error("Error fetching doctor:", error);
+          alert("Doctor not found. Please check and try again.");
+          clearDoctorSearch();
+        } finally {
+          hideLoading();
+        }
+      }
+
+      // Fetch patient details by ID
+      async function fetchPatientDetails() {
+        const id = document.getElementById("patientId").value.trim();
+
+        if (!id) {
+          alert("Please select a patient from the search results");
+          return;
+        }
+
+        showLoading();
+
+        try {
+          const response = await fetch(
+            `http://localhost:8080/api/patients/${id}`,
+            {
+              headers: {
+                "Authorization": `Bearer eyJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJkaXBhbnNodTIzQGdtYWlsLmNvbSIsImlhdCI6MTc1MjY3ODcxNiwiZXhwIjoxNzUyNjgyMzE2fQ.QtNb1PLq4Y6XXIY-_v_Kfyz0PQ0lNRw6puBlbSdT6A0`
+              }
+            }
+          );
+          if (!response.ok) {
+            throw new Error("Patient not found");
+          }
+          const patient = await response.json();
+
+          // Store patient data
+          patientData[patient.patientId] = patient;
+
+          // Hide search results
+          document.getElementById("patientResults").style.display = "none";
+        } catch (error) {
+          console.error("Error fetching patient:", error);
+          alert("Patient not found. Please check and try again.");
+          clearPatientSearch();
+        } finally {
+          hideLoading();
+        }
+      }
+
+      // Load prescriptions
+      async function loadPrescriptions() {
+        showLoading();
+
+        try {
+          const response = await fetch(
+            "http://localhost:8080/api/prescriptions",
+            {
+              headers: {
+                "Authorization": `Bearer eyJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJkaXBhbnNodTIzQGdtYWlsLmNvbSIsImlhdCI6MTc1MjY3ODcxNiwiZXhwIjoxNzUyNjgyMzE2fQ.QtNb1PLq4Y6XXIY-_v_Kfyz0PQ0lNRw6puBlbSdT6A0`
+              }
+            }
+          );
+          if (!response.ok) throw new Error("Network response was not ok");
+          const prescriptions = await response.json();
+
+          const tbody = document.getElementById("prescriptionTableBody");
+          tbody.innerHTML = "";
+
+          prescriptions.forEach((prescription) => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                        <td>${prescription.prescriptionId}</td>
+                          <td> ${prescription.patient.firstName} ${prescription.patient.lastName}</td>
+                        <td>${prescription.doctor.firstName} ${prescription.doctor.lastName}</td>
+                        <td>${new Date(prescription.issueDate).toLocaleDateString()}</td>
+                      
+                        <td>${new Date(prescription.expiryDate).toLocaleDateString()}</td>
+                        <td><span class="badge ${new Date(prescription.expiryDate) > new Date() ? "bg-success" : "bg-secondary"}">
+                          ${new Date(prescription.expiryDate) > new Date() ? "Active" : "Expired"}
+                        </span></td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary view-prescription" data-id="${prescription.prescriptionId}">
+                                <i class="fas fa-eye"></i> View
+                            </button>
+                        </td>
+                    `;
+            tbody.appendChild(row);
+          });
+
+          // Add event listeners to view buttons
+          document.querySelectorAll(".view-prescription").forEach((button) => {
+            button.addEventListener("click", function () {
+              const id = this.getAttribute("data-id");
+              viewPrescription(id);
+            });
+          });
+        } catch (error) {
+          console.error("Error loading prescriptions:", error);
+          alert("Error loading prescriptions");
+        } finally {
+          hideLoading();
+        }
+      }
+
+      // Helper functions to get names from stored data
+      function getDoctorName(id) {
+        return doctorData[id] ? `${doctorData[id].firstName} ${doctorData[id].lastName}` : "Loading...";
+      }
+
+      function getPatientName(id) {
+        return patientData[id] ? `${patientData[id].firstName} ${patientData[id].lastName}` : "Loading...";
+      }
+
+      // Set valid until date (7 days from prescription date)
+      function setValidUntilDate() {
+        const prescriptionDate = document.getElementById("prescriptionDate").value;
+        if (prescriptionDate) {
+          const date = new Date(prescriptionDate);
+          date.setDate(date.getDate() + 7);
+          const validUntil = date.toISOString().split("T")[0];
+          document.getElementById("validUntil").value = validUntil;
+        }
+      }
+
+      // Clear doctor search
+      function clearDoctorSearch() {
+        document.getElementById("doctorSearch").value = "";
+        document.getElementById("doctorId").value = "";
+        document.getElementById("doctorResults").style.display = "none";
+        clearStamp();
+      }
+
+      // Clear patient search
+      function clearPatientSearch() {
+        document.getElementById("patientSearch").value = "";
+        document.getElementById("patientId").value = "";
+        document.getElementById("patientResults").style.display = "none";
+      }
+
+      // Fetch doctor's stamp image
+      async function fetchDoctorStamp(email) {
+        try {
+          const response = await fetch(
+            `http://localhost:8080/api/doctors/email/${email}/stamp`,
+            {
+              headers: {
+                "Authorization": `Bearer eyJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJkaXBhbnNodTIzQGdtYWlsLmNvbSIsImlhdCI6MTc1MjY3ODcxNiwiZXhwIjoxNzUyNjgyMzE2fQ.QtNb1PLq4Y6XXIY-_v_Kfyz0PQ0lNRw6puBlbSdT6A0`
+              }
+            }
+          );
+          
+          if (!response.ok) {
+            throw new Error("Stamp not found");
+          }
+          
+          const imageBytes = await response.arrayBuffer();
+          
+          // Convert to Base64
+          const bytes = new Uint8Array(imageBytes);
+          let binary = "";
+          bytes.forEach((b) => (binary += String.fromCharCode(b)));
+          const base64 = window.btoa(binary);
+
+          // Display the image
+          const stampImg = document.getElementById("stampPreview");
+          const clearBtn = document.getElementById("clearStamp");
+          stampImg.src = `data:image/png;base64,${base64}`;
+          stampImg.style.display = "block";
+          clearBtn.style.display = "inline-block";
+        } catch (error) {
+          console.error("Error loading stamp:", error);
+          alert("Doctor's stamp not available");
+        }
+      }
+
+      // Save prescription
+      async function savePrescription() {
+  showLoading();
+
+  const form = document.getElementById("prescriptionForm");
+  if (!form.checkValidity()) {
+    form.reportValidity();
+    hideLoading();
+    return;
+  }
+
+  const doctorId = document.getElementById("doctorId").value;
+  const patientId = document.getElementById("patientId").value;
+  const date = document.getElementById("prescriptionDate").value;
+  const validUntil = document.getElementById("validUntil").value;
+  const diagnosis = document.getElementById("diagnosis").value;
+  const instructions = document.getElementById("additionalInstructions").value;
+
+  if (!doctorId || !patientId || !date || !validUntil || !diagnosis) {
+    alert("Please fill all required fields");
+    hideLoading();
+    return;
+  }
+
+  const medications = [];
+  document.querySelectorAll(".medication-item").forEach((item) => {
+    medications.push({
+      medicineName: item.querySelector(".medication-name").value,
+      dosage: item.querySelector(".medication-dosage").value,
+      frequency: item.querySelector(".medication-frequency").value,
+      duration: item.querySelector(".medication-duration").value,
+    });
+  });
+
+  if (medications.length === 0) {
+    alert("Please add at least one medication");
+    hideLoading();
+    return;
+  }
+
+  try {
+    const formData = new FormData();
+    formData.append("doctorId", doctorId);
+    formData.append("patientId", patientId);
+    formData.append("issueDate", date);
+    formData.append("expiryDate", validUntil);
+    formData.append("diagnosis", diagnosis);
+    formData.append("additionalInstructions", instructions);
+    formData.append("medicationsJson", JSON.stringify(medications));
+
+    const stampImg = document.getElementById("stampPreview");
+    if (stampImg && stampImg.src && stampImg.src.startsWith("data:image")) {
+      const blob = await fetch(stampImg.src).then(r => r.blob());
+      formData.append("signatureFile", blob, "stamp.png");
+      formData.append("signType", "image/png");
+    }
+
+    const response = await fetch("http://localhost:8080/api/prescriptions/create", {
+      method: "POST",
+      headers: {
+        "Authorization": "Bearer eyJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJkaXBhbnNodTIzQGdtYWlsLmNvbSIsImlhdCI6MTc1Mjk0Njk0NCwiZXhwIjoxNzUyOTUwNTQ0fQ.xsGw82Bp9YauQczSLX9C3e1igfWuYBauupKcK3MJjdU"
+      },
+      body: formData,
+    });
+
+    const contentType = response.headers.get("content-type");
+    const isJson = contentType && contentType.includes("application/json");
+
+    if (!response.ok) {
+      const error = isJson ? await response.json() : await response.text();
+      throw new Error(error.message || error || "Failed to save prescription");
+    }
+
+    const savedPrescription = isJson ? await response.json() : {};
+    alert(`Prescription ${savedPrescription.prescriptionId || ''} created successfully!`);
+
+    const modal = bootstrap.Modal.getInstance(document.getElementById("newPrescriptionModal"));
+    modal.hide();
+    form.reset();
+    clearStamp();
+    loadPrescriptions();
+
+  } catch (error) {
+    console.error("Error saving prescription:", error);
+    alert("Error saving prescription: " + error.message);
+  } finally {
+    hideLoading();
+  }
+}
+
+
+      // View prescription details
+   
+      function arrayBufferToBase64(buffer) {
+    if (!buffer || buffer.length === 0) return "";
+    const binary = buffer.map((b) => String.fromCharCode(b)).join("");
+    return window.btoa(binary);
+  }
+
+
+  // View Prescription by ID
+  async function viewPrescription(id) {
+    showLoading();
+
+    try {
+      const response = await fetch(
+        `http://localhost:8080/api/prescriptions/${id}`,
+        {
+          headers: {
+            "Authorization": `Bearer eyJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJkaXBhbnNodTIzQGdtYWlsLmNvbSIsImlhdCI6MTc1MjY3ODcxNiwiZXhwIjoxNzUyNjgyMzE2fQ.QtNb1PLq4Y6XXIY-_v_Kfyz0PQ0lNRw6puBlbSdT6A0`
+          }
+        }
+      );
+
+      if (!response.ok) {
+        const errText = await response.text();
+        throw new Error("Prescription not found: " + errText);
+      }
+
+      const prescription = await response.json();
+      const medications = prescription.medications || [];
+      currentPrescriptionId = id;
+
+      const details = document.getElementById("prescriptionDetails");
+      details.innerHTML = `
+        <div class="row mb-4">
+          <div class="col-md-6">
+            <h6>Prescription ID:</h6>
+            <p>${prescription.prescriptionId}</p>
+          </div>
+
+           <div class="row mb-4">
+          <div class="col-md-6">
+            <h6>Patient:</h6>
+            <p>${prescription.patient?.patientId} - ${prescription.patient?.firstName || ""} ${prescription.patient?.lastName || ""}</p>
+          </div>
+          <div class="col-md-6">
+            <h6>Doctor:</h6>
+            <p>${prescription.doctor?.doctorId} - ${prescription.doctor?.firstName || ""} ${prescription.doctor?.lastName || ""}</p>
+          </div>
+        </div>
+
+          <div class="col-md-6">
+            <h6>Date Issued:</h6>
+            <p>${new Date(prescription.issueDate).toLocaleDateString()}</p>
+          </div>
+          <div class="col-md-6">
+            <h6>Valid Until:</h6>
+            <p>${new Date(prescription.expiryDate).toLocaleDateString()}</p>
+          </div>
+        </div>
+
+       
+        <div class="mb-4">
+          <h6>Diagnosis:</h6>
+          <p>${prescription.diagnosis || "N/A"}</p>
+        </div>
+
+        <div class="mb-4">
+          <h6>Medications:</h6>
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Medicine</th>
+                <th>Dosage</th>
+                <th>Frequency</th>
+                <th>Duration</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${
+                medications.length > 0
+                  ? medications.map(med => `
+                    <tr>
+                      <td>${med.medicineName}</td>
+                      <td>${med.dosage}</td>
+                      <td>${med.frequency}</td>
+                      <td>${med.duration}</td>
+                    </tr>
+                  `).join("")
+                  : `<tr><td colspan="4">No medications listed</td></tr>`
+              }
+            </tbody>
+          </table>
+        </div>
+
+        <div class="mb-4">
+          <h6>Additional Instructions:</h6>
+          <p>${prescription.additionalInstructions || "None"}</p>
+        </div>
+
+       <div class="row">
+  <div class="col-md-6">
+    <h6>Doctor's Signature:</h6>
+    ${
+      prescription.signaturePath && prescription.signType
+        ? `<img src="data:${prescription.signType};base64,${prescription.signaturePath}" 
+              alt="Doctor's Signature" style="max-width: 200px; border: 1px solid #ddd; padding: 5px;">`
+        : "<p>No signature</p>"
+    }
+  </div>
+</div>
+
+      `;
+
+      const modal = new bootstrap.Modal(document.getElementById("viewPrescriptionModal"));
+      modal.show();
+
+    } catch (error) {
+      console.error("Error viewing prescription:", error);
+      alert("Error loading prescription details: " + error.message);
+    } finally {
+      hideLoading();
+    }
+  }
+
+
+      // Helper function to convert array buffer to base64
+      function arrayBufferToBase64(buffer) {
+        let binary = '';
+        const bytes = new Uint8Array(buffer);
+        const len = bytes.byteLength;
+        for (let i = 0; i < len; i++) {
+          binary += String.fromCharCode(bytes[i]);
+        }
+        return window.btoa(binary);
+      }
+
+      // Print prescription
+      function printPrescription() {
+        const printContent = document.getElementById("prescriptionDetails").innerHTML;
+        const originalContent = document.body.innerHTML;
+
+        document.body.innerHTML = `
+                <div class="container mt-4">
+                    <div class="text-center mb-4">
+                        <h2>MediPlus E-Prescription</h2>
+                        <p>${currentPrescriptionId}</p>
+                    </div>
+                    ${printContent}
+                    <div class="mt-4 text-muted text-center">
+                        <p>This is a computer-generated prescription. No physical signature required.</p>
+                    </div>
+                </div>
+            `;
+
+        window.print();
+        document.body.innerHTML = originalContent;
+
+        // Reinitialize any necessary event listeners
+        document.querySelectorAll(".view-prescription").forEach((button) => {
+          button.addEventListener("click", function () {
+            const id = this.getAttribute("data-id");
+            viewPrescription(id);
+          });
+        });
+      }
+
+      // Show loading spinner
+      function showLoading() {
+        document.querySelector(".loading-spinner").style.display = "flex";
+      }
+
+      // Hide loading spinner
+      function hideLoading() {
+        document.querySelector(".loading-spinner").style.display = "none";
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Same head content as index.html -->
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediPlus - Complete Healthcare Solution</title>
+    <link rel="shortcut icon" href="LOGO.png" type="image/x-icon">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            --primary-color: #0d6efd;
+            --secondary-color: #6c757d;
+            --dark-color: #212529;
+            --light-color: #f8f9fa;
+            --accent-color: #20c997;
+            --danger-color: #dc3545;
+            --success-color: #198754;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--dark-color);
+            overflow-x: hidden;
+        }
+        
+        /* Header Styles */
+        .header-area {
+            padding: 15px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 999;
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .navbar-brand img {
+            height: 40px;
+        }
+        
+        .nav-link {
+            font-weight: 500;
+            padding: 8px 15px !important;
+            color: var(--dark-color);
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            color: var(--primary-color);
+        }
+        
+        .dropdown-menu {
+            border: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            padding: 8px 20px;
+            font-weight: 500;
+            border-radius: 50px;
+        }
+        
+        .btn-primary:hover {
+            background-color: #0b5ed7;
+            border-color: #0a58ca;
+        }
+        
+        .btn-outline-primary {
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .btn-outline-primary:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        /* Hero Section */
+        .hero-section {
+            padding: 180px 0 100px;
+            background: linear-gradient(135deg, #f0f8ff 0%, #e6f0ff 100%);
+            margin-top: 70px;
+        }
+        
+        /* Section Styling */
+        .section {
+            padding: 80px 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .section-title h2 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title h2:after {
+            content: '';
+            position: absolute;
+            width: 60px;
+            height: 3px;
+            background-color: var(--primary-color);
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        /* Feature Cards */
+        .feature-card {
+            padding: 30px;
+            border-radius: 10px;
+            background-color: white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background-color: rgba(13, 110, 253, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: var(--primary-color);
+            font-size: 30px;
+        }
+        
+        /* Dashboard Styles */
+        .dashboard-sidebar {
+            background-color: var(--light-color);
+            height: 100vh;
+            position: fixed;
+            padding-top: 20px;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+        }
+        
+        .dashboard-content {
+            margin-left: 250px;
+            padding: 20px;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .sidebar-menu li {
+            margin-bottom: 5px;
+        }
+        
+        .sidebar-menu a {
+            display: block;
+            padding: 10px 15px;
+            color: var(--dark-color);
+            text-decoration: none;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            background-color: rgba(13, 110, 253, 0.1);
+            color: var(--primary-color);
+        }
+        
+        .sidebar-menu a i {
+            width: 20px;
+            margin-right: 10px;
+            text-align: center;
+        }
+        
+        /* Responsive Adjustments */
+        @media (max-width: 991px) {
+            .dashboard-sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+            
+            .dashboard-content {
+                margin-left: 0;
+            }
+        }
+        
+        @media (max-width: 767px) {
+            .hero-section {
+                padding: 120px 0 60px;
+                text-align: center;
+            }
+            
+            .section-title h2 {
+                font-size: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="d-flex">
+        <!-- Sidebar -->
+        <div class="dashboard-sidebar col-md-3 col-lg-2">
+            <div class="text-center mb-4">
+                <img src="https://via.placeholder.com/100?text=User" alt="Profile" class="rounded-circle mb-2" width="80">
+                <h5>John Doe</h5>
+                <p class="text-muted">Patient</p>
+            </div>
+            <ul class="sidebar-menu">
+                <li><a href="patient-dashboard.html" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="appointments.html"><i class="fas fa-calendar-check"></i> Appointments</a></li>
+                <li><a href="e-prescription.html"><i class="fas fa-file-prescription"></i> E-Prescriptions</a></li>
+                <li><a href="health-records.html"><i class="fas fa-heartbeat"></i> Health Records</a></li>
+                <li><a href="lab-reports.html"><i class="fas fa-flask"></i> Lab Reports</a></li>
+                <li><a href="medicine-orders.html"><i class="fas fa-pills"></i> Medicine Orders</a></li>
+                <li><a href="telemedicine.html"><i class="fas fa-video"></i> Online Consultation</a></li>
+                <li><a href="reminders.html"><i class="fas fa-bell"></i> Reminders</a></li>
+                <li><a href="ai-checker.html"><i class="fas fa-robot"></i> Symptom Checker</a></li>
+                <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+                <li><a href="logout.html"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="dashboard-content col-md-9 col-lg-10">
+            <div class="container-fluid">
+                <h2 class="mb-4">Patient Dashboard</h2>
+                
+                <!-- Quick Stats -->
+                <div class="row mb-4">
+                    <div class="col-md-6 col-lg-3">
+                        <div class="card bg-primary text-white">
+                            <div class="card-body">
+                                <h5 class="card-title">Upcoming Appointments</h5>
+                                <h2>2</h2>
+                                <a href="appointments.html" class="text-white">View All</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <div class="card bg-success text-white">
+                            <div class="card-body">
+                                <h5 class="card-title">Active Prescriptions</h5>
+                                <h2>3</h2>
+                                <a href="e-prescription.html" class="text-white">View All</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <div class="card bg-info text-white">
+                            <div class="card-body">
+                                <h5 class="card-title">Pending Lab Tests</h5>
+                                <h2>1</h2>
+                                <a href="lab-reports.html" class="text-white">View All</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <div class="card bg-warning text-dark">
+                            <div class="card-body">
+                                <h5 class="card-title">Medicine Orders</h5>
+                                <h2>2</h2>
+                                <a href="medicine-orders.html" class="text-dark">View All</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Upcoming Appointments -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5>Upcoming Appointments</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Date & Time</th>
+                                        <th>Doctor</th>
+                                        <th>Specialization</th>
+                                        <th>Type</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>June 15, 2023 - 10:00 AM</td>
+                                        <td>Dr. Sarah Johnson</td>
+                                        <td>Neurology</td>
+                                        <td>Video Consultation</td>
+                                        <td>
+                                            <a href="#" class="btn btn-sm btn-primary">Join</a>
+                                            <a href="#" class="btn btn-sm btn-outline-secondary">Reschedule</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>June 20, 2023 - 2:30 PM</td>
+                                        <td>Dr. Michael Williams</td>
+                                        <td>Orthopedics</td>
+                                        <td>Clinic Visit</td>
+                                        <td>
+                                            <a href="#" class="btn btn-sm btn-outline-primary">Details</a>
+                                            <a href="#" class="btn btn-sm btn-outline-secondary">Cancel</a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Recent Prescriptions -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5>Recent Prescriptions</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Doctor</th>
+                                        <th>Medicines</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>June 10, 2023</td>
+                                        <td>Dr. John Smith</td>
+                                        <td>3 Items</td>
+                                        <td><span class="badge bg-success">Active</span></td>
+                                        <td><a href="prescription-detail.html" class="btn btn-sm btn-primary">View</a></td>
+                                    </tr>
+                                    <tr>
+                                        <td>May 28, 2023</td>
+                                        <td>Dr. Emily Brown</td>
+                                        <td>2 Items</td>
+                                        <td><span class="badge bg-success">Active</span></td>
+                                        <td><a href="prescription-detail.html" class="btn btn-sm btn-primary">View</a></td>
+                                    </tr>
+                                    <tr>
+                                        <td>May 15, 2023</td>
+                                        <td>Dr. Sarah Johnson</td>
+                                        <td>4 Items</td>
+                                        <td><span class="badge bg-secondary">Completed</span></td>
+                                        <td><a href="prescription-detail.html" class="btn btn-sm btn-primary">View</a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Health Summary -->
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Health Summary</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6>Vital Signs</h6>
+                                <ul class="list-group mb-4">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        Blood Pressure
+                                        <span class="badge bg-primary rounded-pill">120/80 mmHg</span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        Heart Rate
+                                        <span class="badge bg-primary rounded-pill">72 bpm</span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        Temperature
+                                        <span class="badge bg-primary rounded-pill">98.6°F</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h6>Recent Lab Results</h6>
+                                <ul class="list-group">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        Blood Test
+                                        <span class="badge bg-success rounded-pill">Normal</span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        Cholesterol
+                                        <span class="badge bg-warning rounded-pill">Borderline</span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        Glucose
+                                        <span class="badge bg-success rounded-pill">Normal</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Dashboard specific scripts
+    </script>
+</body>
+</html>

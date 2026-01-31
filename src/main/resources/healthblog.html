@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Insights | Medical Center</title>
+    <link rel="shortcut icon" href="LOGO.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --hospital-blue: #0066cc;
+            --doctor-white: #f8f9fa;
+            --stethoscope-teal: #008b8b;
+            --emergency-red: #d62839;
+            --text-gray: #4a4a4a;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-gray);
+            background-color: var(--doctor-white);
+            margin: 0;
+            padding: 0;
+        }
+        
+        .medical-header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .medical-logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .medical-logo i {
+            color: var(--hospital-blue);
+            font-size: 2rem;
+            margin-right: 1rem;
+        }
+        
+        .medical-nav a {
+            color: var(--text-gray);
+            text-decoration: none;
+            margin-left: 1.5rem;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .medical-nav a:hover {
+            color: var(--hospital-blue);
+        }
+        
+        .medical-banner {
+            background: linear-gradient(135deg, var(--hospital-blue), var(--stethoscope-teal));
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+        
+        .medical-main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .medical-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+        
+        .medical-card-header {
+            background-color: var(--hospital-blue);
+            color: white;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .medical-card-header i {
+            margin-right: 1rem;
+            font-size: 1.5rem;
+        }
+        
+        .medical-card-body {
+            padding: 1.5rem;
+        }
+        
+        .article-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .article-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+        
+        .article-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .article-image {
+            height: 180px;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .article-content {
+            padding: 1.2rem;
+        }
+        
+        .article-tag {
+            display: inline-block;
+            background-color: var(--stethoscope-teal);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-bottom: 0.8rem;
+        }
+        
+        .medical-newsletter {
+            background-color: var(--hospital-blue);
+            color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            margin: 3rem 0;
+            text-align: center;
+        }
+        
+        .newsletter-form {
+            display: flex;
+            max-width: 500px;
+            margin: 1rem auto;
+        }
+        
+        .newsletter-form input {
+            flex: 1;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 4px 0 0 4px;
+        }
+        
+        .newsletter-form button {
+            background-color: var(--emergency-red);
+            color: white;
+            border: none;
+            padding: 0 1.5rem;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .medical-footer {
+            background-color: var(--text-gray);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 1.5rem 0;
+        }
+        
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+        }
+        
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .social-icons a {
+            color: white;
+            font-size: 1.5rem;
+        }
+        
+        @media (max-width: 768px) {
+            .medical-nav {
+                display: none;
+            }
+            
+            .article-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .newsletter-form {
+                flex-direction: column;
+            }
+            
+            .newsletter-form input,
+            .newsletter-form button {
+                width: 100%;
+                border-radius: 4px;
+            }
+            
+            .newsletter-form button {
+                margin-top: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="medical-header">
+        <div class="medical-logo">
+            <i class="fas fa-hospital"></i>
+            <h1>MediCare Center</h1>
+        </div>
+        <nav class="medical-nav">
+            <a href="#">Home</a>
+            <a href="#">Services</a>
+            <a href="#">Doctors</a>
+            <a href="#">Health Blog</a>
+            <a href="#">Contact</a>
+        </nav>
+    </header>
+
+    <section class="medical-banner">
+        <h2>Health Insights & Medical Updates</h2>
+        <p>Trusted medical information from our healthcare professionals</p>
+    </section>
+
+    <main class="medical-main">
+        <div class="medical-card">
+            <div class="medical-card-header">
+                <i class="fas fa-bullhorn"></i>
+                <h3>Important Health Alerts</h3>
+            </div>
+            <div class="medical-card-body">
+                <p><strong>Seasonal Flu Vaccination:</strong> Now available at all our clinics. Book your appointment today.</p>
+                <p><strong>COVID-19 Update:</strong> Latest guidelines and safety measures in our facilities.</p>
+            </div>
+        </div>
+
+        <h2 style="color: var(--hospital-blue); border-bottom: 2px solid var(--hospital-blue); padding-bottom: 0.5rem;">Featured Health Articles</h2>
+        
+        <div class="article-grid">
+            <div class="article-card">
+                <div class="article-image" style="background-image: url('https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80');"></div>
+                <div class="article-content">
+                    <span class="article-tag">Preventive Care</span>
+                    <h3>10 Heart-Healthy Habits to Start Today</h3>
+                    <p>Cardiologist-approved lifestyle changes to reduce your risk of heart disease.</p>
+                    <a href="#" style="color: var(--hospital-blue); text-decoration: none; font-weight: 500;">Read More →</a>
+                </div>
+            </div>
+            
+            <div class="article-card">
+                <div class="article-image" style="background-image: url('https://images.unsplash.com/photo-1505751172876-fa1923c5c528?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80');"></div>
+                <div class="article-content">
+                    <span class="article-tag">Pediatrics</span>
+                    <h3>Managing Childhood Asthma: A Parent's Guide</h3>
+                    <p>Recognizing triggers and creating an effective action plan with your pediatrician.</p>
+                    <a href="#" style="color: var(--hospital-blue); text-decoration: none; font-weight: 500;">Read More →</a>
+                </div>
+            </div>
+            
+            <div class="article-card">
+                <div class="article-image" style="background-image: url('https://images.unsplash.com/photo-1498837167922-ddd27525d352?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80');"></div>
+                <div class="article-content">
+                    <span class="article-tag">Nutrition</span>
+                    <h3>The Mediterranean Diet: Science-Backed Benefits</h3>
+                    <p>How this eating pattern supports longevity and reduces chronic disease risk.</p>
+                    <a href="#" style="color: var(--hospital-blue); text-decoration: none; font-weight: 500;">Read More →</a>
+                </div>
+            </div>
+            
+            <div class="article-card">
+                <div class="article-image" style="background-image: url('https://images.unsplash.com/photo-1579684385127-1ef15d508118?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80');"></div>
+                <div class="article-content">
+                    <span class="article-tag">Mental Health</span>
+                    <h3>Understanding Anxiety Disorders</h3>
+                    <p>When to seek professional help and evidence-based treatment options.</p>
+                    <a href="#" style="color: var(--hospital-blue); text-decoration: none; font-weight: 500;">Read More →</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="medical-newsletter">
+            <h3>Stay Informed About Your Health</h3>
+            <p>Subscribe to our monthly newsletter for medical updates, health tips, and clinic news.</p>
+            <div class="newsletter-form">
+                <input type="email" placeholder="Enter your email address">
+                <button>Subscribe</button>
+            </div>
+            <p style="font-size: 0.8rem;">We respect your privacy. Unsubscribe at any time.</p>
+        </div>
+    </main>
+
+    <footer class="medical-footer">
+        <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 1rem;">
+            <i class="fas fa-hospital" style="font-size: 2rem; margin-right: 1rem; color: white;"></i>
+            <h3 style="margin: 0;">MediCare Center</h3>
+        </div>
+        <p>Comprehensive healthcare services for you and your family</p>
+        
+        <div class="footer-links">
+            <a href="#">About Us</a>
+            <a href="#">Services</a>
+            <a href="#">Patient Portal</a>
+            <a href="#">Careers</a>
+            <a href="#">Contact</a>
+        </div>
+        
+        <div class="social-icons">
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-linkedin"></i></a>
+        </div>
+        
+        <p style="font-size: 0.8rem; margin-top: 1.5rem;">© 2023 MediCare Center. All rights reserved.</p>
+    </footer>
+</body>
+</html>

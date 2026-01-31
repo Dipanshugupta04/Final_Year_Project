@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lensidarkroom - Medical Imaging | MediPlus</title>
+    <link rel="shortcut icon" href="LOGO.png" type="image/x-icon">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            --primary-color: #0d6efd;
+            --secondary-color: #6c757d;
+            --dark-color: #212529;
+            --light-color: #f8f9fa;
+            --accent-color: #20c997;
+            --danger-color: #dc3545;
+            --success-color: #198754;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--dark-color);
+            overflow-x: hidden;
+        }
+        
+        /* Header Styles */
+        .header-area {
+            padding: 15px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 999;
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .navbar-brand img {
+            height: 40px;
+        }
+        
+        .nav-link {
+            font-weight: 500;
+            padding: 8px 15px !important;
+            color: var(--dark-color);
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            color: var(--primary-color);
+        }
+        
+        .dropdown-menu {
+            border: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            padding: 8px 20px;
+            font-weight: 500;
+            border-radius: 50px;
+        }
+        
+        .btn-primary:hover {
+            background-color: #0b5ed7;
+            border-color: #0a58ca;
+        }
+        
+        .btn-outline-primary {
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .btn-outline-primary:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 8px;
+        }
+        
+        .patient-id-badge {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+        
+        /* Hero Section */
+        .hero-section {
+            padding: 180px 0 100px;
+            background: linear-gradient(135deg, #f0f8ff 0%, #e6f0ff 100%);
+            margin-top: 70px;
+            text-align: center;
+        }
+        
+        /* Section Styling */
+        .section {
+            padding: 80px 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .section-title h2 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title h2:after {
+            content: '';
+            position: absolute;
+            width: 60px;
+            height: 3px;
+            background-color: var(--primary-color);
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        /* Feature Cards */
+        .feature-card {
+            padding: 30px;
+            border-radius: 10px;
+            background-color: white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background-color: rgba(13, 110, 253, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: var(--primary-color);
+            font-size: 30px;
+        }
+        
+        /* Imaging Services */
+        .imaging-service {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            background: white;
+        }
+        
+        .imaging-content {
+            padding: 25px;
+        }
+        
+        .imaging-image {
+            height: 250px;
+            background-color: #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--secondary-color);
+            font-size: 20px;
+        }
+        
+        /* Booking Form */
+        .booking-form {
+            background-color: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .form-control, .form-select {
+            padding: 12px 15px;
+            border: 1px solid #ced4da;
+            border-radius: 8px;
+        }
+        
+        /* Responsive Adjustments */
+        @media (max-width: 991px) {
+            .patient-id-badge {
+                display: block;
+                margin: 5px 0 0 0;
+            }
+        }
+        
+        @media (max-width: 767px) {
+            .hero-section {
+                padding: 120px 0 60px;
+                text-align: center;
+            }
+            
+            .section-title h2 {
+                font-size: 30px;
+            }
+            
+            .booking-form {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header/Navigation -->
+    <header class="header-area">
+        <div class="container">
+            <nav class="navbar navbar-expand-lg">
+                <a class="navbar-brand" href="index.html">
+                    <img src="LOGO.png" alt="Logo">
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="collapse navbar-collapse" id="mainNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="servicesDropdown" role="button" data-bs-toggle="dropdown">
+                                Services
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="telecome.html">Online Consultation</a></li>
+                                <li><a class="dropdown-item" href="E-p.html">E-Prescription</a></li>
+                                <li><a class="dropdown-item" href="labtest.html">Lab Test Booking</a></li>
+                                <li><a class="dropdown-item" href="medicine.html">Search Medicine</a></li>
+                                <li><a class="dropdown-item" href="emergency.html">Emergency Services</a></li>
+                                <li><a class="dropdown-item active" href="lensidarkroom.html">Lensidarkroom</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item"><a class="nav-link" href="doctors.html">Doctors</a></li>
+                        <li class="nav-item"><a class="nav-link" href="healthrecord.html">Health Records</a></li>
+                        <li class="nav-item"><a class="nav-link" href="healthblog.html">Health Blog</a></li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="dashboardDropdown" role="button" data-bs-toggle="dropdown">
+                                Dashboard
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="patientdashboard.html">Patient Dashboard</a></li>
+                                <li><a class="dropdown-item" href="doctordashboard.html">Doctor Dashboard</a></li>
+                                <li><a class="dropdown-item" href="admin.html">Admin Dashboard</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <div class="ms-lg-4" id="authButtons">
+                        <a href="login.html" class="btn btn-outline-primary me-2">Login</a>
+                        <a href="register.html" class="btn btn-primary">Register</a>
+                    </div>
+                    <div class="ms-lg-4 d-none" id="userSection">
+                        <div class="dropdown">
+                            <a class="dropdown-toggle d-flex align-items-center text-decoration-none" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src="https://ui-avatars.com/api/?name=User&background=0D8ABC&color=fff" alt="User" class="user-avatar" id="userAvatar">
+                                <span id="navUsername">User</span>
+                               
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                <span class="patient-id-badge" id="patientIdBadge">ID: </span>
+                                <li><a class="dropdown-item" href="profile.html"><i class="fas fa-user me-2"></i>Profile</a></li>
+                                <li><a class="dropdown-item" href="settings.html"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                                <li><a class="dropdown-item" href="healthrecord.html"><i class="fas fa-file-medical me-2"></i>Health Records</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="#" id="logoutBtn"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <h1>Lensidarkroom Medical Imaging</h1>
+                    <p class="lead">Advanced diagnostic imaging services with precision and care</p>
+                    <a href="#booking" class="btn btn-primary me-3">Book an Appointment</a>
+                    <a href="#services" class="btn btn-outline-primary">View Our Services</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h2>About Lensidarkroom</h2>
+                    <p>Lensidarkroom is MediPlus's state-of-the-art medical imaging department, offering comprehensive diagnostic services using the latest technology. Our team of certified radiologists and technicians work together to provide accurate and timely results for better patient outcomes.</p>
+                    <p>We understand that medical imaging can be intimidating, which is why we've created a comfortable, patient-centered environment with cutting-edge equipment to ensure the highest quality diagnostics with minimal discomfort.</p>
+                    <div class="mt-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="feature-icon me-4">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div>
+                                <h5 class="mb-0">Board-Certified Radiologists</h5>
+                                <p>Our specialists have years of experience in diagnostic imaging</p>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="feature-icon me-4">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div>
+                                <h5 class="mb-0">Advanced Technology</h5>
+                                <p>Latest imaging equipment for precise diagnostics</p>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <div class="feature-icon me-4">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div>
+                                <h5 class="mb-0">Quick Results</h5>
+                                <p>Digital reports delivered within 24-48 hours</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="imaging-image">
+                        <i class="fas fa-x-ray fa-5x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="section bg-light">
+        <div class="container">
+            <div class="section-title">
+                <h2>Our Imaging Services</h2>
+                <p>Comprehensive diagnostic imaging for accurate medical assessment</p>
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-lg-4">
+                    <div class="imaging-service">
+                        <div class="imaging-image">
+                            <i class="fas fa-x-ray fa-3x"></i>
+                        </div>
+                        <div class="imaging-content">
+                            <h3>X-Ray Imaging</h3>
+                            <p>Conventional and digital X-rays for bone fractures, chest examinations, and dental imaging.</p>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-clock me-2"></i> Duration: 15-30 minutes</li>
+                                <li><i class="fas fa-file-medical me-2"></i> Results: Within 24 hours</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="imaging-service">
+                        <div class="imaging-image">
+                            <i class="fas fa-magnet fa-3x"></i>
+                        </div>
+                        <div class="imaging-content">
+                            <h3>MRI Scans</h3>
+                            <p>High-resolution magnetic resonance imaging for soft tissues, brain, and joint examinations.</p>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-clock me-2"></i> Duration: 30-90 minutes</li>
+                                <li><i class="fas fa-file-medical me-2"></i> Results: Within 48 hours</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="imaging-service">
+                        <div class="imaging-image">
+                            <i class="fas fa-wave-square fa-3x"></i>
+                        </div>
+                        <div class="imaging-content">
+                            <h3>CT Scans</h3>
+                            <p>Computed tomography for detailed cross-sectional images of body structures.</p>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-clock me-2"></i> Duration: 15-60 minutes</li>
+                                <li><i class="fas fa-file-medical me-2"></i> Results: Within 24 hours</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="imaging-service">
+                        <div class="imaging-image">
+                            <i class="fas fa-procedures fa-3x"></i>
+                        </div>
+                        <div class="imaging-content">
+                            <h3>Ultrasound</h3>
+                            <p>Sonography for abdominal, obstetric, gynecological, and vascular examinations.</p>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-clock me-2"></i> Duration: 30-60 minutes</li>
+                                <li><i class="fas fa-file-medical me-2"></i> Results: Within 24 hours</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="imaging-service">
+                        <div class="imaging-image">
+                            <i class="fas fa-radiation fa-3x"></i>
+                        </div>
+                        <div class="imaging-content">
+                            <h3>Mammography</h3>
+                            <p>Specialized imaging for breast cancer screening and diagnostic evaluation.</p>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-clock me-2"></i> Duration: 20-30 minutes</li>
+                                <li><i class="fas fa-file-medical me-2"></i> Results: Within 48 hours</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="imaging-service">
+                        <div class="imaging-image">
+                            <i class="fas fa-heartbeat fa-3x"></i>
+                        </div>
+                        <div class="imaging-content">
+                            <h3>Cardiac Imaging</h3>
+                            <p>Specialized cardiac CT and MRI for comprehensive heart assessment.</p>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-clock me-2"></i> Duration: 45-90 minutes</li>
+                                <li><i class="fas fa-file-medical me-2"></i> Results: Within 48 hours</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking Section -->
+    <section id="booking" class="section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Book an Appointment</h2>
+                <p>Schedule your imaging procedure with our specialists</p>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="booking-form">
+                        <form id="imagingBookingForm">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="fullName" class="form-label">Full Name</label>
+                                    <input type="text" class="form-control" id="fullName" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="email" class="form-label">Email Address</label>
+                                    <input type="email" class="form-control" id="email" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="phone" class="form-label">Phone Number</label>
+                                    <input type="tel" class="form-control" id="phone" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="service" class="form-label">Imaging Service</label>
+                                    <select class="form-select" id="service" required>
+                                        <option value="">Select a service</option>
+                                        <option value="xray">X-Ray Imaging</option>
+                                        <option value="mri">MRI Scan</option>
+                                        <option value="ct">CT Scan</option>
+                                        <option value="ultrasound">Ultrasound</option>
+                                        <option value="mammography">Mammography</option>
+                                        <option value="cardiac">Cardiac Imaging</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="date" class="form-label">Preferred Date</label>
+                                    <input type="date" class="form-control" id="date" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="time" class="form-label">Preferred Time</label>
+                                    <select class="form-select" id="time" required>
+                                        <option value="">Select a time</option>
+                                        <option value="09:00">09:00 AM</option>
+                                        <option value="10:00">10:00 AM</option>
+                                        <option value="11:00">11:00 AM</option>
+                                        <option value="12:00">12:00 PM</option>
+                                        <option value="13:00">01:00 PM</option>
+                                        <option value="14:00">02:00 PM</option>
+                                        <option value="15:00">03:00 PM</option>
+                                        <option value="16:00">04:00 PM</option>
+                                    </select>
+                                </div>
+                                <div class="col-12 mb-3">
+                                    <label for="notes" class="form-label">Additional Notes</label>
+                                    <textarea class="form-control" id="notes" rows="3"></textarea>
+                                </div>
+                                <div class="col-12">
+                                    <button type="submit" class="btn btn-primary w-100">Book Appointment</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Preparation Section -->
+    <section class="section bg-light">
+        <div class="container">
+            <div class="section-title">
+                <h2>Preparation Guidelines</h2>
+                <p>How to prepare for your imaging procedure</p>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="card mb-4">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">General Preparation</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">Wear comfortable, loose-fitting clothing</li>
+                                <li class="list-group-item">Avoid wearing jewelry or metal objects</li>
+                                <li class="list-group-item">Bring your ID and insurance information</li>
+                                <li class="list-group-item">Arrive 15 minutes before your appointment</li>
+                                <li class="list-group-item">Inform us if you might be pregnant</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="card mb-4">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">Procedure-Specific Instructions</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="accordion" id="prepAccordion">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#prepOne">
+                                            MRI Scans
+                                        </button>
+                                    </h2>
+                                    <div id="prepOne" class="accordion-collapse collapse show" data-bs-parent="#prepAccordion">
+                                        <div class="accordion-body">
+                                            <p>No food or drink for 4 hours before the procedure. Inform us about any metal implants or devices.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#prepTwo">
+                                            CT Scans
+                                        </button>
+                                    </h2>
+                                    <div id="prepTwo" class="accordion-collapse collapse" data-bs-parent="#prepAccordion">
+                                        <div class="accordion-body">
+                                            <p>Fast for 3-4 hours before the scan. You may be asked to drink a contrast solution.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#prepThree">
+                                            Ultrasound
+                                        </button>
+                                    </h2>
+                                    <div id="prepThree" class="accordion-collapse collapse" data-bs-parent="#prepAccordion">
+                                        <div class="accordion-body">
+                                            <p>Drink 4-6 glasses of water 1 hour before your appointment and avoid emptying your bladder.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer-area bg-dark text-white pt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 col-md-6 mb-5 mb-lg-0">
+                    <div class="footer-widget">
+                        <h3>About MediPlus</h3>
+                        <p class="mt-4">MediPlus is a complete healthcare platform integrating telemedicine, e-prescriptions, lab tests, medicine delivery, and health records management.</p>
+                        <div class="social-links mt-4 d-flex gap-3">
+                            <a href="#" class="text-white"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" class="text-white"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="text-white"><i class="fab fa-instagram"></i></a>
+                            <a href="#" class="text-white"><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-6 mb-5 mb-md-0">
+                    <div class="footer-widget">
+                        <h3>Quick Links</h3>
+                        <ul class="footer-links mt-4 list-unstyled">
+                            <li class="mb-2"><a href="index.html" class="text-white-50">Home</a></li>
+                            <li class="mb-2"><a href="doctors.html" class="text-white-50">Doctors</a></li>
+                            <li class="mb-2"><a href="services.html" class="text-white-50">Services</a></li>
+                            <li class="mb-2"><a href="healthblog.html" class="text-white-50">Health Blog</a></li>
+                            <li class="mb-2"><a href="#footer-widget" class="text-white-50">Contact</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-5 mb-md-0">
+                    <div class="footer-widget">
+                        <h3>Services</h3>
+                        <ul class="footer-links mt-4 list-unstyled">
+                            <li class="mb-2"><a href="telecome.html" class="text-white-50">Online Consultation</a></li>
+                            <li class="mb-2"><a href="E-p.html" class="text-white-50">E-Prescription</a></li>
+                            <li class="mb-2"><a href="medicine.html" class="text-white-50">Medicine Ordering</a></li>
+                            <li class="mb-2"><a href="labtest.html" class="text-white-50">Lab Test Booking</a></li>
+                            <li class="mb-2"><a href="lensidarkroom.html" class="text-white-50">Lensidarkroom Imaging</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6" id="footer-widget">
+                    <div class="footer-widget">
+                        <h3>Contact Us</h3>
+                        <ul class="contact-info mt-4 list-unstyled">
+                            <li class="mb-3">
+                                <i class="fas fa-map-marker-alt me-2"></i>
+                                <span>123 Health Street, Medical City</span>
+                            </li>
+                            <li class="mb-3">
+                                <i class="fas fa-phone-alt me-2"></i>
+                                <span>+1 (123) 456-7890</span>
+                            </li>
+                            <li class="mb-3">
+                                <i class="fas fa-envelope me-2"></i>
+                                <span>info@mediplus.com</span>
+                            </li>
+                            <li class="mb-3">
+                                <i class="fas fa-clock me-2"></i>
+                                <span>24/7 Emergency Services</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom py-4 mt-4 border-top border-secondary">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-md-6">
+                            <p class="mb-0">&copy; 2023 MediPlus. All rights reserved.</p>
+                        </div>
+                        <div class="col-md-6 text-md-end">
+                            <a href="privacy.html" class="text-white-50 me-3">Privacy Policy</a>
+                            <a href="terms.html" class="text-white-50">Terms of Service</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Authentication state management
+            const authButtons = document.getElementById("authButtons");
+            const userSection = document.getElementById("userSection");
+            const navUsername = document.getElementById("navUsername");
+            const userAvatar = document.getElementById("userAvatar");
+            const patientIdBadge = document.getElementById("patientIdBadge");
+            const logoutBtn = document.getElementById("logoutBtn");
+
+            // Check authentication status
+            function checkAuthStatus() {
+                const userData = localStorage.getItem("user");
+
+                if (userData) {
+                    try {
+                        const user = JSON.parse(userData);
+                        const name = user.name || user.username || user.fullName || user.user || "User";
+                        
+                        // Hide auth buttons, show user section
+                        authButtons.classList.add("d-none");
+                        userSection.classList.remove("d-none");
+                        
+                        // Update user info
+                        navUsername.textContent = name;
+                        
+                        // Update avatar with user's initial
+                        const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=0D8ABC&color=fff`;
+                        userAvatar.src = avatarUrl;
+                        
+                        // Get and display patient ID
+                        const id = localStorage.getItem("unique_id");
+                        if (id) {
+                            patientIdBadge.textContent = "ID: " + id;
+                        } else {
+                            patientIdBadge.style.display = "none";
+                        }
+                    } catch (e) {
+                        console.error("Error parsing user data:", e);
+                        clearUserData();
+                        showAuthButtons();
+                    }
+                } else {
+                    showAuthButtons();
+                }
+            }
+
+            function showAuthButtons() {
+                authButtons.classList.remove("d-none");
+                userSection.classList.add("d-none");
+            }
+
+            function clearUserData() {
+                localStorage.removeItem("token");
+                localStorage.removeItem("user");
+                localStorage.removeItem("currentUser");
+                localStorage.removeItem("username");
+                localStorage.removeItem("unique_id");
+            }
+
+            // Initialize auth status
+            checkAuthStatus();
+
+            // Logout functionality
+            function performLogout() {
+                localStorage.removeItem("authToken");
+                localStorage.removeItem("rememberedEmail");
+                localStorage.removeItem("user");
+                localStorage.removeItem("examId");
+                localStorage.removeItem("examName");
+                localStorage.removeItem("unique_id");
+                
+                window.location.href = "index.html";
+            }
+
+            logoutBtn?.addEventListener("click", function (e) {
+                e.preventDefault();
+                performLogout();
+            });
+
+            // Booking form submission
+            const bookingForm = document.getElementById("imagingBookingForm");
+            if (bookingForm) {
+                bookingForm.addEventListener("submit", function(e) {
+                    e.preventDefault();
+                    
+                    // Check if user is logged in
+                    const userData = localStorage.getItem("user");
+                    if (!userData) {
+                        alert("Please login to book an appointment.");
+                        window.location.href = "login.html";
+                        return;
+                    }
+                    
+                    // Get form data
+                    const formData = {
+                        fullName: document.getElementById("fullName").value,
+                        email: document.getElementById("email").value,
+                        phone: document.getElementById("phone").value,
+                        service: document.getElementById("service").value,
+                        date: document.getElementById("date").value,
+                        time: document.getElementById("time").value,
+                        notes: document.getElementById("notes").value
+                    };
+                    
+                    // In a real application, you would send this data to your server
+                    console.log("Booking submission:", formData);
+                    
+                    // Show success message
+                    alert("Your appointment request has been submitted successfully! We will contact you to confirm your booking.");
+                    bookingForm.reset();
+                });
+            }
+
+            // Set minimum date to today for the date picker
+            const dateInput = document.getElementById("date");
+            if (dateInput) {
+                const today = new Date();
+                const yyyy = today.getFullYear();
+                let mm = today.getMonth() + 1;
+                let dd = today.getDate();
+
+                if (dd < 10) dd = '0' + dd;
+                if (mm < 10) mm = '0' + mm;
+
+                const formattedToday = yyyy + '-' + mm + '-' + dd;
+                dateInput.min = formattedToday;
+            }
+
+            // JWT Token Expiry Check (simplified version)
+            function checkTokenExpiry() {
+                const token = localStorage.getItem('authToken');
+                if (token) {
+                    try {
+                        // Simple check - in a real app, you would decode the JWT
+                        // and check the expiration time
+                        const payload = JSON.parse(atob(token.split('.')[1]));
+                        const expirationTime = payload.exp * 1000;
+                        
+                        if (Date.now() >= expirationTime) {
+                            // Token expired
+                            localStorage.removeItem('authToken');
+                            localStorage.removeItem('user');
+                            localStorage.removeItem('unique_id');
+                            window.location.reload();
+                        }
+                    } catch (e) {
+                        console.error('Error checking token expiry:', e);
+                    }
+                }
+            }
+
+            // Check token expiry on page load and every minute
+            checkTokenExpiry();
+            setInterval(checkTokenExpiry, 60000);
+        });
+    </script>
+</body>
+</html>

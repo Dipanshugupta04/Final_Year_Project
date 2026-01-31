@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - MediFind</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background-color: #f0f7ff;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #1976D2 0%, #0D47A1 100%);
+            color: white;
+            padding: 15px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo i {
+            font-size: 28px;
+        }
+        
+        .logo h1 {
+            font-weight: 600;
+            font-size: 24px;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .profile-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: white;
+            color: #1976D2;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .profile-btn:hover {
+            background: #e3f2fd;
+        }
+        
+        .profile-section {
+            padding: 40px 0;
+        }
+        
+        .profile-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .profile-header h2 {
+            font-size: 32px;
+            margin-bottom: 10px;
+            color: #1976D2;
+        }
+        
+        .profile-header p {
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .profile-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+        }
+        
+        .profile-header-card {
+            background: linear-gradient(135deg, #1976D2 0%, #0D47A1 100%);
+            padding: 30px;
+            color: white;
+            text-align: center;
+            position: relative;
+        }
+        
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 4px solid white;
+            margin: 0 auto 15px;
+            background: #e3f2fd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: #1976D2;
+        }
+        
+        .profile-name {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .profile-email {
+            opacity: 0.9;
+            margin-bottom: 15px;
+        }
+        
+        .profile-body {
+            padding: 30px;
+        }
+        
+        .profile-section-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #1976D2;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e3f2fd;
+        }
+        
+        .profile-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .detail-group {
+            margin-bottom: 20px;
+        }
+        
+        .detail-label {
+            font-weight: 500;
+            color: #666;
+            margin-bottom: 5px;
+            display: block;
+        }
+        
+        .detail-value {
+            font-size: 16px;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+        
+        .btn-primary {
+            background: #1976D2;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #1565C0;
+        }
+        
+        .btn-secondary {
+            background: #e3f2fd;
+            color: #1976D2;
+        }
+        
+        .btn-secondary:hover {
+            background: #bbdefb;
+        }
+        
+        .btn-danger {
+            background: #f44336;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #d32f2f;
+        }
+        
+        .appointment-history {
+            margin-top: 40px;
+        }
+        
+        .appointment-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            border-left: 4px solid #1976D2;
+        }
+        
+        .appointment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .appointment-doctor {
+            font-weight: 600;
+            color: #1976D2;
+        }
+        
+        .appointment-date {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .appointment-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .appointment-status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .status-confirmed {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        
+        .status-pending {
+            background: #fff8e1;
+            color: #f57c00;
+        }
+        
+        .status-cancelled {
+            background: #ffebee;
+            color: #d32f2f;
+        }
+        
+        .no-appointments {
+            text-align: center;
+            padding: 40px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+        
+        .no-appointments i {
+            font-size: 60px;
+            color: #ccc;
+            margin-bottom: 20px;
+        }
+        
+        footer {
+            background: #1976D2;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 40px;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            background: #f44336;
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            display: none;
+            z-index: 1000;
+        }
+        
+        .notification.success {
+            background: #4CAF50;
+        }
+        
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 30px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .close:hover {
+            color: black;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+            
+            .nav-buttons {
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .nav-btn, .profile-btn {
+                width: 100%;
+                text-align: center;
+                justify-content: center;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+            
+            .appointment-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .modal-content {
+                width: 95%;
+                margin: 5% auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="notification" id="notification"></div>
+    
+    <!-- Edit Profile Modal -->
+    <div id="editProfileModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('editProfileModal')">&times;</span>
+            <h2>Edit Profile</h2>
+            <form id="editProfileForm">
+                <div class="form-group">
+                    <label for="edit-name">Full Name</label>
+                    <input type="text" id="edit-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-phone">Phone Number</label>
+                    <input type="tel" id="edit-phone">
+                </div>
+                <div class="form-group">
+                    <label for="edit-dob">Date of Birth</label>
+                    <input type="date" id="edit-dob">
+                </div>
+                <div class="form-group">
+                    <label for="edit-address">Address</label>
+                    <input type="text" id="edit-address">
+                </div>
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Change Password Modal -->
+    <div id="changePasswordModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('changePasswordModal')">&times;</span>
+            <h2>Change Password</h2>
+            <form id="changePasswordForm">
+                <div class="form-group">
+                    <label for="current-password">Current Password</label>
+                    <input type="password" id="current-password" required>
+                </div>
+                <div class="form-group">
+                    <label for="new-password">New Password</label>
+                    <input type="password" id="new-password" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirm-password">Confirm New Password</label>
+                    <input type="password" id="confirm-password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Change Password</button>
+            </form>
+        </div>
+    </div>
+    
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-stethoscope"></i>
+                    <h1>MediFind</h1>
+                </div>
+                <div class="nav-buttons" id="auth-buttons">
+                    <!-- This will be populated by JavaScript based on auth status -->
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="profile-section">
+        <div class="container">
+            <div class="profile-header">
+                <h2>My Profile</h2>
+                <p>Manage your personal information and appointment history</p>
+            </div>
+            
+            <div class="profile-card">
+                <div class="profile-header-card">
+                    <div class="profile-avatar" id="profile-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <h3 class="profile-name" id="profile-name">Loading...</h3>
+                    <p class="profile-email" id="profile-email">Loading...</p>
+                </div>
+                
+                <div class="profile-body">
+                    <h4 class="profile-section-title">Personal Information</h4>
+                    
+                    <div class="profile-details">
+                        <div class="detail-group">
+                            <span class="detail-label">Full Name</span>
+                            <div class="detail-value" id="user-fullname">Loading...</div>
+                        </div>
+                        
+                        <div class="detail-group">
+                            <span class="detail-label">Email Address</span>
+                            <div class="detail-value" id="user-email">Loading...</div>
+                        </div>
+                        
+                        <div class="detail-group">
+                            <span class="detail-label">Phone Number</span>
+                            <div class="detail-value" id="user-phone">Not provided</div>
+                        </div>
+                        
+                        <div class="detail-group">
+                            <span class="detail-label">Unique ID</span>
+                            <div class="detail-value" id="user-dob">Not provided</div>
+                        </div>
+                        
+                        
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button class="btn btn-primary" onclick="openEditProfileModal()">
+                            <i class="fas fa-edit"></i> Edit Profile
+                        </button>
+                        <button class="btn btn-secondary" onclick="openChangePasswordModal()">
+                            <i class="fas fa-lock"></i> Change Password
+                        </button>
+                        <button class="btn btn-danger" onclick="logout()">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="appointment-history">
+                <h4 class="profile-section-title">Appointment History</h4>
+                
+                <div id="appointments-container">
+                    <div class="no-appointments">
+                        <i class="fas fa-calendar-check"></i>
+                        <h3>No appointments yet</h3>
+                        <p>Book your first appointment with one of our qualified doctors</p>
+                        <button class="btn btn-primary" style="margin-top: 20px;" onclick="window.location.href='findDoctors.html'">
+                            Find a Doctor
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 MediFind - Doctor Search Portal. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Constants
+        const AUTH_TOKEN_KEY = 'authToken';
+        const USER_EMAIL_KEY = 'email';
+        const USER_DATA_KEY = 'user';
+        const API_BASE_URL = 'http://localhost:8080'; // Your Spring Boot backend URL
+        
+        // DOM Elements
+        const authButtons = document.getElementById('auth-buttons');
+        const notification = document.getElementById('notification');
+        
+        // Check authentication status
+        function checkAuth() {
+            const token = localStorage.getItem(AUTH_TOKEN_KEY);
+            const userEmail = localStorage.getItem(USER_EMAIL_KEY);
+            const userData = localStorage.getItem(USER_DATA_KEY);
+            
+            if (!token) {
+                // Not authenticated - redirect to login
+                window.location.href = 'login.html';
+                return false;
+            } else {
+                // Authenticated - show profile button
+                let userName = 'User';
+                if (userData) {
+                    try {
+                        const user = JSON.parse(userData);
+                        userName = user.username || user.email || 'User';
+                    } catch (e) {
+                        console.error('Error parsing user data:', e);
+                    }
+                }
+                
+                authButtons.innerHTML = `
+                    <a href="findDoctors.html" class="nav-btn">
+                        <i class="fas fa-search"></i> Find Doctors
+                    </a>
+                    <button class="profile-btn">
+                        <i class="fas fa-user"></i>
+                        ${userName}
+                    </button>
+                    <button class="nav-btn" onclick="logout()">Logout</button>
+                `;
+                return true;
+            }
+        }
+        
+        // API call helper function
+        async function apiCall(endpoint, options = {}) {
+            const token = localStorage.getItem(AUTH_TOKEN_KEY);
+            
+            const defaultOptions = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': token ? `Bearer ${token}` : ''
+                }
+            };
+            
+            const config = {
+                ...defaultOptions,
+                ...options,
+                headers: {
+                    ...defaultOptions.headers,
+                    ...options.headers
+                }
+            };
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}${endpoint}`, config);
+                
+                if (!response.ok) {
+                    throw new Error(`API error: ${response.status}`);
+                }
+                
+                return await response.json();
+            } catch (error) {
+                console.error('API call failed:', error);
+                throw error;
+            }
+        }
+        
+        // Safe function to set text content (prevents null errors)
+        function setSafeTextContent(elementId, value) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.textContent = value;
+            }
+        }
+        
+        // Load user profile data from API
+        async function loadProfileData() {
+            try {
+                // Get user email from localStorage
+                const userEmail = localStorage.getItem(USER_EMAIL_KEY);
+                console.log("User email from storage:", userEmail);
+                
+                if (!userEmail) {
+                    throw new Error('No user email found');
+                }
+                
+                // Fetch user details from API using email
+                const userDetails = await apiCall(`/getUser/${encodeURIComponent(userEmail)}`);
+                console.log("User details from API:", userDetails);
+                
+                // Set profile information
+                setSafeTextContent('profile-name', userDetails.username || 'User');
+                setSafeTextContent('profile-email', userDetails.email || '');
+                setSafeTextContent('user-fullname', userDetails.username || 'Not provided');
+                setSafeTextContent('user-email', userDetails.email || 'Not provided');
+                setSafeTextContent('user-phone', userDetails.contactNo || 'Not provided');
+                setSafeTextContent('user-dob', userDetails.uniqueId || 'Not provided');
+                
+                // Set avatar background color based on name
+                if (userDetails.username) {
+                    const firstLetter = userDetails.username.charAt(0).toUpperCase();
+                    const profileAvatar = document.getElementById('profile-avatar');
+                    if (profileAvatar) {
+                        profileAvatar.innerHTML = firstLetter;
+                        const hue = (firstLetter.charCodeAt(0) * 10) % 360;
+                        profileAvatar.style.background = `linear-gradient(135deg, hsl(${hue}, 70%, 65%), hsl(${hue}, 70%, 45%))`;
+                    }
+                }
+                
+            } catch (error) {
+                console.error('Error loading profile data:', error);
+                showNotification('Error loading profile data', true);
+                
+                // Fallback to stored user data if API fails
+                const userData = localStorage.getItem(USER_DATA_KEY);
+                if (userData) {
+                    try {
+                        const user = JSON.parse(userData);
+                        console.log("Fallback to stored user data:", user);
+                        setSafeTextContent('profile-name', user.username || 'User');
+                        setSafeTextContent('profile-email', user.email || '');
+                        setSafeTextContent('user-fullname', user.username || 'Not provided');
+                        setSafeTextContent('user-email', user.email || 'Not provided');
+                    } catch (e) {
+                        console.error('Error parsing stored user data:', e);
+                    }
+                }
+            }
+            
+            // Load appointment history
+            await loadAppointmentHistory();
+        }
+        
+        // Load appointment history
+        function loadAppointmentHistory() {
+            // This would be replaced with actual API call to get appointments
+            // For now, using mock data
+            const appointments = [];
+            
+            const appointmentsContainer = document.getElementById('appointments-container');
+            
+            if (appointments.length === 0) {
+                appointmentsContainer.innerHTML = `
+                    <div class="no-appointments">
+                        <i class="fas fa-calendar-check"></i>
+                        <h3>No appointments yet</h3>
+                        <p>Book your first appointment with one of our qualified doctors</p>
+                        <button class="btn btn-primary" style="margin-top: 20px;" onclick="window.location.href='findDoctors.html'">
+                            Find a Doctor
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+            
+            // If you have appointments, you would display them here
+        }
+        
+        // Show notification message
+        function showNotification(message, isError = true) {
+            const notification = document.getElementById('notification');
+            if (notification) {
+                notification.textContent = message;
+                notification.className = isError ? 'notification' : 'notification success';
+                notification.style.display = 'block';
+                
+                setTimeout(() => {
+                    notification.style.display = 'none';
+                }, 3000);
+            }
+        }
+        
+        // Modal functions
+        function openEditProfileModal() {
+            // Pre-fill the form with current data
+            const nameElement = document.getElementById('user-fullname');
+            const phoneElement = document.getElementById('user-phone');
+            const dobElement = document.getElementById('user-dob');
+            
+            if (nameElement) document.getElementById('edit-name').value = nameElement.textContent;
+            if (phoneElement) document.getElementById('edit-phone').value = phoneElement.textContent;
+            if (dobElement) document.getElementById('edit-dob').value = dobElement.textContent;
+            
+            const modal = document.getElementById('editProfileModal');
+            if (modal) {
+                modal.style.display = 'block';
+            }
+        }
+        
+        function openChangePasswordModal() {
+            const modal = document.getElementById('changePasswordModal');
+            if (modal) {
+                modal.style.display = 'block';
+            }
+        }
+        
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.style.display = 'none';
+            }
+        }
+        
+        // Edit profile form submission
+        document.getElementById('editProfileForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            try {
+                // Get the email from localStorage
+                const userEmail = localStorage.getItem(USER_EMAIL_KEY);
+                
+                // Prepare the data in the format expected by the backend
+                const editProfileRequest = {
+                    username: document.getElementById('edit-name').value,
+                    contactNo: document.getElementById('edit-phone').value,
+                    dob: document.getElementById('edit-dob').value,
+                    address: document.getElementById('edit-address').value
+                };
+                
+                console.log("Sending edit profile request:", editProfileRequest);
+                
+                // Call the edit-profile API endpoint
+                const response = await apiCall('/edit-profile', {
+                    method: 'PUT',
+                    body: JSON.stringify(editProfileRequest)
+                });
+                
+                showNotification('Profile updated successfully!', false);
+                closeModal('editProfileModal');
+                
+                // Reload profile data to reflect changes
+                await loadProfileData();
+                
+            } catch (error) {
+                console.error('Error updating profile:', error);
+                showNotification('Error updating profile: ' + error.message, true);
+            }
+        });
+        
+        // Change password form submission
+        document.getElementById('changePasswordForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            try {
+                const currentPassword = document.getElementById('current-password').value;
+                const newPassword = document.getElementById('new-password').value;
+                const confirmPassword = document.getElementById('confirm-password').value;
+                
+                if (newPassword !== confirmPassword) {
+                    showNotification('New passwords do not match', true);
+                    return;
+                }
+                
+                // Get the email from localStorage
+                const userEmail = localStorage.getItem(USER_EMAIL_KEY);
+                
+                // Prepare the data for password change
+                const passwordChangeRequest = {
+                    currentPassword: currentPassword,
+                    newPassword: newPassword,
+                    confirmPassword: confirmPassword
+                };
+                
+                // Call the change password API endpoint (you'll need to create this in your backend)
+                // For now, we'll just show a success message
+                // const response = await apiCall('/change-password', {
+                //     method: 'POST',
+                //     body: JSON.stringify(passwordChangeRequest)
+                // });
+                
+                showNotification('Password changed successfully!', false);
+                closeModal('changePasswordModal');
+                
+                // Clear the form
+                document.getElementById('changePasswordForm').reset();
+                
+            } catch (error) {
+                console.error('Error changing password:', error);
+                showNotification('Error changing password: ' + error.message, true);
+            }
+        });
+        
+        // Logout function
+        function logout() {
+            localStorage.removeItem(AUTH_TOKEN_KEY);
+            localStorage.removeItem(USER_EMAIL_KEY);
+            localStorage.removeItem(USER_DATA_KEY);
+            window.location.href = 'index.html';
+        }
+        
+        // Initialize page
+        async function initPage() {
+            if (checkAuth()) {
+                await loadProfileData();
+            }
+        }
+        
+        // Start the application
+        initPage();
+        
+        // Close modal when clicking outside of it
+        window.onclick = function(event) {
+            const modals = document.getElementsByClassName('modal');
+            for (let i = 0; i < modals.length; i++) {
+                if (event.target === modals[i]) {
+                    modals[i].style.display = 'none';
+                }
+            }
+        };
+    </script>
+</body>
+</html>

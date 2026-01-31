@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediPlus - AI Symptom Checker</title>
+    <link rel="shortcut icon" href="LOGO.png" type="image/x-icon">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            --primary-color: #2c7be5;
+            --secondary-color: #6e84a3;
+            --success-color: #00d97e;
+            --warning-color: #f6c343;
+            --danger-color: #e63757;
+            --light-bg: #f9fbfd;
+            --gradient-primary: linear-gradient(135deg, #2c7be5 0%, #6c5ce7 100%);
+            --gradient-success: linear-gradient(135deg, #00d97e 0%, #00b8a9 100%);
+            --gradient-warning: linear-gradient(135deg, #f6c343 0%, #ff9a3d 100%);
+            --shadow-light: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --shadow-medium: 0 8px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        * {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+
+        .dashboard-content {
+            background: transparent;
+        }
+
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .symptom-card {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            border: none;
+            border-radius: 15px;
+            background: white;
+            box-shadow: var(--shadow-light);
+        }
+
+        .symptom-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .symptom-card.selected {
+            background: var(--gradient-primary);
+            color: white;
+            transform: translateY(-5px);
+        }
+
+        .symptom-card.selected i {
+            color: white !important;
+        }
+
+        .condition-card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: var(--shadow-light);
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .condition-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .severity-low { border-left-color: var(--success-color); }
+        .severity-medium { border-left-color: var(--warning-color); }
+        .severity-high { border-left-color: var(--danger-color); }
+
+        .chat-bubble {
+            border-radius: 20px;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            max-width: 85%;
+            position: relative;
+            animation: fadeInUp 0.4s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .user-bubble {
+            background: var(--gradient-primary);
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 5px;
+            box-shadow: 0 4px 15px rgba(44, 123, 229, 0.3);
+        }
+
+        .ai-bubble {
+            background: white;
+            margin-right: auto;
+            border-bottom-left-radius: 5px;
+            box-shadow: var(--shadow-light);
+            border-left: 4px solid var(--primary-color);
+        }
+
+        #chat-container {
+            height: 400px;
+            overflow-y: auto;
+            background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .typing-indicator {
+            display: none;
+            padding: 12px 20px;
+            background: white;
+            border-radius: 20px;
+            margin-bottom: 15px;
+            max-width: 120px;
+            border-bottom-left-radius: 5px;
+            box-shadow: var(--shadow-light);
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .typing-dots {
+            display: inline-block;
+        }
+
+        .typing-dots span {
+            animation: typing 1.4s infinite;
+            display: inline-block;
+            font-size: 8px;
+            margin: 0 1px;
+        }
+
+        .nav-tabs {
+            border: none;
+            background: white;
+            border-radius: 15px;
+            padding: 5px;
+            box-shadow: var(--shadow-light);
+        }
+
+        .nav-tabs .nav-link {
+            border: none;
+            border-radius: 10px;
+            padding: 12px 20px;
+            color: var(--secondary-color);
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-tabs .nav-link.active {
+            background: var(--gradient-primary);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(44, 123, 229, 0.4);
+        }
+
+        .card {
+            border: none;
+            border-radius: 20px;
+            box-shadow: var(--shadow-light);
+            margin-bottom: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-medium);
+        }
+
+        .card-header {
+            background: var(--gradient-primary);
+            color: white;
+            border-radius: 20px 20px 0 0 !important;
+            border: none;
+            padding: 20px;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(44, 123, 229, 0.4);
+        }
+
+        .badge {
+            border-radius: 8px;
+            padding: 6px 12px;
+            font-weight: 500;
+        }
+
+        .input-group {
+            box-shadow: var(--shadow-light);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .form-control {
+            border: none;
+            padding: 12px 20px;
+            border-radius: 12px 0 0 12px;
+        }
+
+        .form-control:focus {
+            box-shadow: none;
+            border-color: var(--primary-color);
+        }
+
+        /* Custom scrollbar */
+        #chat-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        #chat-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        #chat-container::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 10px;
+        }
+
+        /* Pulse animation for new messages */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        .pulse {
+            animation: pulse 0.6s ease;
+        }
+
+        /* Loading spinner */
+        .spinner {
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid var(--primary-color);
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="d-flex">
+        <!-- Sidebar -->
+        <div class="dashboard-sidebar col-md-3 col-lg-2">
+            <!-- Sidebar content from patient dashboard -->
+        </div>
+        
+        <!-- Main Content -->
+        <div class="dashboard-content col-md-9 col-lg-10">
+            <div class="container-fluid py-4">
+                <!-- Header -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h2 class="fw-bold mb-1" style="background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">AI-Powered Symptom Checker</h2>
+                        <p class="text-muted mb-0">Get instant medical insights with our advanced AI assistant</p>
+                    </div>
+                    <button class="btn btn-outline-primary">
+                        <i class="fas fa-history me-2"></i> Consultation History
+                    </button>
+                </div>
+                
+                <!-- Symptom Checker Tabs -->
+                <ul class="nav nav-tabs mb-4" id="symptomTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="interview-tab" data-bs-toggle="tab" data-bs-target="#interview" type="button">
+                            <i class="fas fa-comment-medical me-2"></i> AI Chat Assistant
+                        </button>
+                    </li>
+                    <!-- <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="manual-tab" data-bs-toggle="tab" data-bs-target="#manual" type="button">
+                            <i class="fas fa-edit me-2"></i> Quick Assessment
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="results-tab" data-bs-toggle="tab" data-bs-target="#results" type="button" disabled>
+                            <i class="fas fa-diagnoses me-2"></i> Health Report
+                        </button>
+                    </li> -->
+                </ul>
+                
+                <!-- Tab Content -->
+                <div class="tab-content" id="symptomTabsContent">
+                    <!-- AI Chat Assistant Tab -->
+                    <div class="tab-pane fade show active" id="interview" role="tabpanel">
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <div class="card glass-effect">
+                                    <div class="card-header">
+                                        <div class="d-flex align-items-center">
+                                            <div class="bg-white rounded-circle p-2 me-3">
+                                                <i class="fas fa-robot text-primary fa-lg"></i>
+                                            </div>
+                                            <div>
+                                                <h5 class="mb-0">MediPlus AI Assistant</h5>
+                                                <small class="opacity-75">Online • Ready to help</small>
+                                            </div>
+                                            <div class="ms-auto">
+                                                <span class="badge bg-success">
+                                                    <i class="fas fa-circle me-1" style="font-size: 6px;"></i>
+                                                    Active
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div id="chat-container" class="mb-3">
+                                            <div class="chat-bubble ai-bubble pulse">
+                                                <div class="d-flex align-items-center mb-2">
+                                                    <div class="bg-primary rounded-circle p-2 me-2">
+                                                        <i class="fas fa-robot text-white fa-sm"></i>
+                                                    </div>
+                                                    <strong>MediPlus AI</strong>
+                                                </div>
+                                                <p class="mb-1">Hello! I'm your MediPlus AI assistant. I can help you understand your symptoms and suggest possible conditions.</p>
+                                                <p class="mb-0">To get started, could you tell me about your main symptom or health concern?</p>
+                                                <small class="text-muted mt-2 d-block">Just now</small>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Typing indicator -->
+                                        <div class="typing-indicator" id="typing-indicator">
+                                            <div class="typing-dots">
+                                                <span>●</span>
+                                                <span>●</span>
+                                                <span>●</span>
+                                            </div>
+                                            <span class="ms-2">AI is typing</span>
+                                        </div>
+                                        
+                                        <div class="input-group">
+                                            <input type="text" id="chat-input" class="form-control" placeholder="Describe your symptoms here...">
+                                            <button class="btn btn-primary" id="send-message">
+                                                <i class="fas fa-paper-plane me-2"></i>Send
+                                            </button>
+                                        </div>
+                                        
+                                        <div class="mt-3 text-center">
+                                            <small class="text-muted">
+                                                <i class="fas fa-shield-alt me-2"></i>Your conversations are private and secure
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-lg-4">
+                                <div class="card glass-effect">
+                                    <div class="card-header">
+                                        <h5 class="mb-0"><i class="fas fa-bolt me-2"></i>Quick Symptoms</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <p class="text-muted mb-3">Select a symptom to start quickly:</p>
+                                        <div class="row g-2">
+                                            <div class="col-6">
+                                                <div class="symptom-card text-center p-3">
+                                                    <i class="fas fa-head-side-virus fa-2x mb-2" style="color: var(--primary-color);"></i>
+                                                    <h6 class="mb-0">Headache</h6>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="symptom-card text-center p-3">
+                                                    <i class="fas fa-temperature-high fa-2x mb-2" style="color: var(--primary-color);"></i>
+                                                    <h6 class="mb-0">Fever</h6>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="symptom-card text-center p-3">
+                                                    <i class="fas fa-cough fa-2x mb-2" style="color: var(--primary-color);"></i>
+                                                    <h6 class="mb-0">Cough</h6>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="symptom-card text-center p-3">
+                                                    <i class="fas fa-lungs fa-2x mb-2" style="color: var(--primary-color);"></i>
+                                                    <h6 class="mb-0">Breathing</h6>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="symptom-card text-center p-3">
+                                                    <i class="fas fa-stomach fa-2x mb-2" style="color: var(--primary-color);"></i>
+                                                    <h6 class="mb-0">Stomach</h6>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="symptom-card text-center p-3">
+                                                    <i class="fas fa-dizzy fa-2x mb-2" style="color: var(--primary-color);"></i>
+                                                    <h6 class="mb-0">Dizziness</h6>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="card glass-effect mt-3">
+                                    <div class="card-body text-center">
+                                        <i class="fas fa-user-md fa-3x mb-3" style="background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"></i>
+                                        <h5>Emergency Help</h5>
+                                        <p class="text-muted">If you're experiencing a medical emergency, please contact emergency services immediately.</p>
+                                        <button class="btn btn-outline-danger w-100">
+                                            <i class="fas fa-phone-alt me-2"></i>Emergency Contact
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Other tabs remain similar but enhanced -->
+                    <!-- Quick Assessment Tab -->
+                    <div class="tab-pane fade" id="manual" role="tabpanel">
+                        <!-- Enhanced manual entry content -->
+                    </div>
+                    
+                    <!-- Health Report Tab -->
+                    <div class="tab-pane fade" id="results" role="tabpanel">
+                        <!-- Enhanced results content -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // API Configuration
+        const API_BASE_URL = 'http://localhost:8080/api/chat';
+        
+        // DOM Elements
+        const chatInput = document.getElementById('chat-input');
+        const sendButton = document.getElementById('send-message');
+        const chatContainer = document.getElementById('chat-container');
+        const typingIndicator = document.getElementById('typing-indicator');
+
+        // Add message to chat with enhanced styling
+        function addMessage(message, isUser) {
+            const bubble = document.createElement('div');
+            bubble.className = isUser ? 'chat-bubble user-bubble pulse' : 'chat-bubble ai-bubble pulse';
+            
+            const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            
+            if (isUser) {
+                bubble.innerHTML = `
+                    <div class="d-flex align-items-center justify-content-end mb-2">
+                        <strong>You</strong>
+                        <div class="bg-white rounded-circle p-1 ms-2">
+                            <i class="fas fa-user text-primary fa-sm"></i>
+                        </div>
+                    </div>
+                    <p class="mb-1">${message}</p>
+                    <small class="opacity-75 mt-2 d-block text-end">${timestamp}</small>
+                `;
+            } else {
+                bubble.innerHTML = `
+                    <div class="d-flex align-items-center mb-2">
+                        <div class="bg-primary rounded-circle p-2 me-2">
+                            <i class="fas fa-robot text-white fa-sm"></i>
+                        </div>
+                        <strong>MediPlus AI</strong>
+                    </div>
+                    <p class="mb-1">${message}</p>
+                    <small class="text-muted mt-2 d-block">${timestamp}</small>
+                `;
+            }
+            
+            chatContainer.appendChild(bubble);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        // Show typing indicator
+        function showTypingIndicator() {
+            typingIndicator.style.display = 'block';
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        // Hide typing indicator
+        function hideTypingIndicator() {
+            typingIndicator.style.display = 'none';
+        }
+
+        // Send message to API
+        async function sendMessageToAPI(message) {
+            try {
+                showTypingIndicator();
+                
+                const response = await fetch(API_BASE_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ message: message })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                console.log('API Response:', data);
+                
+                return data.reply || "I'm sorry, I didn't understand that. Could you please rephrase?";
+                
+            } catch (error) {
+                console.error('Error calling API:', error);
+                if (error.message.includes('Failed to fetch')) {
+                    return "⚠️ Unable to connect to the AI service. Please check if the backend server is running on port 8080.";
+                }
+                return "I'm having trouble connecting right now. Please try again in a moment.";
+            } finally {
+                hideTypingIndicator();
+            }
+        }
+
+        // Handle send message
+        sendButton.addEventListener('click', async function() {
+            const message = chatInput.value.trim();
+            if (message) {
+                addMessage(message, true);
+                chatInput.value = '';
+                chatInput.disabled = true;
+                sendButton.disabled = true;
+                sendButton.innerHTML = '<span class="spinner"></span> Processing...';
+                
+                try {
+                    const aiResponse = await sendMessageToAPI(message);
+                    addMessage(aiResponse, false);
+                    
+                    // Enable results tab if AI suggests analysis
+                    if (aiResponse.toLowerCase().includes('analyze') || aiResponse.toLowerCase().includes('result')) {
+                        document.getElementById('results-tab').disabled = false;
+                    }
+                } catch (error) {
+                    addMessage("Sorry, I encountered an error. Please try again.", false);
+                } finally {
+                    chatInput.disabled = false;
+                    sendButton.disabled = false;
+                    sendButton.innerHTML = '<i class="fas fa-paper-plane me-2"></i>Send';
+                    chatInput.focus();
+                }
+            }
+        });
+
+        // Allow pressing Enter to send message
+        chatInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendButton.click();
+            }
+        });
+
+        // Quick symptom selection
+        document.querySelectorAll('.symptom-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const symptomText = this.querySelector('h6').textContent;
+                const message = `I'm experiencing ${symptomText.toLowerCase()}`;
+                
+                // Add visual feedback
+                this.classList.add('selected');
+                setTimeout(() => this.classList.remove('selected'), 1000);
+                
+                chatInput.value = message;
+                sendButton.click();
+            });
+        });
+
+        // Enhanced tab switching
+        document.querySelectorAll('.nav-link').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.nav-link').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Initialize
+        chatInput.focus();
+
+        // Add some sample questions for user convenience
+        const sampleQuestions = [
+            "I have a headache and fever",
+            "My stomach hurts after eating",
+            "I'm feeling dizzy and tired",
+            "I have a persistent cough"
+        ];
+
+        // You can add these as quick buttons later if needed
+    </script>
+</body>
+</html>

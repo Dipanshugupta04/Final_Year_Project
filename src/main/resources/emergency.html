@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediPlus - Emergency Services</title>
+    <link rel="shortcut icon" href="LOGO.png" type="image/x-icon">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .emergency-card {
+            transition: all 0.3s ease;
+            border-left: 4px solid #dc3545;
+        }
+        .emergency-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .sos-button {
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="d-flex">
+        <!-- Sidebar -->
+        <div class="dashboard-sidebar col-md-3 col-lg-2 bg-light">
+            <!-- Sidebar content -->
+        </div>
+        
+        <!-- Main Content -->
+        <div class="dashboard-content col-md-9 col-lg-10">
+            <div class="container-fluid py-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2>Emergency Services</h2>
+                    <button class="btn btn-outline-secondary">
+                        <i class="fas fa-history me-2"></i> Emergency Contacts
+                    </button>
+                </div>
+                
+                <!-- Emergency Alert -->
+                <div class="card mb-4 border-danger">
+                    <div class="card-header bg-danger text-white">
+                        <h5 class="mb-0"><i class="fas fa-exclamation-triangle me-2"></i> Emergency Alert</h5>
+                    </div>
+                    <div class="card-body text-center">
+                        <h4 class="text-danger mb-4">Are you experiencing a medical emergency?</h4>
+                        <button class="btn btn-danger btn-lg sos-button mb-3 py-3 px-5">
+                            <i class="fas fa-phone-alt me-2"></i> CALL 911 NOW
+                        </button>
+                        <p class="text-muted">Or your local emergency number</p>
+                        
+                        <div class="row mt-4">
+                            <div class="col-md-6 mb-3">
+                                <div class="card emergency-card h-100">
+                                    <div class="card-body">
+                                        <h5><i class="fas fa-ambulance text-danger me-2"></i> Request Ambulance</h5>
+                                        <p>Immediate medical transportation to nearest hospital</p>
+                                        <button class="btn btn-outline-danger w-100">
+                                            <i class="fas fa-phone-alt me-2"></i> Call Ambulance
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="card emergency-card h-100">
+                                    <div class="card-body">
+                                        <h5><i class="fas fa-user-md text-danger me-2"></i> Emergency Consultation</h5>
+                                        <p>Connect with a doctor immediately via video call</p>
+                                        <button class="btn btn-outline-danger w-100">
+                                            <i class="fas fa-video me-2"></i> Video Call Doctor
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Emergency Instructions -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Emergency Instructions</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6><i class="fas fa-heartbeat text-danger me-2"></i> Signs of Medical Emergency:</h6>
+                                <ul>
+                                    <li>Chest pain or pressure lasting more than a few minutes</li>
+                                    <li>Difficulty breathing or shortness of breath</li>
+                                    <li>Sudden severe pain (especially head, abdomen, or back)</li>
+                                    <li>Sudden dizziness, weakness, or change in vision</li>
+                                    <li>Severe bleeding that won't stop</li>
+                                    <li>Sudden confusion or difficulty speaking</li>
+                                    <li>Unconsciousness or unresponsiveness</li>
+                                    <li>Seizures lasting more than 5 minutes</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h6><i class="fas fa-first-aid text-danger me-2"></i> First Aid Basics:</h6>
+                                <ul>
+                                    <li><strong>CPR:</strong> 30 chest compressions followed by 2 rescue breaths</li>
+                                    <li><strong>Choking:</strong> Perform abdominal thrusts (Heimlich maneuver)</li>
+                                    <li><strong>Bleeding:</strong> Apply direct pressure with clean cloth</li>
+                                    <li><strong>Burns:</strong> Cool with running water, don't use ice</li>
+                                    <li><strong>Fractures:</strong> Immobilize the area, don't try to realign</li>
+                                    <li><strong>Poisoning:</strong> Call poison control immediately</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Nearby Emergency Facilities -->
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Nearby Emergency Facilities</h5>
+                        <button class="btn btn-sm btn-outline-primary">
+                            <i class="fas fa-sync-alt me-1"></i> Refresh
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Facility</th>
+                                        <th>Type</th>
+                                        <th>Distance</th>
+                                        <th>Wait Time</th>
+                                        <th>Contact</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <strong>City General Hospital</strong><br>
+                                            <small>123 Medical Center Dr</small>
+                                        </td>
+                                        <td>Hospital</td>
+                                        <td>1.2 miles</td>
+                                        <td><span class="badge bg-warning">30 min</span></td>
+                                        <td>(555) 123-4567</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary me-1">
+                                                <i class="fas fa-directions"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-danger">
+                                                <i class="fas fa-phone-alt"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <strong>MediPlus Urgent Care</strong><br>
+                                            <small>456 Health Ave</small>
+                                        </td>
+                                        <td>Urgent Care</td>
+                                        <td>0.8 miles</td>
+                                        <td><span class="badge bg-success">15 min</span></td>
+                                        <td>(555) 987-6543</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary me-1">
+                                                <i class="fas fa-directions"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-danger">
+                                                <i class="fas fa-phone-alt"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <strong>Community Emergency Center</strong><br>
+                                            <small>789 Wellness Blvd</small>
+                                        </td>
+                                        <td>Emergency Room</td>
+                                        <td>2.3 miles</td>
+                                        <td><span class="badge bg-danger">45 min</span></td>
+                                        <td>(555) 456-7890</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary me-1">
+                                                <i class="fas fa-directions"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-danger">
+                                                <i class="fas fa-phone-alt"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Emergency button functionality
+        document.querySelector('.sos-button').addEventListener('click', function() {
+            if (confirm('Are you sure you want to call emergency services?')) {
+                alert('Calling 911... Please stay on the line.');
+                // In a real app, this would initiate a phone call
+            }
+        });
+    </script>
+</body>
+</html>

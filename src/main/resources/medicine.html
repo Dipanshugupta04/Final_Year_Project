@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediPlus - Medications</title>
+    <link rel="shortcut icon" href="LOGO.png" type="image/x-icon">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Style for the clear button */
+        #clearSearch {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 5;
+    opacity: 0.6;  /* Slightly more visible by default */
+    transition: opacity 0.2s ease;
+    background: rgba(0, 0, 0, 0.1);  /* Subtle background */
+    border: none;
+    cursor: pointer;
+    color: black;  /* Darker gray color */
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;  /* Circular shape */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+  visibility: hidden;
+}
+
+#clearSearch:hover {
+    opacity: 1;
+    background: rgba(0, 0, 0, 0.15);  /* Slightly darker on hover */
+    color: #000000;  /* Even darker on hover */
+}
+
+#clearSearch:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.25);  /* Bootstrap-like focus */
+}
+
+/* Adjust input padding to prevent text under clear button */
+#searchInput {
+    padding-right: 38px;  /* Increased to accommodate larger button */
+}
+        
+        /* Adjust input padding to prevent text under clear button */
+        #searchInput {
+            padding-right: 30px;
+        }
+        
+        .medication-card {
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+        .medication-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .pill-icon {
+            font-size: 2rem;
+            color: #0d6efd;
+        }
+        .loader {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 2s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .error-message {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        .search-results {
+            position: absolute;
+            width: calc(100% - 40px);
+            max-height: 300px;
+            overflow-y: auto;
+            z-index: 1000;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 0 0 5px 5px;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+            display: none;
+            margin-top: 5px;
+        }
+        .search-results .result-item {
+            padding: 10px 15px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+        }
+        .search-results .result-item:hover {
+            background-color: #f8f9fa;
+        }
+        .search-results .result-item:last-child {
+            border-bottom: none;
+        }
+        .search-container {
+            position: relative;
+        }
+        body {
+            background-color: #f8f9fa;
+        }
+        .dashboard-sidebar {
+            min-height: 100vh;
+        }
+        .dashboard-content {
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="d-flex">
+        <!-- Sidebar -->
+        <div class="dashboard-sidebar col-md-3 col-lg-2 bg-light p-3">
+            <div class="d-flex flex-column align-items-center mb-4">
+                <i class="fas fa-pills fa-3x text-primary mb-2"></i>
+                <h4>MediPlus</h4>
+            </div>
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#">
+                        <i class="fas fa-home me-2"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <i class="fas fa-pills me-2"></i> Medications
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <i class="fas fa-calendar-alt me-2"></i> Appointments
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <i class="fas fa-user me-2"></i> Profile
+                    </a>
+                </li>
+            </ul>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="dashboard-content col-md-9 col-lg-10">
+            <div class="container-fluid py-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2>Medication Information</h2>
+                    <button class="btn btn-outline-secondary">
+                        <i class="fas fa-history me-2"></i> Medication History
+                    </button>
+                </div>
+                
+                <!-- Search Bar -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-8 mb-3">
+                                <label class="form-label">Search Medications</label>
+                                <div class="search-container">
+                                    <div class="position-relative">
+                                        <input type="text" id="searchInput" class="form-control" placeholder="Search by medication name, condition..." autocomplete="off">
+                                        <button type="button" class="btn-close" id="clearSearch" aria-label="Clear"><i class="fa-solid fa-xmark"></i></button>
+                                    </div>
+                                    <div class="search-results" id="medicineResult"></div>
+                                </div>
+                                <div id="searchError" class="error-message mt-2"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Medications List -->
+                <div class="row" id="medicationsContainer">
+                    <div class="col-12 text-center">
+                        <div class="loader" id="mainLoader"></div>
+                        <p class="text-muted">Loading medications...</p>
+                    </div>
+                </div>
+                
+                <!-- Medication Details Modal -->
+                <div class="modal fade" id="medicationModal" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modalMedicationName">Medication Details</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body" id="modalMedicationDetails">
+                                <div class="text-center">
+                                    <div class="loader"></div>
+                                    <p>Loading medication details...</p>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Configuration
+        const API_BASE_URL = "http://localhost:8080/medicines";
+        const MEDICINES_PER_PAGE = 10;
+        let searchTimeout = null;
+        const SEARCH_DELAY = 300;
+        
+        // State
+        let medications = [];
+        let currentMedication = null;
+        const medicationModal = new bootstrap.Modal(document.getElementById('medicationModal'));
+
+        // DOM Elements
+        const elements = {
+            searchInput: document.getElementById('searchInput'),
+            clearSearch: document.getElementById('clearSearch'),
+            searchError: document.getElementById('searchError'),
+            conditionFilter: document.getElementById('conditionFilter'),
+            medicationsContainer: document.getElementById('medicationsContainer'),
+            modalMedicationName: document.getElementById('modalMedicationName'),
+            modalMedicationDetails: document.getElementById('modalMedicationDetails'),
+            medicineResult: document.getElementById('medicineResult'),
+            mainLoader: document.getElementById('mainLoader')
+        };
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchInitialMedications();
+            setupEventListeners();
+        });
+
+        // Fetch initial 10 medications
+        async function fetchInitialMedications() {
+            try {
+                showMainLoader();
+                
+                const response = await fetch(`${API_BASE_URL}?limit=${MEDICINES_PER_PAGE}`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                medications = Array.isArray(data) ? data : [data];
+                renderMedications(medications);
+            } catch (error) {
+                console.error('Error fetching initial medications:', error);
+                showMainError(error.message);
+            } finally {
+                hideMainLoader();
+            }
+        }
+
+        // Render medications on main page
+        function renderMedications(meds) {
+            if (!meds || meds.length === 0) {
+                elements.medicationsContainer.innerHTML = `
+                    <div class="col-12 text-center">
+                        <p class="text-muted">No medications found</p>
+                    </div>
+                `;
+                return;
+            }
+
+            elements.medicationsContainer.innerHTML = meds.map(med => `
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card medication-card">
+                        <div class="card-body">
+                            <div class="text-center mb-3">
+                                <i class="fas fa-pills pill-icon"></i>
+                            </div>
+                            <h4 class="text-center mb-3">${med.name || 'Unnamed Medication'}</h4>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="text-muted">Type:</span>
+                                <span>${med.type || 'N/A'}</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="text-muted">Used For:</span>
+                                <span>${med.uses || 'N/A'}</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <span class="text-muted">Dosage:</span>
+                                <span>${med.dosage || 'Consult doctor'}</span>
+                            </div>
+                            <button class="btn btn-outline-primary w-100 view-details" data-med-id="${med.id}">
+                                <i class="fas fa-info-circle me-2"></i> View Details
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            // Add event listeners to detail buttons
+            document.querySelectorAll('.view-details').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const medId = btn.getAttribute('data-med-id');
+                    showMedicationDetails(medId);
+                });
+            });
+        }
+
+        // Handle search input with debounce
+        function handleSearchInput() {
+            clearTimeout(searchTimeout);
+            const searchTerm = elements.searchInput.value.trim();
+            elements.clearSearch.style.visibility = searchTerm.length > 0 ? 'visible' : 'hidden';
+            if (searchTerm.length < 1) {
+                
+                elements.medicineResult.style.display = 'none';
+                elements.clearSearch.style.display = 'none';
+                return;
+            }
+            
+            elements.clearSearch.style.display = 'block';
+            
+            searchTimeout = setTimeout(() => {
+                searchMedications(searchTerm);
+            }, SEARCH_DELAY);
+        }
+
+        // Main search function
+        async function searchMedications(searchTerm) {
+            elements.searchError.textContent = '';
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}?q=${encodeURIComponent(searchTerm)}`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                medications = Array.isArray(data) ? data : [data];
+                displayResults(medications);
+            } catch (error) {
+                console.error('Error fetching medications:', error);
+                showError(`Failed to load medications: ${error.message}`);
+            }
+        }
+
+        // Display search results in dropdown
+        function displayResults(meds) {
+            if (!meds || meds.length === 0) {
+                elements.medicineResult.innerHTML = `
+                    <div class="result-item text-muted">
+                        No medications found matching your search
+                    </div>
+                `;
+                elements.medicineResult.style.display = 'block';
+                return;
+            }
+
+            elements.medicineResult.innerHTML = meds.slice(0, 5).map(med => `
+                <div class="result-item" data-med-id="${med.id}">
+                    <div class="d-flex justify-content-between">
+                        <strong>${med.name || 'Unnamed Medication'}</strong>
+                        <span class="text-muted">${med.type || 'N/A'}</span>
+                    </div>
+                    <div class="text-muted small">${med.uses || 'No usage information'}</div>
+                </div>
+            `).join('');
+
+            elements.medicineResult.style.display = 'block';
+
+            // Add click handlers to result items
+            document.querySelectorAll('.result-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const medId = item.getAttribute('data-med-id');
+                    elements.searchInput.value = item.querySelector('strong').textContent;
+                    elements.medicineResult.style.display = 'none';
+                    showMedicationDetails(medId);
+                });
+            });
+        }
+
+        async function showMedicationDetails(medId) {
+            try {
+                showModalLoader();
+                medicationModal.show();
+                
+                const response = await fetch(`${API_BASE_URL}/getmedicine/${medId}`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                currentMedication = await response.json();
+                renderMedicationModal(currentMedication);
+            } catch (error) {
+                console.error('Error fetching medication details:', error);
+                elements.modalMedicationDetails.innerHTML = `
+                    <div class="alert alert-danger">
+                        Failed to load medication details: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        function renderMedicationModal(med) {
+            elements.modalMedicationName.textContent = `${med.name || 'Medication'} - Detailed Information`;
+           
+            elements.modalMedicationDetails.innerHTML = `
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>Type</h6>
+                        <p>${med.type || 'No type available.'}</p>
+                        
+                        <h6>Overview</h6>
+                        <p>${med.description || 'No description available.'}</p>
+                        
+                        <h6>Emergency Symptoms</h6>
+                        <p>${med.emergencySymptoms || 'No emergency symptoms available.'}</p>
+
+                        <h6>Interactions</h6>
+                        <p>${med.interactions || 'No interactions available.'}</p>
+
+                        <h6>Details</h6>
+                        <p>${med.details || 'No details available.'}</p>
+
+                        <h6>How It Works</h6>
+                        <p>${med.howitworks || 'No information available.'}</p>
+
+                        <h6>Side Effects</h6>
+                        <p>${med.sideeffects || 'No side effects available.'}</p>
+
+                        <h6>Uses</h6>
+                        <p>${med.uses || 'No uses available.'}</p>
+
+                        <h6 class="mt-4">Dosage</h6>
+                        <ul>
+                            <li><strong>Standard Dose:</strong> ${med.dosage || 'Consult doctor'}</li>
+                            <li><strong>Maximum Dose:</strong> ${med.maxDosage || 'Not specified'}</li>
+                            <li><strong>Frequency:</strong> ${med.frequency || 'As needed'}</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Warnings</h6>
+                        <div class="alert alert-warning">
+                            <ul class="mb-0">
+                                ${med.warnings ? med.warnings.split(',').map(warning => `<li>${warning.trim()}</li>`).join('') : '<li>No specific warnings</li>'}
+                            </ul>
+                        </div>
+                        
+                        <h6>Precautions</h6>
+                        <div class="alert alert-info">
+                            <ul class="mb-0">
+                                ${med.precautions ? med.precautions.split(',').map(precaution => `<li>${precaution.trim()}</li>`).join('') : '<li>No specific precautions</li>'}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Helper Functions
+        function showMainLoader() {
+            elements.mainLoader.style.display = 'block';
+            elements.medicationsContainer.innerHTML = `
+                <div class="col-12 text-center">
+                    <div class="loader"></div>
+                    <p>Loading medications...</p>
+                </div>
+            `;
+        }
+
+        function hideMainLoader() {
+            elements.mainLoader.style.display = 'none';
+        }
+
+        function showMainError(message) {
+            elements.medicationsContainer.innerHTML = `
+                <div class="col-12 text-center">
+                    <div class="alert alert-danger">
+                        ${message}
+                    </div>
+                </div>
+            `;
+        }
+
+        function showModalLoader() {
+            elements.modalMedicationDetails.innerHTML = `
+                <div class="text-center">
+                    <div class="loader"></div>
+                    <p>Loading medication details...</p>
+                </div>
+            `;
+        }
+
+        function showError(message) {
+            elements.searchError.textContent = message;
+        }
+
+        // Set up all event listeners
+        function setupEventListeners() {
+            elements.clearSearch.addEventListener('click', () => {
+                elements.searchInput.value = '';
+                elements.medicineResult.style.display = 'none';
+                elements.clearSearch.style.display = 'none';
+                renderMedications(medications);
+            });
+            
+            elements.searchInput.addEventListener('input', handleSearchInput);
+            elements.searchInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    searchMedications(elements.searchInput.value.trim());
+                }
+            });
+            elements.searchInput.addEventListener('focus', () => {
+          
+
+                if (elements.searchInput.value.trim().length > 0) {
+                    searchMedications(elements.searchInput.value.trim());
+                }
+            });
+            elements.searchInput.addEventListener('blur', () => {
+                setTimeout(() => elements.medicineResult.style.display = 'none', 200);
+            });
+            
+            // Close results when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!event.target.closest('.search-container') && 
+                    !event.target.closest('#medicineResult')) {
+                    elements.medicineResult.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>

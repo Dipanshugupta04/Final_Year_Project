@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediPlus - Health Records</title>
+    <link rel="shortcut icon" href="LOGO.png" type="image/x-icon">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <style>
+        .timeline {
+            position: relative;
+            padding-left: 50px;
+        }
+        .timeline:before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #e9ecef;
+        }
+        .timeline-item {
+            position: relative;
+            margin-bottom: 30px;
+        }
+        .timeline-item:last-child {
+            margin-bottom: 0;
+        }
+        .timeline-dot {
+            position: absolute;
+            left: -38px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #0d6efd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        .vital-card {
+            text-align: center;
+            padding: 15px;
+            border-radius: 10px;
+            height: 100%;
+        }
+        .vital-value {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .vital-label {
+            font-size: 14px;
+            color: #6c757d;
+        }
+        .record-card {
+            transition: all 0.3s ease;
+        }
+        .record-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="d-flex">
+        <!-- Sidebar -->
+        <div class="dashboard-sidebar col-md-3 col-lg-2">
+            <!-- Sidebar content from patient or doctor dashboard -->
+        </div>
+        
+        <!-- Main Content -->
+        <div class="dashboard-content col-md-9 col-lg-10">
+            <div class="container-fluid py-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2>Health Records & History</h2>
+                    <div>
+                        <button class="btn btn-outline-primary me-2">
+                            <i class="fas fa-print me-2"></i> Print
+                        </button>
+                        <button class="btn btn-primary">
+                            <i class="fas fa-share-alt me-2"></i> Share
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Patient Summary -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Patient Summary</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3 text-center mb-4 mb-md-0">
+                                <img src="https://via.placeholder.com/150?text=Patient" alt="Patient" class="rounded-circle mb-3" width="100">
+                                <h4>John Doe</h4>
+                                <p class="text-muted">35 years, Male</p>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <ul class="list-unstyled">
+                                            <li class="mb-3"><strong>Date of Birth:</strong> June 15, 1988</li>
+                                            <li class="mb-3"><strong>Blood Group:</strong> A+</li>
+                                            <li class="mb-3"><strong>Height:</strong> 175 cm</li>
+                                            <li class="mb-3"><strong>Weight:</strong> 72 kg</li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <ul class="list-unstyled">
+                                            <li class="mb-3"><strong>Primary Care Physician:</strong> Dr. Sarah Johnson</li>
+                                            <li class="mb-3"><strong>Last Visit:</strong> June 10, 2023</li>
+                                            <li class="mb-3"><strong>Allergies:</strong> Penicillin, Shellfish</li>
+                                            <li class="mb-3"><strong>Chronic Conditions:</strong> Migraine, Hypertension</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Vital Signs -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Vital Signs</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-6 col-md-3 mb-4">
+                                <div class="vital-card bg-light">
+                                    <div class="vital-value text-primary">120/80</div>
+                                    <div class="vital-label">Blood Pressure (mmHg)</div>
+                                    <small class="text-success"><i class="fas fa-arrow-down me-1"></i> 5% improvement</small>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-3 mb-4">
+                                <div class="vital-card bg-light">
+                                    <div class="vital-value text-primary">72</div>
+                                    <div class="vital-label">Heart Rate (bpm)</div>
+                                    <small class="text-success"><i class="fas fa-check me-1"></i> Normal</small>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-3 mb-4">
+                                <div class="vital-card bg-light">
+                                    <div class="vital-value text-primary">98.6</div>
+                                    <div class="vital-label">Temperature (°F)</div>
+                                    <small class="text-success"><i class="fas fa-check me-1"></i> Normal</small>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-3 mb-4">
+                                <div class="vital-card bg-light">
+                                    <div class="vital-value text-primary">22</div>
+                                    <div class="vital-label">Respiratory Rate</div>
+                                    <small class="text-success"><i class="fas fa-check me-1"></i> Normal</small>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center">
+                            <button class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-plus me-2"></i> Add New Reading
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Medical History Timeline -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Medical History Timeline</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="timeline">
+                            <!-- Timeline Item 1 -->
+                            <div class="timeline-item">
+                                <div class="timeline-dot">
+                                    <i class="fas fa-heartbeat"></i>
+                                </div>
+                                <div class="card record-card">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between">
+                                            <h5>Hypertension Diagnosis</h5>
+                                            <span class="text-muted">May 15, 2021</span>
+                                        </div>
+                                        <p>Diagnosed with primary hypertension during routine checkup. Blood pressure readings consistently elevated at 140/90 mmHg.</p>
+                                        <div class="d-flex">
+                                            <span class="badge bg-light text-dark me-2"><i class="fas fa-user-md me-1"></i> Dr. Michael Williams</span>
+                                            <span class="badge bg-light text-dark"><i class="fas fa-map-marker-alt me-1"></i> City Medical Center</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Timeline Item 2 -->
+                            <div class="timeline-item">
+                                <div class="timeline-dot">
+                                    <i class="fas fa-pills"></i>
+                                </div>
+                                <div class="card record-card">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between">
+                                            <h5>Prescribed Lisinopril</h5>
+                                            <span class="text-muted">May 20, 2021</span>
+                                        </div>
+                                        <p>Started on Lisinopril 10mg daily for hypertension management. Follow-up scheduled in 4 weeks to monitor response.</p>
+                                        <div class="d-flex">
+                                            <span class="badge bg-light text-dark me-2"><i class="fas fa-user-md me-1"></i> Dr. Michael Williams</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Timeline Item 3 -->
+                            <div class="timeline-item">
+                                <div class="timeline-dot">
+                                    <i class="fas fa-head-side-virus"></i>
+                                </div>
+                                <div class="card record-card">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between">
+                                            <h5>Migraine Diagnosis</h5>
+                                            <span class="text-muted">March 10, 2022</span>
+                                        </div>
+                                        <p>Presented with recurrent headaches, diagnosed with migraine with aura. Prescribed Sumatriptan 50mg as needed.</p>
+                                        <div class="d-flex">
+                                            <span class="badge bg-light text-dark me-2"><i class="fas fa-user-md me-1"></i> Dr. Sarah Johnson</span>
+                                            <span class="badge bg-light text-dark"><i class="fas fa-map-marker-alt me-1"></i> NeuroCare Clinic</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Timeline Item 4 -->
+                            <div class="timeline-item">
+                                <div class="timeline-dot">
+                                    <i class="fas fa-flask"></i>
+                                </div>
+                                <div class="card record-card">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between">
+                                            <h5>Routine Blood Work</h5>
+                                            <span class="text-muted">January 5, 2023</span>
+                                        </div>
+                                        <p>Comprehensive metabolic panel and lipid profile. Results showed slightly elevated cholesterol (LDL 130 mg/dL). Recommended dietary changes.</p>
+                                        <div class="d-flex">
+                                            <span class="badge bg-light text-dark me-2"><i class="fas fa-user-md me-1"></i> Dr. Emily Brown</span>
+                                            <span class="badge bg-light text-dark"><i class="fas fa-map-marker-alt me-1"></i> Main Lab Center</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Timeline Item 5 -->
+                            <div class="timeline-item">
+                                <div class="timeline-dot">
+                                    <i class="fas fa-calendar-check"></i>
+                                </div>
+                                <div class="card record-card">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between">
+                                            <h5>Last Follow-up Visit</h5>
+                                            <span class="text-muted">June 10, 2023</span>
+                                        </div>
+                                        <p>Routine follow-up for hypertension and migraine management. Blood pressure well controlled at 120/80 mmHg. Migraine frequency reduced to 1-2 episodes per month.</p>
+                                        <div class="d-flex">
+                                            <span class="badge bg-light text-dark me-2"><i class="fas fa-user-md me-1"></i> Dr. Sarah Johnson</span>
+                                            <span class="badge bg-light text-dark"><i class="fas fa-map-marker-alt me-1"></i> NeuroCare Clinic</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Records Sections -->
+                <div class="row">
+                    <!-- Medications -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h5 class="mb-0">Current Medications</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Medication</th>
+                                                <th>Dosage</th>
+                                                <th>Prescribed</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <strong>Lisinopril</strong><br>
+                                                    <small class="text-muted">For Hypertension</small>
+                                                </td>
+                                                <td>10mg daily</td>
+                                                <td>May 20, 2021</td>
+                                                <td><span class="badge bg-success">Active</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <strong>Sumatriptan</strong><br>
+                                                    <small class="text-muted">For Migraine</small>
+                                                </td>
+                                                <td>50mg as needed</td>
+                                                <td>March 10, 2022</td>
+                                                <td><span class="badge bg-success">Active</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <strong>Propranolol</strong><br>
+                                                    <small class="text-muted">Migraine Prevention</small>
+                                                </td>
+                                                <td>40mg twice daily</td>
+                                                <td>June 10, 2023</td>
+                                                <td><span class="badge bg-success">Active</span></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Allergies -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h5 class="mb-0">Allergies & Adverse Reactions</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Allergen</th>
+                                                <th>Reaction</th>
+                                                <th>Severity</th>
+                                                <th>First Observed</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Penicillin</td>
+                                                <td>Rash, Hives</td>
+                                                <td><span class="badge bg-danger">Severe</span></td>
+                                                <td>2015</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Shellfish</td>
+                                                <td>Swelling, Difficulty Breathing</td>
+                                                <td><span class="badge bg-danger">Severe</span></td>
+                                                <td>2010</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Sulfa Drugs</td>
+                                                <td>Mild Rash</td>
+                                                <td><span class="badge bg-warning">Moderate</span></td>
+                                                <td>2018</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Immunizations -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h5 class="mb-0">Immunizations</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Vaccine</th>
+                                                <th>Date</th>
+                                                <th>Next Due</th>
+                                                <th>Location</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Influenza (Flu)</td>
+                                                <td>October 15, 2022</td>
+                                                <td>October 2023</td>
+                                                <td>City Medical Center</td>
+                                            </tr>
+                                            <tr>
+                                                <td>COVID-19 (Moderna)</td>
+                                                <td>January 10, 2023</td>
+                                                <td>January 2024</td>
+                                                <td>Vaccination Hub</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Tetanus (Tdap)</td>
+                                                <td>March 5, 2020</td>
+                                                <td>March 2030</td>
+                                                <td>Family Clinic</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Family History -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h5 class="mb-0">Family History</h5>
+                            </div>
+                            <div class="card-body">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        <strong>Father:</strong> Hypertension (Age 50), Type 2 Diabetes (Age 55)
+                                    </li>
+                                    <li class="list-group-item">
+                                        <strong>Mother:</strong> Breast Cancer (Age 60), Osteoporosis
+                                    </li>
+                                    <li class="list-group-item">
+                                        <strong>Paternal Grandfather:</strong> Heart Disease (Age 65)
+                                    </li>
+                                    <li class="list-group-item">
+                                        <strong>Maternal Grandmother:</strong> Alzheimer's Disease (Age 75)
+                                    </li>
+                                    <li class="list-group-item">
+                                        <strong>Sibling:</strong> None significant
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Emergency Contacts -->
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Emergency Contacts</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <div class="card bg-light">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center">
+                                            <div class="me-3">
+                                                <i class="fas fa-user fa-3x text-primary"></i>
+                                            </div>
+                                            <div>
+                                                <h5 class="mb-1">Jane Smith</h5>
+                                                <p class="mb-1">Spouse</p>
+                                                <p class="mb-1"><i class="fas fa-phone me-2"></i> (123) 456-7890</p>
+                                                <p class="mb-0"><i class="fas fa-envelope me-2"></i> jane.smith@example.com</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <div class="card bg-light">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center">
+                                            <div class="me-3">
+                                                <i class="fas fa-user fa-3x text-primary"></i>
+                                            </div>
+                                            <div>
+                                                <h5 class="mb-1">Robert Johnson</h5>
+                                                <p class="mb-1">Brother</p>
+                                                <p class="mb-1"><i class="fas fa-phone me-2"></i> (123) 456-7891</p>
+                                                <p class="mb-0"><i class="fas fa-envelope me-2"></i> robert.j@example.com</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
