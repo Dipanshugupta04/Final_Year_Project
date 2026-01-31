@@ -3,12 +3,12 @@
 this is the medicine management 
 =======
 
-
+<!-- 
 <<<<<<< HEAD
 Your local changes
 =======
 Remote changes from GitHub
->>>>>>> FETCH_HEAD
+>>>>>>> FETCH_HEAD -->
 
 # ML-Integrated Smart Healthcare and Doctor Appointment System
 
