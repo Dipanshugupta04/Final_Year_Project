@@ -1,0 +1,1603 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MediPlus - Health Records</title>
+    <link rel="shortcut icon" href="LOGO.png" type="image/x-icon">
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      :root {
+        --primary-color: #0d6efd;
+        --secondary-color: #6c757d;
+        --success-color: #198754;
+        --info-color: #0dcaf0;
+        --warning-color: #ffc107;
+        --danger-color: #dc3545;
+        --light-color: #f8f9fa;
+        --dark-color: #212529;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f5f7fb;
+        color: var(--dark-color);
+      }
+
+      .dashboard-container {
+        display: flex;
+        min-height: 100vh;
+      }
+
+      .sidebar {
+        width: 250px;
+        background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+        color: white;
+        padding: 20px 0;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+      }
+
+      .sidebar-brand {
+        padding: 0 20px 20px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        margin-bottom: 20px;
+      }
+
+      .sidebar-brand img {
+        height: 40px;
+      }
+
+      .sidebar-menu {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .sidebar-menu li {
+        margin-bottom: 5px;
+      }
+
+      .sidebar-menu a {
+        display: flex;
+        align-items: center;
+        padding: 12px 20px;
+        color: rgba(255, 255, 255, 0.9);
+        text-decoration: none;
+        transition: all 0.3s;
+      }
+
+      .sidebar-menu a:hover,
+      .sidebar-menu a.active {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: white;
+        border-left: 4px solid white;
+      }
+
+      .sidebar-menu a i {
+        width: 20px;
+        margin-right: 10px;
+      }
+
+      .main-content {
+        flex: 1;
+        padding: 20px;
+        overflow-y: auto;
+        position: relative;
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #e0e0e0;
+      }
+
+      .profile-dropdown-container {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        z-index: 1000;
+      }
+      
+      .user-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: var(--primary-color);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 10px;
+        font-weight: bold;
+      }
+
+      .patient-id-badge {
+        display: block;
+        background-color: var(--primary-color);
+        color: white;
+        padding: 8px 12px;
+        border-radius: 4px;
+        font-size: 12px;
+        margin: 10px 15px;
+        text-align: center;
+      }
+
+      .card {
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        margin-bottom: 24px;
+      }
+
+      .card-header {
+        background-color: white;
+        border-bottom: 1px solid #e0e0e0;
+        padding: 15px 20px;
+        border-radius: 10px 10px 0 0 !important;
+      }
+
+      .health-metric {
+        text-align: center;
+        padding: 15px;
+      }
+
+      .health-value {
+        font-size: 2rem;
+        font-weight: 600;
+        color: var(--primary-color);
+      }
+
+      .health-label {
+        color: var(--secondary-color);
+        font-size: 0.9rem;
+      }
+
+      .timeline {
+        position: relative;
+        padding-left: 50px;
+      }
+
+      .timeline::before {
+        content: "";
+        position: absolute;
+        left: 15px;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background: #dee2e6;
+      }
+
+      .timeline-item {
+        position: relative;
+        margin-bottom: 30px;
+      }
+
+      .timeline-item::before {
+        content: "";
+        position: absolute;
+        left: -38px;
+        top: 5px;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: var(--primary-color);
+        border: 4px solid #e9ecef;
+      }
+
+      .record-card {
+        transition: all 0.3s ease;
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+      }
+
+      .record-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .badge-appointment {
+        background-color: var(--primary-color);
+      }
+
+      .badge-prescription {
+        background-color: var(--success-color);
+      }
+
+      .badge-lab {
+        background-color: var(--info-color);
+      }
+
+      .badge-allergy {
+        background-color: var(--warning-color);
+      }
+
+      .badge-vaccination {
+        background-color: var(--secondary-color);
+      }
+
+      .file-preview {
+        max-height: 150px;
+        overflow: hidden;
+        border-radius: 5px;
+        margin-top: 10px;
+      }
+
+      .file-preview img {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+      }
+
+      .toast-container {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1050;
+      }
+
+      .api-status {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 1050;
+        padding: 10px 15px;
+        border-radius: 5px;
+        font-size: 14px;
+      }
+
+      .status-online {
+        background-color: var(--success-color);
+        color: white;
+      }
+
+      .status-offline {
+        background-color: var(--danger-color);
+        color: white;
+      }
+
+      @media (max-width: 768px) {
+        .dashboard-container {
+          flex-direction: column;
+        }
+
+        .sidebar {
+          width: 100%;
+          height: auto;
+        }
+
+        .health-metric {
+          margin-bottom: 15px;
+        }
+        
+        .profile-dropdown-container {
+          position: relative;
+          top: 0;
+          right: 0;
+          margin-bottom: 20px;
+          display: flex;
+          justify-content: flex-end;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="dashboard-container">
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <div class="sidebar-brand">
+          <h5 class="mt-2">MediPlus</h5>
+        </div>
+        <ul class="sidebar-menu">
+          <li>
+            <a href="index.html"><i class="fas fa-home"></i> Dashboard</a>
+          </li>
+          <li>
+            <a href="telecome.html"
+              ><i class="fas fa-video"></i> Online Consultation</a
+            >
+          </li>
+          <li>
+            <a href="E-p.html"
+              ><i class="fas fa-file-prescription"></i> E-Prescription</a
+            >
+          </li>
+          <li>
+            <a href="medicine.html"><i class="fas fa-pills"></i> Medicine</a>
+          </li>
+          <li>
+            <a href="labtest.html"><i class="fas fa-flask"></i> Lab Tests</a>
+          </li>
+          <li>
+            <a href="healthrecord.html" class="active"
+              ><i class="fas fa-file-medical"></i> Health Records</a
+            >
+          </li>
+          <li>
+            <a href="emergency.html"
+              ><i class="fas fa-ambulance"></i> Emergency</a
+            >
+          </li>
+          <li>
+            <a href="#"><i class="fas fa-cog"></i> Settings</a>
+          </li>
+          <li>
+            <a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Main Content -->
+      <div class="main-content">
+        <!-- Profile Dropdown (Fixed Position at Top Right) -->
+        <div class="profile-dropdown-container">
+          <div class="dropdown">
+            <a class="dropdown-toggle d-flex align-items-center text-decoration-none" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                <img src="https://ui-avatars.com/api/?name=Emily+Johnson&background=0D8ABC&color=fff" alt="User" class="user-avatar">
+                <span>Emily Johnson</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                <span class="patient-id-badge">ID: PAT-12345</span>
+                <li><a class="dropdown-item" href="profile.html"><i class="fas fa-user me-2"></i>Profile</a></li>
+                <li><a class="dropdown-item" href="settings.html"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                <li><a class="dropdown-item" href="healthrecord.html"><i class="fas fa-file-medical me-2"></i>Health Records</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="#" id="logoutBtn"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="header">
+          <h2>Health Records</h2>
+        </div>
+
+        <!-- Health Summary -->
+        <div class="card">
+          <div class="card-header">
+            <h5 class="mb-0">Health Summary</h5>
+          </div>
+          <div class="card-body">
+            <div class="row" id="healthSummary">
+              <div class="col-md-3">
+                <div class="health-metric">
+                  <div class="health-value">72</div>
+                  <div class="health-label">kg Weight</div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="health-metric">
+                  <div class="health-value">120/80</div>
+                  <div class="health-label">mmHg Blood Pressure</div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="health-metric">
+                  <div class="health-value">98.6</div>
+                  <div class="health-label">°F Temperature</div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="health-metric">
+                  <div class="health-value">72</div>
+                  <div class="health-label">bpm Heart Rate</div>
+                </div>
+              </div>
+            </div>
+            <div class="text-center mt-3">
+              <button class="btn btn-outline-primary me-2">
+                <i class="fas fa-chart-line me-2"></i> View Trends
+              </button>
+              <button class="btn btn-outline-secondary">
+                <i class="fas fa-file-export me-2"></i> Export Records
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="d-flex justify-content-between mb-4">
+          <div>
+            <button
+              class="btn btn-sm btn-outline-secondary me-2"
+              id="filterBtn"
+            >
+              <i class="fas fa-filter me-1"></i> Filter
+            </button>
+            <button class="btn btn-sm btn-outline-secondary" id="timeRangeBtn">
+              <i class="fas fa-calendar me-1"></i> Time Range
+            </button>
+          </div>
+          <button
+            class="btn btn-primary"
+            data-bs-toggle="modal"
+            data-bs-target="#addRecordModal"
+          >
+            <i class="fas fa-plus me-2"></i> Add Record
+          </button>
+        </div>
+
+        <!-- API Status Indicator -->
+        <div class="alert alert-warning" role="alert" id="apiAlert">
+          <i class="fas fa-info-circle me-2"></i>
+          <strong>Development Mode:</strong> Using mock data as the backend API
+          is not available.
+          <button class="btn btn-sm btn-outline-primary ms-2" id="retryApiBtn">
+            <i class="fas fa-sync-alt me-1"></i> Retry Connection
+          </button>
+        </div>
+
+        <!-- Medical Timeline -->
+        <div class="card">
+          <div class="card-header">
+            <h5 class="mb-0">Medical Timeline</h5>
+          </div>
+          <div class="card-body">
+            <div class="timeline" id="timelineContainer">
+              <!-- Timeline items will be loaded here -->
+            </div>
+          </div>
+        </div>
+
+        <!-- All Records -->
+        <div class="card">
+          <div
+            class="card-header d-flex justify-content-between align-items-center"
+          >
+            <h5 class="mb-0">All Health Records</h5>
+            <div class="d-flex">
+              <input
+                type="text"
+                class="form-control form-control-sm me-2"
+                placeholder="Search records..."
+                id="searchInput"
+              />
+              <select class="form-select form-select-sm" id="recordTypeFilter">
+                <option value="">All Types</option>
+                <option value="Appointment">Appointment</option>
+                <option value="Prescription">Prescription</option>
+                <option value="Lab Test">Lab Test</option>
+                <option value="Allergy">Allergy</option>
+                <option value="Vaccination">Vaccination</option>
+              </select>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Type</th>
+                    <th>Condition</th>
+                    <th>Description</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="recordsTableBody">
+                  <!-- Records will be loaded here -->
+                </tbody>
+              </table>
+            </div>
+            <nav aria-label="Page navigation">
+              <ul
+                class="pagination justify-content-center"
+                id="paginationContainer"
+              >
+                <!-- Pagination will be loaded here -->
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add Record Modal -->
+    <div
+      class="modal fade"
+      id="addRecordModal"
+      tabindex="-1"
+      aria-labelledby="addRecordModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="addRecordModalLabel">
+              Add New Health Record
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <form id="addRecordForm" enctype="multipart/form-data">
+            <div class="modal-body">
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="recordType" class="form-label">Record Type</label>
+                  <select
+                    class="form-select"
+                    id="recordType"
+                    name="recordType"
+                    required
+                  >
+                    <option value="">Select record type</option>
+                    <option value="Appointment">Doctor Appointment</option>
+                    <option value="Prescription">Prescription</option>
+                    <option value="Lab Test">Lab Test</option>
+                    <option value="Allergy">Allergy</option>
+                    <option value="Vaccination">Vaccination</option>
+                  </select>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label for="recordDate" class="form-label">Date</label>
+                  <input
+                    type="date"
+                    class="form-control"
+                    id="recordDate"
+                    name="recordDate"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="condition" class="form-label"
+                  >Health Condition</label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  id="condition"
+                  name="condition"
+                  placeholder="e.g., Hypertension, Diabetes, Headache"
+                  required
+                />
+              </div>
+
+              <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <textarea
+                  class="form-control"
+                  id="description"
+                  name="description"
+                  rows="3"
+                  placeholder="Provide details about this health record"
+                ></textarea>
+              </div>
+
+              <div class="mb-3">
+                <label for="recordFile" class="form-label"
+                  >Upload Related File</label
+                >
+                <input
+                  class="form-control"
+                  type="file"
+                  id="recordFile"
+                  name="files"
+                />
+                <div class="form-text">
+                  Upload medical reports, prescriptions, or test results (PDF,
+                  JPG, PNG)
+                </div>
+                <div class="file-preview mt-2 d-none" id="filePreview"></div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                class="btn btn-primary"
+                id="submitRecordBtn"
+              >
+                <span
+                  class="spinner-border spinner-border-sm me-2 d-none"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+                Save Record
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- View Record Modal -->
+    <div
+      class="modal fade"
+      id="viewRecordModal"
+      tabindex="-1"
+      aria-labelledby="viewRecordModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="viewRecordModalLabel">
+              Health Record Details
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body" id="recordDetails">
+            <!-- Record details will be loaded here -->
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+            <button type="button" class="btn btn-danger" id="deleteRecordBtn">
+              <i class="fas fa-trash me-2"></i> Delete Record
+            </button>
+            <button type="button" class="btn btn-primary" id="downloadFileBtn">
+              <i class="fas fa-download me-2"></i> Download File
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Container for Notifications -->
+    <div class="toast-container"></div>
+
+    <!-- API Status Indicator -->
+    <div class="api-status status-offline" id="apiStatus">
+      <i class="fas fa-plug me-2"></i> Backend API: Offline
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      // Global variables
+      let currentRecords = [];
+      let currentPage = 1;
+      const recordsPerPage = 5;
+      let currentRecordId = null;
+      let apiOnline = false;
+      const API_BASE_URL = "http://localhost:8080";
+
+      // Mock data for development (aligned with your Java models)
+      let mockRecords = [
+        {
+          id: 1,
+          patientName: "John Smith",
+          condition: "Annual Checkup",
+          description: "Routine annual health checkup with general physician",
+          createdAt: "2023-06-15T10:30:00Z",
+          file: {
+            id: 101,
+            fileName: "medical_report.pdf",
+            fileType: "application/pdf",
+            fileSize: 2048576,
+            uploadDate: "2023-06-15T10:30:00Z",
+          },
+        },
+        {
+          id: 2,
+          patientName: "John Smith",
+          condition: "Headache",
+          description: "Prescribed Ibuprofen 400mg for headache relief",
+          createdAt: "2023-05-28T14:45:00Z",
+          file: {
+            id: 102,
+            fileName: "prescription.jpg",
+            fileType: "image/jpeg",
+            fileSize: 512000,
+            uploadDate: "2023-05-28T14:45:00Z",
+          },
+        },
+        {
+          id: 3,
+          patientName: "John Smith",
+          condition: "Blood Test",
+          description: "Routine blood test to check overall health",
+          createdAt: "2023-04-10T09:15:00Z",
+          file: {
+            id: 103,
+            fileName: "blood_test_results.pdf",
+            fileType: "application/pdf",
+            fileSize: 1536000,
+            uploadDate: "2023-04-10T09:15:00Z",
+          },
+        },
+        {
+          id: 4,
+          patientName: "John Smith",
+          condition: "Pollen Allergy",
+          description: "Diagnosed with seasonal pollen allergy",
+          createdAt: "2023-03-05T11:20:00Z",
+          file: null,
+        },
+        {
+          id: 5,
+          patientName: "John Smith",
+          condition: "Flu Vaccination",
+          description: "Annual influenza vaccination",
+          createdAt: "2023-01-20T08:45:00Z",
+          file: {
+            id: 104,
+            fileName: "vaccination_record.pdf",
+            fileType: "application/pdf",
+            fileSize: 1024000,
+            uploadDate: "2023-01-20T08:45:00Z",
+          },
+        },
+      ];
+
+      document.addEventListener("DOMContentLoaded", function () {
+        // Check API status on load
+        checkApiStatus();
+
+        // Initialize the application
+        loadTimelineRecords();
+        loadAllRecords();
+
+        // Set today's date as default
+        document.getElementById("recordDate").valueAsDate = new Date();
+
+        // File preview handler
+        document
+          .getElementById("recordFile")
+          .addEventListener("change", function (e) {
+            const file = e.target.files[0];
+            const preview = document.getElementById("filePreview");
+
+            if (file) {
+              preview.classList.remove("d-none");
+
+              if (file.type.startsWith("image/")) {
+                preview.innerHTML = `<img src="${URL.createObjectURL(
+                  file
+                )}" alt="File preview">`;
+              } else {
+                preview.innerHTML = `
+                            <div class="alert alert-info">
+                                <i class="fas fa-file me-2"></i> ${
+                                  file.name
+                                } (${(file.size / 1024).toFixed(2)} KB)
+                            </div>
+                        `;
+              }
+            } else {
+              preview.classList.add("d-none");
+            }
+          });
+
+        // Form submission handler
+        document
+          .getElementById("addRecordForm")
+          .addEventListener("submit", async function (e) {
+            e.preventDefault();
+
+            // Show loading state
+            const submitBtn = document.getElementById("submitRecordBtn");
+            submitBtn.disabled = true;
+            submitBtn
+              .querySelector(".spinner-border")
+              .classList.remove("d-none");
+
+            try {
+              const formData = new FormData();
+              const fileInput = document.getElementById("recordFile");
+              let fileId = null;
+
+              // Add file to form data if selected (using "files" parameter name)
+              if (fileInput.files[0]) {
+                formData.append("files", fileInput.files[0]);
+
+                // Try to upload the file if API is online
+                if (apiOnline) {
+                  try {
+                    const uploadResponse = await fetch(
+                      `${API_BASE_URL}/files/upload`,
+                      {
+                        method: "POST",
+                        body: formData,
+                      }
+                    );
+
+                    if (!uploadResponse.ok) {
+                      throw new Error(
+                        `File upload failed: ${uploadResponse.status}`
+                      );
+                    }
+
+                    const uploadResult = await uploadResponse.text();
+                    fileId = uploadResult.split(" ").pop(); // Extract file ID from response
+                    showToast("File uploaded successfully", "success");
+                  } catch (uploadError) {
+                    console.error("File upload error:", uploadError);
+                    showToast(
+                      "File upload failed, saving record without file",
+                      "warning"
+                    );
+                  }
+                } else {
+                  showToast(
+                    "API offline - saving record without file",
+                    "warning"
+                  );
+                }
+              }
+
+              // Prepare record data (aligned with your HealthRecord model)
+              const recordData = {
+                patientName: "John Smith",
+                condition: document.getElementById("condition").value,
+                description: document.getElementById("description").value,
+                createdAt: new Date().toISOString(),
+                file: fileId ? {
+                  id: fileId,
+                  fileName: document.getElementById("recordFile").files[0]?.name || "uploaded_file",
+                  fileType: document.getElementById("recordFile").files[0]?.type || "application/octet-stream",
+                  fileSize: document.getElementById("recordFile").files[0]?.size || 0,
+                  uploadDate: new Date().toISOString()
+                } : null
+              };
+
+              // Save record to database
+              if (apiOnline) {
+                try {
+                  const saveResponse = await fetch(`${API_BASE_URL}/api/health-records`, {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(recordData),
+                  });
+
+                  if (!saveResponse.ok) {
+                    throw new Error("Failed to save health record");
+                  }
+
+                  showToast("Record saved to database", "success");
+                } catch (saveError) {
+                  console.error("Save record error:", saveError);
+                  // Fall back to adding to mock data
+                  addToMockData(recordData, fileId);
+                  showToast("Saved to local storage (API unavailable)", "info");
+                }
+              } else {
+                // Add to mock data when API is offline
+                addToMockData(recordData, fileId);
+                showToast("Saved to local storage", "info");
+              }
+
+              // Refresh data
+              loadTimelineRecords();
+              loadAllRecords();
+
+              // Close modal after a brief delay
+              setTimeout(() => {
+                const modal = bootstrap.Modal.getInstance(
+                  document.getElementById("addRecordModal")
+                );
+                modal.hide();
+                document.getElementById("addRecordForm").reset();
+                document.getElementById("filePreview").classList.add("d-none");
+              }, 1500);
+            } catch (error) {
+              console.error("Error:", error);
+              showToast("Error: " + error.message, "danger");
+            } finally {
+              // Reset button state
+              submitBtn.disabled = false;
+              submitBtn
+                .querySelector(".spinner-border")
+                .classList.add("d-none");
+            }
+          });
+
+        // Search functionality
+        document
+          .getElementById("searchInput")
+          .addEventListener("input", function () {
+            filterRecords();
+          });
+
+        // Record type filter
+        document
+          .getElementById("recordTypeFilter")
+          .addEventListener("change", function () {
+            filterRecords();
+          });
+
+        // Retry API connection
+        document
+          .getElementById("retryApiBtn")
+          .addEventListener("click", function () {
+            checkApiStatus();
+          });
+
+        // Initialize modal events
+        const addRecordModal = document.getElementById("addRecordModal");
+        addRecordModal.addEventListener("hidden.bs.modal", function () {
+          document.getElementById("addRecordForm").reset();
+          document.getElementById("recordDate").valueAsDate = new Date();
+          document.getElementById("filePreview").classList.add("d-none");
+        });
+
+        // View record modal event
+        const viewRecordModal = document.getElementById("viewRecordModal");
+        viewRecordModal.addEventListener("hidden.bs.modal", function () {
+          currentRecordId = null;
+        });
+
+        // Delete record button
+        document
+          .getElementById("deleteRecordBtn")
+          .addEventListener("click", function () {
+            if (currentRecordId) {
+              deleteRecord(currentRecordId);
+            }
+          });
+
+        // Download file button
+        document
+          .getElementById("downloadFileBtn")
+          .addEventListener("click", function () {
+            if (currentRecordId) {
+              downloadFile(currentRecordId);
+            }
+          });
+      });
+
+      // Function to add record to mock data
+      function addToMockData(recordData, fileId) {
+        const newRecord = {
+          id: Math.max(...mockRecords.map((r) => r.id), 0) + 1,
+          ...recordData,
+          file: fileId
+            ? {
+                id: fileId,
+                fileName:
+                  document.getElementById("recordFile").files[0]?.name ||
+                  "uploaded_file",
+                fileType:
+                  document.getElementById("recordFile").files[0]?.type ||
+                  "application/octet-stream",
+                fileSize:
+                  document.getElementById("recordFile").files[0]?.size || 0,
+                uploadDate: new Date().toISOString(),
+              }
+            : null,
+        };
+        mockRecords.unshift(newRecord);
+
+        // Save to localStorage for persistence
+        localStorage.setItem("healthRecords", JSON.stringify(mockRecords));
+      }
+
+      // Function to check API status
+      async function checkApiStatus() {
+        try {
+          const response = await fetch(`${API_BASE_URL}/api/health-summary`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+
+          if (response.ok) {
+            apiOnline = true;
+            document.getElementById("apiStatus").className =
+              "api-status status-online";
+            document.getElementById("apiStatus").innerHTML =
+              '<i class="fas fa-plug me-2"></i> Backend API: Online';
+            document.getElementById("apiAlert").classList.add("d-none");
+            showToast("Connected to backend API successfully", "success");
+            return true;
+          } else {
+            throw new Error(`API returned status ${response.status}`);
+          }
+        } catch (error) {
+          apiOnline = false;
+          document.getElementById("apiStatus").className =
+            "api-status status-offline";
+          document.getElementById("apiStatus").innerHTML =
+            '<i class="fas fa-plug me-2"></i> Backend API: Offline';
+          document.getElementById("apiAlert").classList.remove("d-none");
+          console.log("API offline, using mock data:", error.message);
+
+          // Load from localStorage if available
+          const savedRecords = localStorage.getItem("healthRecords");
+          if (savedRecords) {
+            mockRecords = JSON.parse(savedRecords);
+            showToast("Loaded saved records from local storage", "info");
+          }
+
+          return false;
+        }
+      }
+
+      // Function to load timeline records
+      async function loadTimelineRecords() {
+        try {
+          let records;
+
+          if (apiOnline) {
+            // Try to fetch from API
+            const response = await fetch(`${API_BASE_URL}/api/health-records`);
+            if (response.ok) {
+              const data = await response.json();
+              records = Array.isArray(data) ? data : data.data;
+            } else {
+              throw new Error(`API returned status ${response.status}`);
+            }
+          } else {
+            // Use mock data if API is offline
+            records = mockRecords;
+          }
+
+          let timelineHtml = "";
+
+          records.forEach((record) => {
+            timelineHtml += `
+                        <div class="timeline-item">
+                            <div class="card record-card">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between">
+                                        <h6 class="text-primary mb-0">
+                                            <i class="${getRecordIcon(
+                                              record.condition
+                                            )} me-2"></i> ${record.condition}
+                                        </h6>
+                                        <small class="text-muted">${formatDate(
+                                          record.createdAt
+                                        )}</small>
+                                    </div>
+                                    <h5 class="mt-2">${record.condition}</h5>
+                                    <p class="mb-2">${record.description}</p>
+                                    <div class="d-flex flex-wrap gap-2 mb-3">
+                                        ${
+                                          record.file
+                                            ? `<span class="badge bg-light text-dark">File Attached</span>`
+                                            : ""
+                                        }
+                                    </div>
+                                    <button class="btn btn-sm btn-outline-primary view-record-btn" data-id="${
+                                      record.id
+                                    }">
+                                        <i class="fas fa-file-medical me-2"></i> View Details
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+          });
+
+          document.getElementById("timelineContainer").innerHTML = timelineHtml;
+
+          // Add event listeners to view buttons
+          document.querySelectorAll(".view-record-btn").forEach((btn) => {
+            btn.addEventListener("click", function () {
+              const recordId = this.getAttribute("data-id");
+              viewRecord(recordId);
+            });
+          });
+        } catch (error) {
+          console.error("Error loading timeline records:", error);
+          // Fall back to mock data
+          showToast("Error loading data, using mock data", "warning");
+          loadMockData();
+        }
+      }
+
+      // Function to load all records
+      async function loadAllRecords() {
+        try {
+          if (apiOnline) {
+            // Try to fetch from API
+            const response = await fetch(`${API_BASE_URL}/api/health-records`);
+            if (response.ok) {
+              const data = await response.json();
+              currentRecords = Array.isArray(data) ? data : data.data;
+
+              // Update mock data with API data
+              mockRecords = currentRecords;
+              localStorage.setItem(
+                "healthRecords",
+                JSON.stringify(mockRecords)
+              );
+            } else {
+              throw new Error(`API returned status ${response.status}`);
+            }
+          } else {
+            // Use mock data if API is offline
+            const savedRecords = localStorage.getItem("healthRecords");
+            currentRecords = savedRecords
+              ? JSON.parse(savedRecords)
+              : mockRecords;
+          }
+
+          renderRecordsTable();
+          renderPagination();
+        } catch (error) {
+          console.error("Error loading records:", error);
+          // Fall back to mock data
+          const savedRecords = localStorage.getItem("healthRecords");
+          currentRecords = savedRecords
+            ? JSON.parse(savedRecords)
+            : mockRecords;
+          renderRecordsTable();
+          renderPagination();
+          showToast("Using local data: " + error.message, "warning");
+        }
+      }
+
+      // Function to load mock data
+      function loadMockData() {
+        const savedRecords = localStorage.getItem("healthRecords");
+        currentRecords = savedRecords ? JSON.parse(savedRecords) : mockRecords;
+        renderRecordsTable();
+        renderPagination();
+
+        let timelineHtml = "";
+
+        currentRecords.forEach((record) => {
+          timelineHtml += `
+                    <div class="timeline-item">
+                        <div class="card record-card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <h6 class="text-primary mb-0">
+                                        <i class="${getRecordIcon(
+                                          record.condition
+                                        )} me-2"></i> ${record.condition}
+                                    </h6>
+                                    <small class="text-muted">${formatDate(
+                                      record.createdAt
+                                    )}</small>
+                                </div>
+                                <h5 class="mt-2">${record.condition}</h5>
+                                <p class="mb-2">${record.description}</p>
+                                <div class="d-flex flex-wrap gap-2 mb-3">
+                                    ${
+                                      record.file
+                                        ? `<span class="badge bg-light text-dark">File Attached</span>`
+                                        : ""
+                                    }
+                                </div>
+                                <button class="btn btn-sm btn-outline-primary view-record-btn" data-id="${
+                                  record.id
+                                }">
+                                    <i class="fas fa-file-medical me-2"></i> View Details
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+        });
+
+        document.getElementById("timelineContainer").innerHTML = timelineHtml;
+
+        // Add event listeners to view buttons
+        document.querySelectorAll(".view-record-btn").forEach((btn) => {
+          btn.addEventListener("click", function () {
+            const recordId = this.getAttribute("data-id");
+            viewRecord(recordId);
+          });
+        });
+      }
+
+      // Function to render records table
+      function renderRecordsTable() {
+        const tableBody = document.getElementById("recordsTableBody");
+        const searchTerm = document
+          .getElementById("searchInput")
+          .value.toLowerCase();
+        const typeFilter = document.getElementById("recordTypeFilter").value;
+
+        // Filter records
+        let filteredRecords = currentRecords.filter((record) => {
+          const matchesSearch =
+            record.condition.toLowerCase().includes(searchTerm) ||
+            record.description.toLowerCase().includes(searchTerm);
+          const matchesType = typeFilter
+            ? record.condition.includes(typeFilter)
+            : true;
+
+          return matchesSearch && matchesType;
+        });
+
+        // Apply pagination
+        const startIndex = (currentPage - 1) * recordsPerPage;
+        const paginatedRecords = filteredRecords.slice(
+          startIndex,
+          startIndex + recordsPerPage
+        );
+
+        let tableHtml = "";
+
+        paginatedRecords.forEach((record) => {
+          tableHtml += `
+                    <tr>
+                        <td>${formatDate(record.createdAt)}</td>
+                        <td><span class="badge ${getRecordBadgeClass(
+                          record.condition
+                        )}">${record.condition}</span></td>
+                        <td>${record.condition}</td>
+                        <td>${record.description.substring(0, 50)}${
+            record.description.length > 50 ? "..." : ""
+          }</td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary view-record-btn" data-id="${
+                              record.id
+                            }">
+                                View
+                            </button>
+                        </td>
+                    </tr>
+                `;
+        });
+
+        tableBody.innerHTML = tableHtml;
+
+        // Add event listeners to view buttons
+        document.querySelectorAll(".view-record-btn").forEach((btn) => {
+          btn.addEventListener("click", function () {
+            const recordId = this.getAttribute("data-id");
+            viewRecord(recordId);
+          });
+        });
+      }
+
+      // Function to render pagination
+      function renderPagination() {
+        const totalRecords = currentRecords.length;
+        const totalPages = Math.ceil(totalRecords / recordsPerPage);
+        const paginationContainer = document.getElementById(
+          "paginationContainer"
+        );
+
+        let paginationHtml = "";
+
+        if (currentPage > 1) {
+          paginationHtml += `
+                    <li class="page-item">
+                        <a class="page-link" href="#" data-page="${
+                          currentPage - 1
+                        }">Previous</a>
+                    </li>
+                `;
+        } else {
+          paginationHtml += `
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#">Previous</a>
+                    </li>
+                `;
+        }
+
+        for (let i = 1; i <= totalPages; i++) {
+          paginationHtml += `
+                    <li class="page-item ${i === currentPage ? "active" : ""}">
+                        <a class="page-link" href="#" data-page="${i}">${i}</a>
+                    </li>
+                `;
+        }
+
+        if (currentPage < totalPages) {
+          paginationHtml += `
+                    <li class="page-item">
+                        <a class="page-link" href="#" data-page="${
+                          currentPage + 1
+                        }">Next</a>
+                    </li>
+                `;
+        } else {
+          paginationHtml += `
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#">Next</a>
+                    </li>
+                `;
+        }
+
+        paginationContainer.innerHTML = paginationHtml;
+
+        // Add event listeners to pagination links
+        paginationContainer.querySelectorAll(".page-link").forEach((link) => {
+          link.addEventListener("click", function (e) {
+            e.preventDefault();
+            const page = parseInt(this.getAttribute("data-page"));
+            if (!isNaN(page)) {
+              currentPage = page;
+              renderRecordsTable();
+            }
+          });
+        });
+      }
+
+      // Function to filter records
+      function filterRecords() {
+        currentPage = 1;
+        renderRecordsTable();
+        renderPagination();
+      }
+
+      // Function to view record details
+      async function viewRecord(recordId) {
+        try {
+          let record;
+
+          if (apiOnline) {
+            // Try to fetch from API
+            const response = await fetch(
+              `${API_BASE_URL}/api/health-records/${recordId}`
+            );
+            if (response.ok) {
+              record = await response.json();
+            } else {
+              throw new Error(`API returned status ${response.status}`);
+            }
+          } else {
+            // Use mock data if API is offline
+            record = mockRecords.find((r) => r.id == recordId);
+          }
+
+          currentRecordId = recordId;
+
+          let detailsHtml = `
+                    <div class="mb-4">
+                        <h4>${record.condition}</h4>
+                        <div class="d-flex justify-content-between text-muted mb-3">
+                            <span><i class="fas fa-calendar me-1"></i> ${formatDate(
+                              record.createdAt
+                            )}</span>
+                            <span><i class="fas fa-user me-1"></i> ${
+                              record.patientName
+                            }</span>
+                        </div>
+                        <div class="mb-3">
+                            <span class="badge ${getRecordBadgeClass(
+                              record.condition
+                            )}">${record.condition}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <h5>Description</h5>
+                        <p>${
+                          record.description || "No description provided."
+                        }</p>
+                    </div>
+                `;
+
+          // Add file info if available
+          if (record.file) {
+            detailsHtml += `
+                        <div class="mb-3">
+                            <h5>Attached File</h5>
+                            <div class="alert alert-info">
+                                <i class="fas fa-file me-2"></i> ${
+                                  record.file.fileName
+                                } (${formatFileSize(record.file.fileSize)})
+                                <br><small>Uploaded: ${formatDate(
+                                  record.file.uploadDate
+                                )}</small>
+                            </div>
+                        </div>
+                    `;
+          }
+
+          document.getElementById("recordDetails").innerHTML = detailsHtml;
+
+          // Show the modal
+          const viewRecordModal = new bootstrap.Modal(
+            document.getElementById("viewRecordModal")
+          );
+          viewRecordModal.show();
+        } catch (error) {
+          console.error("Error loading record details:", error);
+          showToast("Error loading record details", "danger");
+        }
+      }
+
+      // Function to delete a record
+      async function deleteRecord(recordId) {
+        if (
+          !confirm(
+            "Are you sure you want to delete this record? This action cannot be undone."
+          )
+        ) {
+          return;
+        }
+
+        try {
+          if (apiOnline) {
+            // Try to delete from API
+            const response = await fetch(
+              `${API_BASE_URL}/api/health-records/${recordId}`,
+              {
+                method: "DELETE",
+              }
+            );
+
+            if (response.ok) {
+              showToast("Record deleted successfully", "success");
+            } else {
+              throw new Error("Failed to delete record");
+            }
+          } else {
+            // Delete from mock data
+            mockRecords = mockRecords.filter((record) => record.id != recordId);
+            localStorage.setItem("healthRecords", JSON.stringify(mockRecords));
+            showToast("Record deleted from local storage", "success");
+          }
+
+          // Close the modal
+          const viewRecordModal = bootstrap.Modal.getInstance(
+            document.getElementById("viewRecordModal")
+          );
+          viewRecordModal.hide();
+
+          // Refresh data
+          loadTimelineRecords();
+          loadAllRecords();
+        } catch (error) {
+          console.error("Error deleting record:", error);
+          showToast("Error deleting record", "danger");
+        }
+      }
+
+      // Function to download a file
+      async function downloadFile(recordId) {
+        try {
+          const record = mockRecords.find((r) => r.id == recordId);
+
+          if (!record || !record.file) {
+            showToast("No file available for download", "warning");
+            return;
+          }
+
+          if (apiOnline) {
+            // Try to download from API
+            const response = await fetch(
+              `${API_BASE_URL}/api/health-records/${recordId}/file`
+            );
+
+            if (response.ok) {
+              const blob = await response.blob();
+              const url = window.URL.createObjectURL(blob);
+              const a = document.createElement("a");
+              a.href = url;
+              a.download = record.file.fileName;
+              document.body.appendChild(a);
+              a.click();
+              window.URL.revokeObjectURL(url);
+              document.body.removeChild(a);
+            } else {
+              throw new Error("Failed to download file");
+            }
+          } else {
+            // Mock file download
+            showToast("File download simulated (API offline)", "info");
+          }
+        } catch (error) {
+          console.error("Error downloading file:", error);
+          showToast("Error downloading file", "danger");
+        }
+      }
+
+      // Helper function to get record icon
+      function getRecordIcon(condition) {
+        if (
+          condition.includes("Appointment") ||
+          condition.includes("Checkup")
+        ) {
+          return "fas fa-user-md";
+        } else if (
+          condition.includes("Prescription") ||
+          condition.includes("Headache")
+        ) {
+          return "fas fa-prescription";
+        } else if (condition.includes("Test") || condition.includes("Blood")) {
+          return "fas fa-flask";
+        } else if (condition.includes("Allergy")) {
+          return "fas fa-allergies";
+        } else if (
+          condition.includes("Vaccination") ||
+          condition.includes("Flu")
+        ) {
+          return "fas fa-syringe";
+        } else {
+          return "fas fa-file-medical";
+        }
+      }
+
+      // Helper function to get record badge class
+      function getRecordBadgeClass(condition) {
+        if (
+          condition.includes("Appointment") ||
+          condition.includes("Checkup")
+        ) {
+          return "badge-appointment";
+        } else if (
+          condition.includes("Prescription") ||
+          condition.includes("Headache")
+        ) {
+          return "badge-prescription";
+        } else if (condition.includes("Test") || condition.includes("Blood")) {
+          return "badge-lab";
+        } else if (condition.includes("Allergy")) {
+          return "badge-allergy";
+        } else if (
+          condition.includes("Vaccination") ||
+          condition.includes("Flu")
+        ) {
+          return "badge-vaccination";
+        } else {
+          return "bg-secondary";
+        }
+      }
+
+      // Helper function to format date
+      function formatDate(dateString) {
+        const options = { year: "numeric", month: "long", day: "numeric" };
+        return new Date(dateString).toLocaleDateString(undefined, options);
+      }
+
+      // Helper function to format file size
+      function formatFileSize(bytes) {
+        if (bytes === 0) return "0 Bytes";
+        const k = 1024;
+        const sizes = ["Bytes", "KB", "MB", "GB"];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
+      }
+
+      // Function to show toast notifications
+      function showToast(message, type = "info") {
+        const toastEl = document.createElement("div");
+        toastEl.className = `toast align-items-center text-bg-${type} border-0`;
+        toastEl.setAttribute("role", "alert");
+        toastEl.setAttribute("aria-live", "assertive");
+        toastEl.setAttribute("aria-atomic", "true");
+
+        toastEl.innerHTML = `
+                <div class="d-flex">
+                    <div class="toast-body">
+                        ${message}
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            `;
+
+        document.querySelector(".toast-container").appendChild(toastEl);
+        const toast = new bootstrap.Toast(toastEl);
+        toast.show();
+
+        // Remove toast from DOM after it hides
+        toastEl.addEventListener("hidden.bs.toast", () => {
+          toastEl.remove();
+        });
+      }
+    </script>
+  </body>
+</html>

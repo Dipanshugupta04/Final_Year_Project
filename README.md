@@ -1,3 +1,15 @@
+<!-- <<<<<<< HEAD -->
+#MEDICINE MANAGEMENT SYSTEM
+this is the medicine management 
+=======
+
+<!-- 
+<<<<<<< HEAD
+Your local changes
+=======
+Remote changes from GitHub
+>>>>>>> FETCH_HEAD -->
+
 # ML-Integrated Smart Healthcare and Doctor Appointment System
 
 ## 👥 Group Members  
@@ -87,3 +99,4 @@ The **ML-Integrated Smart Healthcare and Doctor Appointment System** is a compre
 - AI-powered **predictive analytics** for preventive healthcare.  
 - **Wearable device integration** for real-time health monitoring.  
 - **Blockchain-based health records** for improved security and transparency.  
+>>>>>>> 249edc49da59b8d5352d52e18605ef49bcf6f8ba

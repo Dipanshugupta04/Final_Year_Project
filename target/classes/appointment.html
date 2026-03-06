@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>New Appointment</title>
+    <link rel="shortcut icon" href="LOGO.png" type="image/x-icon">
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        padding: 20px;
+        background-color: #f5f5f5;
+      }
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        color: #2c3e50;
+        margin-bottom: 20px;
+      }
+      .form-group {
+        margin-bottom: 15px;
+      }
+      label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: 500;
+      }
+      input, select, textarea {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+      button {
+        background-color: #3498db;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+      button:hover {
+        background-color: #2980b9;
+      }
+      .search-container {
+        position: relative;
+      }
+      .search-results {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 0 0 4px 4px;
+        z-index: 1000;
+        display: none;
+      }
+      .search-result-item {
+        padding: 8px 12px;
+        cursor: pointer;
+      }
+      .search-result-item:hover {
+        background-color: #f5f5f5;
+      }
+      .input-group {
+        display: flex;
+      }
+      .input-group input {
+        flex: 1;
+      }
+      .input-group button {
+        width: auto;
+        padding: 8px 12px;
+      }
+      .back-btn {
+        background-color: #7f8c8d;
+        margin-right: 10px;
+      }
+      .back-btn:hover {
+        background-color: #6c7a7d;
+      }
+      .status-pending {
+        color: #f39c12;
+      }
+      .status-confirmed {
+        color: #2ecc71;
+      }
+      .status-cancelled {
+        color: #e74c3c;
+      }
+      .status-completed {
+        color: #3498db;
+      }
+      .status-rescheduled {
+        color: #9b59b6;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <button class="back-btn" onclick="window.location.href='index.html'">
+        <i class="fas fa-arrow-left"></i> Back
+      </button>
+      <h1>New Appointment</h1>
+
+      <!-- Appointment Form -->
+      <form id="appointmentForm">
+        <div class="row mb-3">
+          <!-- Patient Information -->
+          <div class="col-md-6">
+            <label class="form-label">Patient Name</label>
+            <div class="search-container">
+              <div class="input-group">
+                <input
+                  type="text"
+                  id="patientSearch"
+                  class="form-control"
+                  placeholder="Enter patient name"
+                  required
+                />
+                <button
+                  class="btn btn-outline-secondary"
+                  type="button"
+                  onclick="clearPatientSearch()"
+                >
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+              <div class="search-results" id="patientResults"></div>
+            </div>
+          </div>
+
+          <!-- Doctor Information -->
+          <div class="col-md-6">
+            <label class="form-label">Doctor Name</label>
+            <div class="search-container">
+              <div class="input-group">
+                <input
+                  type="text"
+                  id="doctorSearch"
+                  class="form-control"
+                  placeholder="Enter doctor name"
+                  required
+                />
+                <button
+                  class="btn btn-outline-secondary"
+                  type="button"
+                  onclick="clearDoctorSearch()"
+                >
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+              <div class="search-results" id="doctorResults"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="appointmentDate">Date</label>
+              <input type="date" id="appointmentDate" class="form-control" required />
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="appointmentTime">Time</label>
+              <input type="time" id="appointmentTime" class="form-control" required />
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="patientEmail">Patient Email</label>
+              <input type="email" id="patientEmail" class="form-control" required />
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="patientContactNumber">Patient Phone</label>
+              <input type="tel" id="patientContactNumber" class="form-control" required />
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="doctorEmail">Doctor Email</label>
+              <input type="email" id="doctorEmail" class="form-control" required />
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="doctorContactNumber">Doctor Phone</label>
+              <input type="tel" id="doctorContactNumber" class="form-control" required />
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="appointmentType">Appointment Type</label>
+              <select id="appointmentType" class="form-control" required>
+                <option value="">Select type</option>
+                <option value="CONSULTATION">Consultation</option>
+                <option value="FOLLOW_UP">Follow Up</option>
+                <option value="EMERGENCY">Emergency</option>
+                <option value="ROUTINE_CHECKUP">Routine Checkup</option>
+                <option value="TEST">Test</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="appointmentDuration">Duration (minutes)</label>
+              <input
+                type="number"
+                id="appointmentDuration"
+                class="form-control"
+                min="15"
+                max="120"
+                value="30"
+                required
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="location">Location</label>
+              <input type="text" id="location" class="form-control" value="Main Clinic" required />
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="specialty">Specialty</label>
+              <input type="text" id="specialty" class="form-control" value="General Medicine" required />
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="appointmentReason">Reason</label>
+          <textarea id="appointmentReason" class="form-control" rows="3"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="notes">Notes</label>
+          <textarea id="notes" class="form-control" rows="2"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Book Appointment</button>
+      </form>
+    </div>
+
+    <script>
+      const API_URL = "http://localhost:8080/api/appointments";
+      let doctorsData = {};
+      let patientsData = {};
+
+      // DOM Elements
+      const form = document.getElementById("appointmentForm");
+
+      // Set minimum date to today on page load
+      document.addEventListener("DOMContentLoaded", () => {
+        const today = new Date().toISOString().split("T")[0];
+        document.getElementById("appointmentDate").min = today;
+
+        // Add event listeners for search inputs
+        document
+          .getElementById("doctorSearch")
+          .addEventListener("input", function () {
+            searchDoctors(this.value);
+          });
+
+        document
+          .getElementById("patientSearch")
+          .addEventListener("input", function () {
+            searchPatients(this.value);
+          });
+      });
+
+      // Form submission
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        // Format time to HH:mm:ss
+        const timeValue = document.getElementById("appointmentTime").value;
+        const formattedTime = timeValue + ":00";
+
+        const appointment = {
+          patientName: document.getElementById("patientSearch").value,
+          doctorName: document.getElementById("doctorSearch").value,
+          appointmentDate: document.getElementById("appointmentDate").value,
+          appointmentTime: formattedTime,
+          patientEmail: document.getElementById("patientEmail").value,
+          patientContactNumber: document.getElementById("patientContactNumber").value,
+          doctorEmail: document.getElementById("doctorEmail").value,
+          doctorContactNumber: document.getElementById("doctorContactNumber").value,
+          doctorId:localStorage.getItem("doctorid"),
+          appointmentType: document.getElementById("appointmentType").value,
+          appointmentDuration: document.getElementById("appointmentDuration").value + " minutes",
+          location: document.getElementById("location").value,
+          specialty: document.getElementById("specialty").value,
+          appointmentReason: document.getElementById("appointmentReason").value,
+          notes: document.getElementById("notes").value,
+          appointmentID: generateAppointmentId(),
+          appointmentStatus: "PENDING",
+          reminderSent: false
+        };
+
+        try {
+          const response = await fetch(API_URL, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": "Bearer eyJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJkaXBhbnNodTIzQGdtYWlsLmNvbSIsImlhdCI6MTc1MjY3ODcxNiwiZXhwIjoxNzUyNjgyMzE2fQ.QtNb1PLq4Y6XXIY-_v_Kfyz0PQ0lNRw6puBlbSdT6A0"
+            },
+            body: JSON.stringify(appointment),
+          });
+
+          if (response.ok) {
+            alert("Appointment booked successfully!");
+            form.reset();
+            // Optionally redirect to upcoming appointments
+            // window.location.href = "upcoming-appointments.html";
+          } else {
+            const error = await response.json();
+            alert(`Error: ${error.message || "Failed to book appointment"}`);
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          alert("An error occurred. Please try again.");
+        }
+      });
+
+      // Search doctors by name
+      async function searchDoctors(query) {
+        const resultsContainer = document.getElementById("doctorResults");
+        resultsContainer.innerHTML = "";
+
+        if (query.length < 2) {
+          resultsContainer.style.display = "none";
+          return;
+        }
+
+        try {
+          const response = await fetch(
+            `http://localhost:8080/api/doctors/name/${query}`,
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer eyJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJkaXBhbnNodTIzQGdtYWlsLmNvbSIsImlhdCI6MTc1MjY3ODcxNiwiZXhwIjoxNzUyNjgyMzE2fQ.QtNb1PLq4Y6XXIY-_v_Kfyz0PQ0lNRw6puBlbSdT6A0"
+              },
+            }
+          );
+
+          if (!response.ok) throw new Error("Network response was not ok");
+          const doctors = await response.json();
+          console.log(doctors);
+         
+
+          if (doctors.length > 0) {
+            doctors.forEach((doctor) => {
+              const item = document.createElement("div");
+              item.className = "search-result-item";
+              item.textContent = `${doctor.firstName} ${doctor.lastName} (${doctor.specialization})`;
+              item.onclick = function() {
+                document.getElementById("doctorSearch").value = 
+                  `${doctor.firstName} ${doctor.lastName}`;
+                doctorsData[doctor.doctorId] = doctor;
+                document.getElementById("doctorEmail").value = doctor.email || "";
+                document.getElementById("doctorContactNumber").value = doctor.phonenumber || "";
+                document.getElementById("specialty").value = doctor.specialization || "General Medicine";
+                localStorage.setItem("doctorid",doctor.doctorId);
+                resultsContainer.style.display = "none";
+              };
+              resultsContainer.appendChild(item);
+            });
+            resultsContainer.style.display = "block";
+          } else {
+            resultsContainer.style.display = "none";
+          }
+        } catch (error) {
+          console.error("Error searching doctors:", error);
+          alert("Error searching doctors");
+        }
+      }
+
+    //   // Search patients by name
+    //   async function searchPatients(query) {
+    //     const resultsContainer = document.getElementById("patientResults");
+    //     resultsContainer.innerHTML = "";
+
+    //     if (query.length < 2) {
+    //       resultsContainer.style.display = "none";
+    //       return;
+    //     }
+
+    //     try {
+    //       const response = await fetch(
+    //         `http://localhost:8080/api/patients/search/name/${query}`,
+    //         {
+    //           method: "GET",
+    //           headers: {
+    //             "Content-Type": "application/json",
+    //             "Authorization": "Bearer eyJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJkaXBhbnNodTIzQGdtYWlsLmNvbSIsImlhdCI6MTc1MjY3ODcxNiwiZXhwIjoxNzUyNjgyMzE2fQ.QtNb1PLq4Y6XXIY-_v_Kfyz0PQ0lNRw6puBlbSdT6A0"
+    //           },
+    //         }
+    //       );
+
+    //       if (!response.ok) throw new Error("Network response was not ok");
+    //       const patients = await response.json();
+
+    //       if (patients.length > 0) {
+    //         patients.forEach((patient) => {
+    //           const item = document.createElement("div");
+    //           item.className = "search-result-item";
+    //           item.textContent = `${patient.firstName} ${patient.lastName}`;
+    //           item.onclick = function() {
+    //             document.getElementById("patientSearch").value = 
+    //               `${patient.firstName} ${patient.lastName}`;
+    //             patientsData[patient.patientId] = patient;
+    //             document.getElementById("patientEmail").value = patient.email || "";
+    //             document.getElementById("patientContactNumber").value = patient.contactNumber || "";
+    //             resultsContainer.style.display = "none";
+    //           };
+    //           resultsContainer.appendChild(item);
+    //         });
+    //         resultsContainer.style.display = "block";
+    //       } else {
+    //         resultsContainer.style.display = "none";
+    //       }
+    //     } catch (error) {
+    //       console.error("Error searching patients:", error);
+    //       alert("Error searching patients");
+    //     }
+    //   }
+
+      // Clear doctor search
+      function clearDoctorSearch() {
+        document.getElementById("doctorSearch").value = "";
+        document.getElementById("doctorResults").style.display = "none";
+        document.getElementById("doctorEmail").value = "";
+        document.getElementById("doctorContactNumber").value = "";
+        document.getElementById("specialty").value = "General Medicine";
+      }
+
+      // Clear patient search
+      function clearPatientSearch() {
+        document.getElementById("patientSearch").value = "";
+        document.getElementById("patientResults").style.display = "none";
+        document.getElementById("patientEmail").value = "";
+        document.getElementById("patientContactNumber").value = "";
+      }
+
+      // Helper function to generate appointment ID
+      function generateAppointmentId() {
+        return "APP-" + Date.now().toString(36).toUpperCase();
+      }
+
+      // Helper function to format time for display
+      function formatTime(timeString) {
+        if (!timeString) return "";
+        const [hours, minutes] = timeString.split(":");
+        const hour = parseInt(hours);
+        const ampm = hour >= 12 ? "PM" : "AM";
+        const hour12 = hour % 12 || 12;
+        return `${hour12}:${minutes} ${ampm}`;
+      }
+    </script>
+  </body>
+</html>

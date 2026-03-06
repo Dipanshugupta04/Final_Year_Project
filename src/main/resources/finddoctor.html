@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediPlus - Book Appointment</title>
+    <link rel="shortcut icon" href="LOGO.png" type="image/x-icon">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .doctor-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .doctor-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .rating {
+            color: #ffc107;
+        }
+    </style>
+</head>
+<body>
+    <div class="d-flex">
+        <!-- Sidebar -->
+        <div class="dashboard-sidebar col-md-3 col-lg-2 bg-light">
+            <!-- Sidebar content -->
+        </div>
+        
+        <!-- Main Content -->
+        <div class="dashboard-content col-md-9 col-lg-10">
+            <div class="container-fluid py-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2>Book an Appointment</h2>
+                    <div class="btn-group">
+                        <button class="btn btn-outline-secondary">
+                            <i class="fas fa-filter me-2"></i> Filter
+                        </button>
+                        <button class="btn btn-outline-secondary">
+                            <i class="fas fa-map-marker-alt me-2"></i> Near Me
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Search Bar -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Search Doctors</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Search by name, specialty...">
+                                    <button class="btn btn-primary">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">Specialty</label>
+                                <select class="form-select">
+                                    <option selected>All Specialties</option>
+                                    <option>General Practitioner</option>
+                                    <option>Cardiologist</option>
+                                    <option>Neurologist</option>
+                                    <option>Dermatologist</option>
+                                    <option>Pediatrician</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">Location</label>
+                                <select class="form-select">
+                                    <option selected>Near Me</option>
+                                    <option>New York</option>
+                                    <option>Los Angeles</option>
+                                    <option>Chicago</option>
+                                    <option>Houston</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Doctors List -->
+                <div class="row">
+                    <!-- Doctor 1 -->
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="card doctor-card h-100">
+                            <div class="card-body">
+                                <div class="d-flex align-items-start mb-3">
+                                    <img src="https://randomuser.me/api/portraits/women/65.jpg" class="rounded-circle me-3" width="60" height="60" alt="Doctor">
+                                    <div>
+                                        <h5 class="mb-1">Dr. Sarah Johnson</h5>
+                                        <p class="text-muted mb-1">General Practitioner</p>
+                                        <div class="rating">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star-half-alt"></i>
+                                            <span class="text-muted ms-2">4.7 (128)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <p><i class="fas fa-map-marker-alt text-primary me-2"></i> 2.5 miles away</p>
+                                    <p><i class="fas fa-dollar-sign text-primary me-2"></i> $120 consultation fee</p>
+                                    <p><i class="fas fa-clock text-primary me-2"></i> Available tomorrow</p>
+                                </div>
+                                <button class="btn btn-primary w-100">
+                                    <i class="fas fa-calendar-check me-2"></i> Book Appointment
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Doctor 2 -->
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="card doctor-card h-100">
+                            <div class="card-body">
+                                <div class="d-flex align-items-start mb-3">
+                                    <img src="https://randomuser.me/api/portraits/men/32.jpg" class="rounded-circle me-3" width="60" height="60" alt="Doctor">
+                                    <div>
+                                        <h5 class="mb-1">Dr. Michael Chen</h5>
+                                        <p class="text-muted mb-1">Neurologist</p>
+                                        <div class="rating">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <span class="text-muted ms-2">5.0 (89)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <p><i class="fas fa-map-marker-alt text-primary me-2"></i> 1.2 miles away</p>
+                                    <p><i class="fas fa-dollar-sign text-primary me-2"></i> $180 consultation fee</p>
+                                    <p><i class="fas fa-clock text-primary me-2"></i> Available today</p>
+                                </div>
+                                <button class="btn btn-primary w-100">
+                                    <i class="fas fa-calendar-check me-2"></i> Book Appointment
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Doctor 3 -->
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="card doctor-card h-100">
+                            <div class="card-body">
+                                <div class="d-flex align-items-start mb-3">
+                                    <img src="https://randomuser.me/api/portraits/women/45.jpg" class="rounded-circle me-3" width="60" height="60" alt="Doctor">
+                                    <div>
+                                        <h5 class="mb-1">Dr. Emily Rodriguez</h5>
+                                        <p class="text-muted mb-1">Pediatrician</p>
+                                        <div class="rating">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="far fa-star"></i>
+                                            <span class="text-muted ms-2">4.2 (156)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <p><i class="fas fa-map-marker-alt text-primary me-2"></i> 3.1 miles away</p>
+                                    <p><i class="fas fa-dollar-sign text-primary me-2"></i> $150 consultation fee</p>
+                                    <p><i class="fas fa-clock text-primary me-2"></i> Available in 2 days</p>
+                                </div>
+                                <button class="btn btn-primary w-100">
+                                    <i class="fas fa-calendar-check me-2"></i> Book Appointment
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Appointment Modal -->
+                <div class="modal fade" id="appointmentModal" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Book Appointment with Dr. Sarah Johnson</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Select Date</label>
+                                            <input type="date" class="form-control">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Select Time</label>
+                                            <select class="form-select">
+                                                <option>9:00 AM</option>
+                                                <option>10:30 AM</option>
+                                                <option>12:00 PM</option>
+                                                <option>2:00 PM</option>
+                                                <option>3:30 PM</option>
+                                                <option>5:00 PM</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Appointment Type</label>
+                                            <select class="form-select">
+                                                <option>In-person Visit</option>
+                                                <option>Video Consultation</option>
+                                                <option>Phone Consultation</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Reason for Visit</label>
+                                            <textarea class="form-control" rows="3" placeholder="Briefly describe your symptoms or reason for visit"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-primary">Confirm Appointment</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Initialize appointment modal
+        document.querySelectorAll('.doctor-card .btn-primary').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const modal = new bootstrap.Modal(document.getElementById('appointmentModal'));
+                modal.show();
+            });
+        });
+    </script>
+</body>
+</html>

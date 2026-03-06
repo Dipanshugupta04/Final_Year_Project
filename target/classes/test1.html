@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediPlus - Complete Healthcare Solution</title>
+    <link rel="shortcut icon" href="LOGO.png" type="image/x-icon">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            --primary-color: #0d6efd;
+            --primary-light: #e8f2ff;
+            --secondary-color: #6c757d;
+            --dark-color: #212529;
+            --light-color: #f8f9fa;
+            --accent-color: #20c997;
+            --danger-color: #dc3545;
+            --success-color: #198754;
+            --warning-color: #ffc107;
+            --gradient-primary: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+            --gradient-success: linear-gradient(135deg, #20c997 0%, #198754 100%);
+            --gradient-warning: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
+            --shadow-light: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --shadow-medium: 0 8px 30px rgba(0, 0, 0, 0.12);
+            --shadow-heavy: 0 15px 50px rgba(0, 0, 0, 0.15);
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--dark-color);
+            overflow-x: hidden;
+            background-color: #f9fbfd;
+        }
+        
+        /* Header Styles */
+        .header-area {
+            padding: 15px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 999;
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .header-area.sticky {
+            padding: 10px 0;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .navbar-brand img {
+            height: 40px;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link {
+            font-weight: 500;
+            padding: 8px 15px !important;
+            color: var(--dark-color);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            color: var(--primary-color);
+            background-color: var(--primary-light);
+        }
+        
+        .nav-link:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 50%;
+            background-color: var(--primary-color);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+        
+        .nav-link:hover:after, .nav-link.active:after {
+            width: 70%;
+        }
+        
+        .dropdown-menu {
+            border: none;
+            border-radius: 12px;
+            box-shadow: var(--shadow-medium);
+            padding: 10px;
+        }
+        
+        .dropdown-item {
+            border-radius: 8px;
+            padding: 8px 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .dropdown-item:hover {
+            background-color: var(--primary-light);
+            color: var(--primary-color);
+        }
+        
+        .btn-primary {
+            background: var(--gradient-primary);
+            border: none;
+            padding: 10px 25px;
+            font-weight: 500;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(13, 110, 253, 0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(13, 110, 253, 0.4);
+        }
+        
+        .btn-outline-primary {
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+            border-radius: 50px;
+            padding: 10px 25px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-outline-primary:hover {
+            background-color: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(13, 110, 253, 0.3);
+        }
+        
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 8px;
+            border: 2px solid var(--primary-light);
+        }
+        
+        .patient-id-badge {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-left: 10px;
+        }
+        
+        /* Hero Section */
+        .hero-section {
+            padding: 180px 0 100px;
+            background: linear-gradient(135deg, #f0f8ff 0%, #e6f0ff 100%);
+            margin-top: 70px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-section:before {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: rgba(13, 110, 253, 0.05);
+            top: -150px;
+            right: -150px;
+        }
+        
+        .hero-section:after {
+            content: '';
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: rgba(32, 201, 151, 0.05);
+            bottom: -100px;
+            left: -100px;
+        }
+        
+        .hero-content h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero-content p {
+            font-size: 1.2rem;
+            color: var(--secondary-color);
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .hero-image {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero-image img {
+            border-radius: 20px;
+            box-shadow: var(--shadow-heavy);
+            transform: perspective(1000px) rotateY(-5deg);
+            transition: all 0.5s ease;
+        }
+        
+        .hero-image img:hover {
+            transform: perspective(1000px) rotateY(0deg);
+        }
+        
+        /* Welcome Section for Logged-in Users */
+        .welcome-section {
+            padding: 120px 0 80px;
+            background: var(--gradient-primary);
+            color: white;
+            margin-top: 70px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .welcome-section:before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23ffffff" fill-opacity="0.1" d="M0,96L48,112C96,128,192,160,288,186.7C384,213,480,235,576,213.3C672,192,768,128,864,128C960,128,1056,192,1152,197.3C1248,203,1344,149,1392,122.7L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .welcome-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .welcome-content h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        
+        .welcome-content p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+        
+        /* Section Styling */
+        .section {
+            padding: 80px 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .section-title h2 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title h2:after {
+            content: '';
+            position: absolute;
+            width: 60px;
+            height: 3px;
+            background: var(--gradient-primary);
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        /* Feature Cards */
+        .feature-card {
+            padding: 30px;
+            border-radius: 15px;
+            background-color: white;
+            box-shadow: var(--shadow-light);
+            margin-bottom: 30px;
+            transition: all 0.4s ease;
+            height: 100%;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-card:before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 4px;
+            top: 0;
+            left: 0;
+            background: var(--gradient-primary);
+            transform: scaleX(0);
+            transition: all 0.4s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-medium);
+        }
+        
+        .feature-card:hover:before {
+            transform: scaleX(1);
+        }
+        
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: white;
+            font-size: 32px;
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+        
+        .feature-card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--dark-color);
+        }
+        
+        .feature-card p {
+            color: var(--secondary-color);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        /* Quick Actions for Logged-in Users */
+        .quick-actions {
+            padding: 60px 0;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        }
+        
+        .action-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: var(--shadow-light);
+            transition: all 0.3s ease;
+            height: 100%;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .action-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-medium);
+        }
+        
+        .action-icon {
+            width: 70px;
+            height: 70px;
+            background: var(--primary-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            color: var(--primary-color);
+            font-size: 28px;
+        }
+        
+        /* Stats Section */
+        .stats-section {
+            padding: 80px 0;
+            background: var(--gradient-primary);
+            color: white;
+            text-align: center;
+        }
+        
+        .stat-item {
+            padding: 20px;
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .stat-label {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        /* Footer */
+        .footer-area {
+            background: var(--dark-color);
+            color: white;
+            padding-top: 60px;
+        }
+        
+        .footer-widget h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer-widget h3:after {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 2px;
+            background: var(--primary-color);
+            bottom: 0;
+            left: 0;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+            padding-left: 5px;
+        }
+        
+        .contact-info li {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .contact-info i {
+            width: 20px;
+            margin-right: 10px;
+            color: var(--primary-color);
+        }
+        
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: white;
+            margin-right: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .social-links a:hover {
+            background: var(--primary-color);
+            transform: translateY(-3px);
+        }
+        
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px 0;
+            margin-top: 40px;
+        }
+        
+        /* Responsive Adjustments */
+        @media (max-width: 991px) {
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+            
+            .dashboard-sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+            
+            .dashboard-content {
+                margin-left: 0;
+            }
+            
+            .patient-id-badge {
+                display: block;
+                margin: 5px 0 0 0;
+            }
+        }
+        
+        @media (max-width: 767px) {
+            .hero-section {
+                padding: 120px 0 60px;
+                text-align: center;
+            }
+            
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+            
+            .section-title h2 {
+                font-size: 30px;
+            }
+            
+            .welcome-content h2 {
+                font-size: 2rem;
+            }
+        }
+        
+        /* Animation Classes */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+        
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Pulse Animation */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header/Navigation -->
+    <header class="header-area">
+        <div class="container">
+            <nav class="navbar navbar-expand-lg">
+                <a class="navbar-brand" href="index.html">
+                    <img src="LOGO.png" alt="MediPlus Logo">
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="collapse navbar-collapse" id="mainNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item"><a class="nav-link active" href="index.html">Home</a></li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="servicesDropdown" role="button" data-bs-toggle="dropdown">
+                                Services
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="telecome.html">Online Consultation</a></li>
+                                <li><a class="dropdown-item" href="E-p.html">E-Prescription</a></li>
+                                <li><a class="dropdown-item" href="labtest.html">Lab Test Booking</a></li>
+                                <li><a class="dropdown-item" href="medicine.html">Search Medicine</a></li>
+                                <li><a class="dropdown-item" href="emergency.html">Emergency Services</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item"><a class="nav-link" href="findDoctors.html">Doctors</a></li>
+                        <li class="nav-item"><a class="nav-link" href="healthrecord.html">Health Records</a></li>
+                        <li class="nav-item"><a class="nav-link" href="healthblog.html">Health Blog</a></li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="dashboardDropdown" role="button" data-bs-toggle="dropdown">
+                                Dashboard
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="patientdashboard.html">Patient Dashboard</a></li>
+                                <li><a class="dropdown-item" href="doctordashboard.html">Doctor Dashboard</a></li>
+                                <li><a class="dropdown-item" href="admin.html">Admin Dashboard</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <div class="ms-lg-4" id="authButtons">
+                        <a href="login.html" class="btn btn-outline-primary me-2">Login</a>
+                        <a href="signup.html" class="btn btn-primary">Register</a>
+                    </div>
+                    <div class="ms-lg-4 d-none" id="userSection">
+                        <div class="dropdown">
+                            <a class="dropdown-toggle d-flex align-items-center text-decoration-none" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src="https://ui-avatars.com/api/?name=User&background=0D8ABC&color=fff" alt="User" class="user-avatar" id="userAvatar">
+                                <span id="navUsername">User</span>
+                                <span class="patient-id-badge" id="patientIdBadge">ID: </span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                <li><a class="dropdown-item" href="profile.html"><i class="fas fa-user me-2"></i>Profile</a></li>
+                                <li><a class="dropdown-item" href="settings.html"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                                <li><a class="dropdown-item" href="healthrecord.html"><i class="fas fa-file-medical me-2"></i>Health Records</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="#" id="logoutBtn"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Welcome Section for Logged-in Users -->
+    <section class="welcome-section d-none" id="welcomeSection">
+        <div class="container">
+            <div class="welcome-content">
+                <h2 id="welcomeMessage">Welcome back, User!</h2>
+                <p>We're glad to see you again. How can we assist with your healthcare needs today?</p>
+                <a href="patientdashboard.html" class="btn btn-light me-2">Go to Dashboard</a>
+                <a href="telecome.html" class="btn btn-outline-light">Book Consultation</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Hero Section -->
+    <section class="hero-section" id="heroSection">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <div class="hero-content">
+                        <h1>Complete Healthcare Solution For Everyone</h1>
+                        <p>MediPlus integrates all healthcare services in one platform - from telemedicine to medicine delivery, lab tests to health records management.</p>
+                        <a href="#features" class="btn btn-primary me-3">Explore Features</a>
+                        <a class="btn btn-outline-primary" id="btn-started">Get Started</a>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="hero-image">
+                        <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Healthcare Platform" class="img-fluid">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Actions for Logged-in Users -->
+    <section class="quick-actions d-none" id="quickActions">
+        <div class="container">
+            <div class="section-title">
+                <h2>Quick Actions</h2>
+                <p>Access your most used features quickly</p>
+            </div>
+            <div class="row">
+                <div class="col-md-3 col-sm-6 mb-4">
+                    <div class="action-card">
+                        <div class="action-icon">
+                            <i class="fas fa-video"></i>
+                        </div>
+                        <h4>Consult Doctor</h4>
+                        <p>Book an online consultation with a specialist</p>
+                        <a href="telecome.html" class="btn btn-sm btn-primary">Book Now</a>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 mb-4">
+                    <div class="action-card">
+                        <div class="action-icon">
+                            <i class="fas fa-pills"></i>
+                        </div>
+                        <h4>Order Medicine</h4>
+                        <p>Get your prescribed medicines delivered</p>
+                        <a href="medicine.html" class="btn btn-sm btn-primary">Order Now</a>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 mb-4">
+                    <div class="action-card">
+                        <div class="action-icon">
+                            <i class="fas fa-file-medical"></i>
+                        </div>
+                        <h4>Health Records</h4>
+                        <p>View your medical history and reports</p>
+                        <a href="healthrecord.html" class="btn btn-sm btn-primary">View Records</a>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 mb-4">
+                    <div class="action-card">
+                        <div class="action-icon">
+                            <i class="fas fa-flask"></i>
+                        </div>
+                        <h4>Lab Tests</h4>
+                        <p>Book diagnostic tests and check results</p>
+                        <a href="labtest.html" class="btn btn-sm btn-primary">Book Test</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="section bg-light">
+        <div class="container">
+            <div class="section-title">
+                <h2>Our Comprehensive Features</h2>
+                <p>All your healthcare needs in one integrated platform</p>
+            </div>
+            <div class="row">
+                <!-- Row 1 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card fade-in">
+                        <div class="feature-icon">
+                            <i class="fas fa-video"></i>
+                        </div>
+                        <h3>Online Consultation</h3>
+                        <p>Secure video consultations with doctors using Jitsi Meet API. Get medical advice from the comfort of your home.</p>
+                        <a href="telecome.html" class="btn btn-sm btn-outline-primary">Learn More</a>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card fade-in">
+                        <div class="feature-icon">
+                            <i class="fas fa-file-prescription"></i>
+                        </div>
+                        <h3>E-Prescription</h3>
+                        <p>Digital prescription management system for doctors with automatic medicine inventory checking.</p>
+                        <a href="E-p.html" class="btn btn-sm btn-outline-primary">Learn More</a>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card fade-in">
+                        <div class="feature-icon">
+                            <i class="fas fa-pills"></i>
+                        </div>
+                        <h3>Medicine Ordering</h3>
+                        <p>Order prescribed medicines with home delivery option. Integrated with local pharmacies.</p>
+                        <a href="medicine.html" class="btn btn-sm btn-outline-primary">Learn More</a>
+                    </div>
+                </div>
+                
+                <!-- Row 2 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card fade-in">
+                        <div class="feature-icon">
+                            <i class="fas fa-flask"></i>
+                        </div>
+                        <h3>Lab Test Booking</h3>
+                        <p>Book lab tests online and receive digital reports. Home sample collection available.</p>
+                        <a href="labtest.html" class="btn btn-sm btn-outline-primary">Learn More</a>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card fade-in">
+                        <div class="feature-icon">
+                            <i class="fas fa-heartbeat"></i>
+                        </div>
+                        <h3>Health Records</h3>
+                        <p>Centralized storage for all your medical records, prescriptions, and test reports.</p>
+                        <a href="healthrecord.html" class="btn btn-sm btn-outline-primary">Learn More</a>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card fade-in">
+                        <div class="feature-icon">
+                            <i class="fas fa-bell"></i>
+                        </div>
+                        <h3>Reminders</h3>
+                        <p>Medication reminders, appointment alerts, and health checkup notifications.</p>
+                        <a href="reminders.html" class="btn btn-sm btn-outline-primary">Learn More</a>
+                    </div>
+                </div>
+                
+                <!-- Row 3 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card fade-in">
+                        <div class="feature-icon">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <h3>AI Symptom Checker</h3>
+                        <p>AI-powered preliminary diagnosis based on symptoms before consulting a doctor.</p>
+                        <a href="aichecker.html" class="btn btn-sm btn-outline-primary">Learn More</a>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card fade-in">
+                        <div class="feature-icon">
+                            <i class="fas fa-language"></i>
+                        </div>
+                        <h3>Multi-Language</h3>
+                        <p>Supports multiple languages with Google Translate integration for accessibility.</p>
+                        <a href="translate.html" class="btn btn-sm btn-outline-primary">Learn More</a>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card fade-in">
+                        <div class="feature-icon">
+                            <i class="fas fa-ambulance"></i>
+                        </div>
+                        <h3>Emergency Services</h3>
+                        <p>Immediate connection to emergency services with location sharing.</p>
+                        <a href="emergency.html" class="btn btn-sm btn-outline-primary">Learn More</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 col-sm-6">
+                    <div class="stat-item">
+                        <div class="stat-number">50,000+</div>
+                        <div class="stat-label">Patients Served</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="stat-item">
+                        <div class="stat-number">500+</div>
+                        <div class="stat-label">Expert Doctors</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="stat-item">
+                        <div class="stat-number">24/7</div>
+                        <div class="stat-label">Service Availability</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="stat-item">
+                        <div class="stat-number">98%</div>
+                        <div class="stat-label">Patient Satisfaction</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- OAuth 2.0 Login Section -->
+    <section class="section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <img src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Secure Login" class="img-fluid rounded shadow">
+                </div>
+                <div class="col-lg-6">
+                    <h2>Secure Authentication</h2>
+                    <p>Login using OAuth 2.0 with your preferred account for enhanced security and convenience.</p>
+                    <div class="d-flex flex-wrap gap-3 mt-4">
+                        <a href="#" class="btn btn-outline-secondary"><i class="fab fa-google me-2"></i> Google</a>
+                        <a href="#" class="btn btn-outline-secondary"><i class="fab fa-facebook-f me-2"></i> Facebook</a>
+                        <a href="#" class="btn btn-outline-secondary"><i class="fab fa-apple me-2"></i> Apple</a>
+                        <a href="#" class="btn btn-outline-secondary"><i class="fab fa-microsoft me-2"></i> Microsoft</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 col-md-6 mb-5 mb-lg-0">
+                    <div class="footer-widget">
+                        <h3>About MediPlus</h3>
+                        <p class="mt-4">MediPlus is a complete healthcare platform integrating telemedicine, e-prescriptions, lab tests, medicine delivery, and health records management.</p>
+                        <div class="social-links mt-4 d-flex">
+                            <a href="#" class="text-white"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" class="text-white"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="text-white"><i class="fab fa-instagram"></i></a>
+                            <a href="#" class="text-white"><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-6 mb-5 mb-md-0">
+                    <div class="footer-widget">
+                        <h3>Quick Links</h3>
+                        <ul class="footer-links mt-4 list-unstyled">
+                            <li class="mb-2"><a href="index.html" class="text-white-50">Home</a></li>
+                            <li class="mb-2"><a href="doctors.html" class="text-white-50">Doctors</a></li>
+                            <li class="mb-2"><a href="services.html" class="text-white-50">Services</a></li>
+                            <li class="mb-2"><a href="healthblog.html" class="text-white-50">Health Blog</a></li>
+                            <li class="mb-2"><a href="#footer-widget" class="text-white-50">Contact</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-5 mb-md-0">
+                    <div class="footer-widget">
+                        <h3>Services</h3>
+                        <ul class="footer-links mt-4 list-unstyled">
+                            <li class="mb-2"><a href="telecome.html" class="text-white-50">Online Consultation</a></li>
+                            <li class="mb-2"><a href="E-p.html" class="text-white-50">E-Prescription</a></li>
+                            <li class="mb-2"><a href="medicine.html" class="text-white-50">Medicine Ordering</a></li>
+                            <li class="mb-2"><a href="labtest.html" class="text-white-50">Lab Test Booking</a></li>
+                            <li class="mb-2"><a href="emergency.html" class="text-white-50">Emergency Services</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6" id="footer-widget">
+                    <div class="footer-widget">
+                        <h3>Contact Us</h3>
+                        <ul class="contact-info mt-4 list-unstyled">
+                            <li class="mb-3">
+                                <i class="fas fa-map-marker-alt me-2"></i>
+                                <span>123 Health Street, Medical City</span>
+                            </li>
+                            <li class="mb-3">
+                                <i class="fas fa-phone-alt me-2"></i>
+                                <span>+1 (123) 456-7890</span>
+                            </li>
+                            <li class="mb-3">
+                                <i class="fas fa-envelope me-2"></i>
+                                <span>info@mediplus.com</span>
+                            </li>
+                            <li class="mb-3">
+                                <i class="fas fa-clock me-2"></i>
+                                <span>24/7 Emergency Services</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom py-4 mt-4">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-md-6">
+                            <p class="mb-0">&copy; 2023 MediPlus. All rights reserved.</p>
+                        </div>
+                        <div class="col-md-6 text-md-end">
+                            <a href="privacy.html" class="text-white-50 me-3">Privacy Policy</a>
+                            <a href="terms.html" class="text-white-50">Terms of Service</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Authentication state management
+            const authButtons = document.getElementById("authButtons");
+            const userSection = document.getElementById("userSection");
+            const navUsername = document.getElementById("navUsername");
+            const userAvatar = document.getElementById("userAvatar");
+            const patientIdBadge = document.getElementById("patientIdBadge");
+            const logoutBtn = document.getElementById("logoutBtn");
+            const getstartedbtn = document.getElementById("btn-started");
+            const welcomeSection = document.getElementById("welcomeSection");
+            const welcomeMessage = document.getElementById("welcomeMessage");
+            const quickActions = document.getElementById("quickActions");
+            const heroSection = document.getElementById("heroSection");
+
+            // Check authentication status
+            function checkAuthStatus() {
+                const userData = localStorage.getItem("user");
+                
+                if (userData) {
+                    try {
+                        const user = JSON.parse(userData);
+                        const name = user.user || user.name || user.username || user.fullName || "User";
+                        
+                        // Hide auth buttons, show user section
+                        authButtons.classList.add("d-none");
+                        userSection.classList.remove("d-none");
+                        
+                        // Update user info
+                        navUsername.textContent = name;
+                        
+                        // Update avatar with user's initial
+                        const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=0D8ABC&color=fff`;
+                        userAvatar.src = avatarUrl;
+                        
+                        // Get and display patient ID
+                        const id = localStorage.getItem("unique_id");
+                        if (id) {
+                            patientIdBadge.textContent = "ID: " + id;
+                        } else {
+                            patientIdBadge.style.display = "none";
+                        }
+                        
+                        // Show welcome section and quick actions for logged-in users
+                        welcomeSection.classList.remove("d-none");
+                        quickActions.classList.remove("d-none");
+                        welcomeMessage.textContent = `Welcome back, ${name}!`;
+                        
+                        // Adjust hero section margin for logged-in users
+                        heroSection.style.marginTop = "0";
+                        
+                    } catch (e) {
+                        console.error("Error parsing user data:", e);
+                        clearUserData();
+                        showAuthButtons();
+                    }
+                } else {
+                    showAuthButtons();
+                }
+            }
+
+            function showAuthButtons() {
+                authButtons.classList.remove("d-none");
+                userSection.classList.add("d-none");
+                welcomeSection.classList.add("d-none");
+                quickActions.classList.add("d-none");
+                heroSection.style.marginTop = "70px";
+            }
+
+            function clearUserData() {
+                localStorage.removeItem("token");
+                localStorage.removeItem("user");
+                localStorage.removeItem("currentUser");
+                localStorage.removeItem("username");
+                localStorage.removeItem("unique_id");
+            }
+
+            // Initialize auth status
+            checkAuthStatus();
+
+            // Logout functionality
+            function performLogout() {
+                localStorage.removeItem("authToken");
+                localStorage.removeItem("rememberedEmail");
+                localStorage.removeItem("user");
+                localStorage.removeItem("examId");
+                localStorage.removeItem("examName");
+                localStorage.removeItem("unique_id");
+                
+                window.location.href = "index.html";
+            }
+            
+            logoutBtn?.addEventListener("click", function (e) {
+                e.preventDefault();
+                performLogout();
+            });
+
+            // Sticky header on scroll
+            window.addEventListener('scroll', function() {
+                const header = document.querySelector('.header-area');
+                header.classList.toggle('sticky', window.scrollY > 0);
+            });
+            
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            
+            // Fade-in animation for elements
+            function checkFadeIn() {
+                const fadeElements = document.querySelectorAll('.fade-in');
+                
+                fadeElements.forEach(element => {
+                    const elementTop = element.getBoundingClientRect().top;
+                    const elementVisible = 150;
+                    
+                    if (elementTop < window.innerHeight - elementVisible) {
+                        element.classList.add('visible');
+                    }
+                });
+            }
+            
+            window.addEventListener('scroll', checkFadeIn);
+            checkFadeIn(); // Check on page load
+            
+            // Feature card animations
+            const featureCards = document.querySelectorAll('.feature-card');
+            if (featureCards.length > 0) {
+                const observer = new IntersectionObserver(
+                    (entries) => {
+                        entries.forEach((entry, index) => {
+                            if (entry.isIntersecting) {
+                                setTimeout(() => {
+                                    entry.target.style.opacity = 1;
+                                    entry.target.style.transform = 'translateY(0)';
+                                }, index * 200);
+                            }
+                        });
+                    },
+                    { threshold: 0.1 }
+                );
+
+                featureCards.forEach(card => {
+                    card.style.opacity = 0;
+                    card.style.transform = 'translateY(20px)';
+                    card.style.transition = 'all 0.6s ease';
+                    observer.observe(card);
+                });
+            }
+
+            //get started button
+            getstartedbtn.addEventListener("click",function(e){
+                const token = localStorage.getItem('authToken');
+                if(token){
+                    window.location.href="medicine.html";
+                }
+                else{
+                    window.location.href="signup.html"
+                }
+            });
+
+            // JWT Token Expiry Check (simplified version)
+            function checkTokenExpiry() {
+                const token = localStorage.getItem('authToken');
+                if (token) {
+                    try {
+                        // Simple check - in a real app, you would decode the JWT
+                        // and check the expiration time
+                        const payload = JSON.parse(atob(token.split('.')[1]));
+                        const expirationTime = payload.exp * 1000;
+                        
+                        if (Date.now() >= expirationTime) {
+                            // Token expired
+                            localStorage.removeItem('authToken');
+                            localStorage.removeItem('user');
+                            localStorage.removeItem('unique_id');
+                            window.location.reload();
+                        }
+                    } catch (e) {
+                        console.error('Error checking token expiry:', e);
+                    }
+                }
+            }
+
+            // Check token expiry on page load and every minute
+            checkTokenExpiry();
+            setInterval(checkTokenExpiry, 60000);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediFind - Doctor Search Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background-color: #f0f7ff;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #1976D2 0%, #0D47A1 100%);
+            color: white;
+            padding: 15px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo i {
+            font-size: 28px;
+        }
+        
+        .logo h1 {
+            font-weight: 600;
+            font-size: 24px;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .profile-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: white;
+            color: #1976D2;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .profile-btn:hover {
+            background: #e3f2fd;
+        }
+        
+        .search-section {
+            padding: 40px 0;
+            text-align: center;
+        }
+        
+        .search-section h2 {
+            font-size: 32px;
+            margin-bottom: 10px;
+            color: #1976D2;
+        }
+        
+        .search-section p {
+            color: #666;
+            margin-bottom: 30px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .search-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .tab {
+            padding: 12px 24px;
+            background: #e3f2fd;
+            cursor: pointer;
+            border-radius: 30px;
+            margin: 0 8px 10px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .tab.active {
+            background: #1976D2;
+            color: white;
+        }
+        
+        .search-forms {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .search-form {
+            display: none;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .search-form.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+            position: relative;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #444;
+        }
+        
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border 0.3s ease;
+        }
+        
+        .form-group input:focus, .form-group select:focus {
+            border-color: #1976D2;
+            outline: none;
+        }
+        
+        .search-btn {
+            background: #1976D2;
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            width: 100%;
+        }
+        
+        .search-btn:hover {
+            background: #1565C0;
+        }
+        
+        .search-btn:disabled {
+            background: #90caf9;
+            cursor: not-allowed;
+        }
+        
+        .results-section {
+            padding: 20px 0 50px;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #1976D2;
+        }
+        
+        .doctors-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        
+        .doctor-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .doctor-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+        }
+        
+        .card-header {
+            padding: 20px;
+            background: #e3f2fd;
+            text-align: center;
+        }
+        
+        .card-header img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-body {
+            padding: 20px;
+        }
+        
+        .doctor-name {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #1976D2;
+        }
+        
+        .doctor-specialization {
+            color: #666;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+        
+        .doctor-details {
+            margin-bottom: 15px;
+        }
+        
+        .detail-item {
+            display: flex;
+            margin-bottom: 8px;
+        }
+        
+        .detail-item i {
+            margin-right: 10px;
+            color: #1976D2;
+            width: 20px;
+        }
+        
+        .view-profile {
+            display: block;
+            text-align: center;
+            background: #e3f2fd;
+            color: #1976D2;
+            padding: 10px;
+            text-decoration: none;
+            font-weight: 500;
+            border-radius: 6px;
+            transition: background 0.3s ease;
+        }
+        
+        .view-profile:hover {
+            background: #bbdefb;
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            grid-column: 1 / -1;
+        }
+        
+        .no-results i {
+            font-size: 60px;
+            color: #ccc;
+            margin-bottom: 20px;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            grid-column: 1 / -1;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #1976D2;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        footer {
+            background: #1976D2;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 40px;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            background: #f44336;
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            display: none;
+            z-index: 1000;
+        }
+        
+        .notification.success {
+            background: #4CAF50;
+        }
+        
+        .suggestions-container {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #ddd;
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 100;
+            display: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .suggestion-item {
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .suggestion-item:last-child {
+            border-bottom: none;
+        }
+        
+        .suggestion-item:hover {
+            background: #e3f2fd;
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+            
+            .nav-buttons {
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .nav-btn, .profile-btn {
+                width: 100%;
+                text-align: center;
+                justify-content: center;
+            }
+            
+            .search-tabs {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .tab {
+                width: 100%;
+                max-width: 300px;
+                margin-bottom: 10px;
+            }
+            
+            .doctors-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="notification" id="notification"></div>
+    
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-stethoscope"></i>
+                    <h1>MediFind</h1>
+                </div>
+                <div class="nav-buttons" id="auth-buttons">
+                    <!-- This will be populated by JavaScript based on auth status -->
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="search-section">
+        <div class="container">
+            <h2>Find the Right Doctor for You</h2>
+            <p>Search from our database of qualified healthcare professionals based on your needs</p>
+            
+            <div class="search-tabs">
+                <div class="tab active" data-tab="all">All Doctors</div>
+                <div class="tab" data-tab="name">Search by Name</div>
+                <div class="tab" data-tab="specialization">Search by Specialization</div>
+                <div class="tab" data-tab="location">Search by Location</div>
+                <div class="tab" data-tab="combined">Advanced Search</div>
+            </div>
+            
+            <div class="search-forms">
+                <div class="search-form active" id="all-form">
+                    <button class="search-btn" id="fetch-all">Show All Doctors</button>
+                </div>
+                
+                <div class="search-form" id="name-form">
+                    <div class="form-group">
+                        <label for="name-input">Doctor's Name</label>
+                        <input type="text" id="name-input" placeholder="Enter doctor's name">
+                        <div class="suggestions-container" id="name-suggestions"></div>
+                    </div>
+                    <button class="search-btn" id="search-name">Search by Name</button>
+                </div>
+                
+                <div class="search-form" id="specialization-form">
+                    <div class="form-group">
+                        <label for="specialization-select">Specialization</label>
+                        <select id="specialization-select">
+                            <option value="">Select a specialization</option>
+                            <option value="Cardiology">Cardiology</option>
+                            <option value="Dermatology">Dermatology</option>
+                            <option value="Neurology">Neurology</option>
+                            <option value="Pediatrics">Pediatrics</option>
+                            <option value="Orthopedics">Orthopedics</option>
+                            <option value="Ophthalmology">Ophthalmology</option>
+                            <option value="Psychiatry">Psychiatry</option>
+                            <option value="Surgery">Surgery</option>
+                        </select>
+                    </div>
+                    <button class="search-btn" id="search-specialization">Search by Specialization</button>
+                </div>
+                
+                <div class="search-form" id="location-form">
+                    <div class="form-group">
+                        <label for="location-input">Location</label>
+                        <input type="text" id="location-input" placeholder="Enter city or area">
+                    </div>
+                    <button class="search-btn" id="search-location">Search by Location</button>
+                </div>
+                
+                <div class="search-form" id="combined-form">
+                    <div class="form-group">
+                        <label for="combined-specialization">Specialization</label>
+                        <select id="combined-specialization">
+                            <option value="">Select a specialization</option>
+                            <option value="Cardiology">Cardiology</option>
+                            <option value="Dermatology">Dermatology</option>
+                            <option value="Neurology">Neurology</option>
+                            <option value="Pediatrics">Pediatrics</option>
+                            <option value="Orthopedics">Orthopedics</option>
+                            <option value="Ophthalmology">Ophthalmology</option>
+                            <option value="Psychiatry">Psychiatry</option>
+                            <option value="Surgery">Surgery</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="combined-location">Location</label>
+                        <input type="text" id="combined-location" placeholder="Enter city or area">
+                    </div>
+                    <button class="search-btn" id="search-combined">Search</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="results-section">
+        <div class="container">
+            <h3 class="section-title">Available Doctors</h3>
+            <div class="doctors-grid" id="doctors-container">
+                <div class="no-results">
+                    <i class="fas fa-search"></i>
+                    <h3>Search for doctors</h3>
+                    <p>Use the search options above to find doctors that match your criteria</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 MediFind - Doctor Search Portal. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // API Base URL - Update this to match your backend URL
+        const API_BASE_URL = 'http://localhost:8080/api/doctors';
+        const AUTH_TOKEN_KEY = 'authToken';
+        const USER_DATA_KEY = 'user';
+        
+        // DOM Elements
+        const tabs = document.querySelectorAll('.tab');
+        const searchForms = document.querySelectorAll('.search-form');
+        const doctorsContainer = document.getElementById('doctors-container');
+        const notification = document.getElementById('notification');
+        const nameInput = document.getElementById('name-input');
+        const nameSuggestions = document.getElementById('name-suggestions');
+        const authButtons = document.getElementById('auth-buttons');
+        
+        // Check authentication status
+        function checkAuth() {
+            const token = localStorage.getItem(AUTH_TOKEN_KEY);
+            const userData = localStorage.getItem(USER_DATA_KEY);
+            
+            if (!token) {
+                // Not authenticated - show login/register buttons
+                authButtons.innerHTML = `
+                    <a href="login.html" class="nav-btn">Login</a>
+                    <a href="register.html" class="nav-btn">Register</a>
+                `;
+                return false;
+            } else {
+                // Authenticated - show profile button
+                let userName = 'User';
+                if (userData) {
+                    try {
+                        const user = JSON.parse(userData);
+                        userName = user.name || user.email || 'User';
+                    } catch (e) {
+                        console.error('Error parsing user data:', e);
+                    }
+                }
+                
+                authButtons.innerHTML = `
+                    <button class="profile-btn" onclick="viewProfile()">
+                        <i class="fas fa-user"></i>
+                        ${userName}
+                    </button>
+                    <button class="nav-btn" onclick="logout()">Logout</button>
+                `;
+                return true;
+            }
+        }
+        
+        // Redirect to login if not authenticated
+        function requireAuth() {
+            if (!checkAuth()) {
+                window.location.href = 'login.html';
+                return false;
+            }
+            return true;
+        }
+        
+        // View profile function
+        function viewProfile() {
+            if (requireAuth()) {
+                window.location.href = 'profile.html';
+            }
+        }
+        
+        // Logout function
+        function logout() {
+            localStorage.removeItem(AUTH_TOKEN_KEY);
+            localStorage.removeItem(USER_DATA_KEY);
+            window.location.reload();
+        }
+        
+        // Show notification message
+        function showNotification(message, isError = true) {
+            notification.textContent = message;
+            notification.className = isError ? 'notification' : 'notification success';
+            notification.style.display = 'block';
+            
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+        
+        // Show loading state
+        function showLoading() {
+            doctorsContainer.innerHTML = `
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Searching for doctors...</p>
+                </div>
+            `;
+        }
+        
+        // Get auth headers for API requests
+        function getAuthHeaders() {
+            const token = localStorage.getItem(AUTH_TOKEN_KEY);
+            const headers = {
+                'Content-Type': 'application/json'
+            };
+            
+            if (token) {
+                headers['Authorization'] = `Bearer ${token}`;
+            }
+            
+            return headers;
+        }
+        
+        // Display doctors from API response
+        function displayDoctors(doctors) {
+            if (!doctors || doctors.length === 0) {
+                doctorsContainer.innerHTML = `
+                    <div class="no-results">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <h3>No doctors found</h3>
+                        <p>Try adjusting your search criteria</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            doctorsContainer.innerHTML = doctors.map(doctor => `
+                <div class="doctor-card">
+                    <div class="card-header">
+                        <img src="https://randomuser.me/api/portraits/${doctor.gender === 'FEMALE' ? 'women' : 'men'}/${doctor.id % 100}.jpg" alt="${doctor.firstName} ${doctor.lastName}">
+                    </div>
+                    <div class="card-body">
+                        <h3 class="doctor-name">${doctor.firstName} ${doctor.lastName || 'Dr. Unknown'}</h3>
+                        <p class="doctor-specialization">${doctor.specialization || 'General Practitioner'}</p>
+                        
+                        <div class="doctor-details">
+                            <div class="detail-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>${doctor.location || 'Location not specified'}</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-briefcase"></i>
+                                <span>${doctor.experience || 'Experience not specified'}</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-graduation-cap"></i>
+                                <span>${doctor.licenseNumber || 'License not specified'}</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-phone"></i>
+                                <span>${doctor.phonenumber || 'Phone not available'}</span>
+                            </div>
+                        </div>
+                        
+                        <a href="#" class="view-profile">View Full Profile</a>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Generic fetch function with error handling
+        async function fetchData(url, options = {}) {
+            try {
+                const response = await fetch(url, {
+                    ...options,
+                    headers: {
+                        ...getAuthHeaders(),
+                        ...options.headers
+                    }
+                });
+                
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        showNotification('Session expired. Please login again.');
+                        logout();
+                        throw new Error('Authentication failed');
+                    }
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                return await response.json();
+            } catch (error) {
+                console.error('Fetch error:', error);
+                
+                if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
+                    showNotification('Network error. Please check if the server is running.');
+                } else if (error.message.includes('CORS')) {
+                    showNotification('CORS error. Please check server configuration.');
+                } else {
+                    showNotification(error.message || 'An unexpected error occurred');
+                }
+                
+                throw error;
+            }
+        }
+        
+        // Fetch all doctors
+        async function fetchAllDoctors() {
+            if (!requireAuth()) return;
+            
+            showLoading();
+            
+            try {
+                const doctors = await fetchData(`${API_BASE_URL}`);
+                displayDoctors(doctors);
+            } catch (error) {
+                doctorsContainer.innerHTML = `
+                    <div class="no-results">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h3>Connection Error</h3>
+                        <p>Could not connect to the server. Please try again later.</p>
+                        <p><small>Error: ${error.message}</small></p>
+                    </div>
+                `;
+            }
+        }
+        
+        // Fetch doctor name suggestions
+        async function fetchNameSuggestions(query) {
+            if (query.length < 2) {
+                nameSuggestions.style.display = 'none';
+                return;
+            }
+            
+            try {
+                const doctors = await fetchData(`${API_BASE_URL}/search/name/${encodeURIComponent(query)}`);
+                
+                if (doctors && doctors.length > 0) {
+                    nameSuggestions.innerHTML = doctors.map(doctor => `
+                        <div class="suggestion-item" data-name="${doctor.firstName} ${doctor.lastName}">
+                            ${doctor.firstName} ${doctor.lastName} - ${doctor.specialization || 'General Practitioner'}
+                        </div>
+                    `).join('');
+                    
+                    nameSuggestions.style.display = 'block';
+                    
+                    // Add click event to suggestion items
+                    document.querySelectorAll('.suggestion-item').forEach(item => {
+                        item.addEventListener('click', () => {
+                            const fullName = item.getAttribute('data-name');
+                            nameInput.value = fullName;
+                            nameSuggestions.style.display = 'none';
+                            console.log(fullName);
+                            searchDoctorsByName(fullName);
+                        });
+                    });
+                } else {
+                    nameSuggestions.style.display = 'none';
+                }
+            } catch (error) {
+                nameSuggestions.style.display = 'none';
+                // Error is already handled in fetchData
+            }
+        }
+        
+        // Search doctors by name
+        async function searchDoctorsByName(name) {
+            if (!requireAuth()) return;
+            
+            showLoading();
+            
+            try {
+                const doctors = await fetchData(`${API_BASE_URL}/search/name/${encodeURIComponent(name)}`);
+                displayDoctors(doctors);
+            } catch (error) {
+                // Error is already handled in fetchData
+            }
+        }
+        
+        // Search doctors by specialization
+        async function searchDoctorsBySpecialization(specialization) {
+            if (!requireAuth()) return;
+            
+            showLoading();
+            
+            try {
+                const doctors = await fetchData(`${API_BASE_URL}/search/specialization/${encodeURIComponent(specialization)}`);
+                displayDoctors(doctors);
+            } catch (error) {
+                // Error is already handled in fetchData
+            }
+        }
+        
+        // Search doctors by location
+        async function searchDoctorsByLocation(location) {
+            if (!requireAuth()) return;
+            
+            showLoading();
+            
+            try {
+                const doctors = await fetchData(`${API_BASE_URL}/search/location/${encodeURIComponent(location)}`);
+                displayDoctors(doctors);
+            } catch (error) {
+                // Error is already handled in fetchData
+            }
+        }
+        
+        // Search doctors by specialization and location
+        async function searchDoctorsBySpecializationAndLocation(specialization, location) {
+            if (!requireAuth()) return;
+            
+            showLoading();
+            
+            try {
+                const doctors = await fetchData(`${API_BASE_URL}/search/${encodeURIComponent(specialization)}/${encodeURIComponent(location)}`);
+                displayDoctors(doctors);
+            } catch (error) {
+                // Error is already handled in fetchData
+            }
+        }
+        
+        // Event listeners for search buttons
+        document.getElementById('fetch-all').addEventListener('click', fetchAllDoctors);
+        
+        document.getElementById('search-name').addEventListener('click', () => {
+            const nameQuery = nameInput.value.trim();
+            if (!nameQuery) {
+                showNotification('Please enter a name to search');
+                return;
+            }
+            
+            searchDoctorsByName(nameQuery);
+        });
+        
+        document.getElementById('search-specialization').addEventListener('click', () => {
+            const specializationQuery = document.getElementById('specialization-select').value;
+            if (!specializationQuery) {
+                showNotification('Please select a specialization');
+                return;
+            }
+            
+            searchDoctorsBySpecialization(specializationQuery);
+        });
+        
+        document.getElementById('search-location').addEventListener('click', () => {
+            const locationQuery = document.getElementById('location-input').value.trim();
+            if (!locationQuery) {
+                showNotification('Please enter a location');
+                return;
+            }
+            
+            searchDoctorsByLocation(locationQuery);
+        });
+        
+        document.getElementById('search-combined').addEventListener('click', () => {
+            const specializationQuery = document.getElementById('combined-specialization').value;
+            const locationQuery = document.getElementById('combined-location').value.trim();
+            
+            if (!specializationQuery && !locationQuery) {
+                showNotification('Please enter at least one search criteria');
+                return;
+            }
+            
+            if (specializationQuery && locationQuery) {
+                searchDoctorsBySpecializationAndLocation(specializationQuery, locationQuery);
+            } else if (specializationQuery) {
+                searchDoctorsBySpecialization(specializationQuery);
+            } else if (locationQuery) {
+                searchDoctorsByLocation(locationQuery);
+            }
+        });
+        
+        // Event listener for name input with debounce for suggestions
+        let debounceTimer;
+        nameInput.addEventListener('input', () => {
+            clearTimeout(debounceTimer);
+            const query = nameInput.value.trim();
+            
+            debounceTimer = setTimeout(() => {
+                if (query.length >= 2) {
+                    fetchNameSuggestions(query);
+                } else {
+                    nameSuggestions.style.display = 'none';
+                }
+            }, 300);
+        });
+        
+        // Event listener for Enter key in search inputs
+        const searchInputs = document.querySelectorAll('input[type="text"]');
+        searchInputs.forEach(input => {
+            input.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    
+                    // Find the closest search form and trigger its search button
+                    const form = input.closest('.search-form');
+                    const searchButton = form.querySelector('.search-btn');
+                    searchButton.click();
+                }
+            });
+        });
+        
+        // Hide suggestions when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!nameInput.contains(e.target) && !nameSuggestions.contains(e.target)) {
+                nameSuggestions.style.display = 'none';
+            }
+        });
+        
+        // Tab switching functionality
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabId = tab.getAttribute('data-tab');
+                
+                // Update active tab
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                // Show corresponding form
+                searchForms.forEach(form => form.classList.remove('active'));
+                document.getElementById(`${tabId}-form`).classList.add('active');
+                
+                // If switching to "All Doctors" tab, automatically fetch all doctors
+                if (tabId === 'all') {
+                    fetchAllDoctors();
+                }
+            });
+        });
+        
+        // Initialize page
+        function initPage() {
+            checkAuth();
+            fetchAllDoctors();
+        }
+        
+        // Start the application
+        initPage();
+    </script>
+</body>
+</html>

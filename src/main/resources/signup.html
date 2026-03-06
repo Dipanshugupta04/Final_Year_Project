@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign Up | MediPlus </title>
+    <link rel="shortcut icon" href="LOGO.png" type="image/x-icon">
+    <link rel="stylesheet" href="auth.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+     <!-- Google Identity Services -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  </head>
+  <body>
+    <div class="particles-container" id="particles-js"></div>
+
+    <div class="auth-container">
+      <div class="logo">
+        <i class="fas fa-brain"></i>
+        <span>MediPlus</span>
+      </div>
+
+      <h1>Create Your Account</h1>
+      <p class="subtitle">Join our community of quiz enthusiasts</p>
+
+      <form id="signupForm">
+        <div class="input-group">
+          <i class="fas fa-envelope"></i>
+          <input
+            type="email"
+            name="email"
+            id="email"
+            placeholder="Enter your Email"
+            required
+          />
+        </div>
+
+        <div class="input-group">
+          <i class="fas fa-user"></i>
+          <input
+            type="text"
+            name="name"
+            id="name"
+            placeholder="Enter your Name"
+            required
+          />
+        </div>
+        
+        <div class="input-group">
+          <i class="fas fa-user-tag"></i>
+          <select name="role" id="role" required>
+            <option value="" disabled selected>Select your role</option>
+            <option value="ROLE_USER">Patient</option>
+            <option value="ROLE_ADMIN">Admin</option>
+            <option value="ROLE_Doctor">Doctor</option>
+            <option value="ROLE_PHARMACIST">Pharmacist</option>
+            <option value="ROLE_Assistant">Lab Assistant</option>
+          </select>
+        </div>
+
+        <div class="input-group">
+          <i class="fas fa-lock"></i>
+          <input
+            type="password"
+            name="password"
+            placeholder="Enter your Password"
+            required
+            id="password"
+          />
+          <i class="fas fa-eye toggle-password"></i>
+        </div>
+
+        <div class="input-group">
+          <i class="fas fa-lock"></i>
+          <input
+            type="password"
+            name="confirmPassword"
+            placeholder="Confirm your Password"
+            required
+            id="confirmPassword"
+          />
+          <i class="fas fa-eye toggle-password"></i>
+          <span class="match-status"></span>
+        </div>
+
+        <div class="password-strength">
+          <div class="strength-meter"></div>
+          <span class="strength-text"
+            >Password Strength: <span>Weak</span></span
+          >
+        </div>
+
+        <div class="password-requirements">
+          <ul>
+            <li id="req-length">✗ At least 8 characters</li>
+            <li id="req-upper">✗ At least one uppercase letter</li>
+            <li id="req-lower">✗ At least one lowercase letter</li>
+            <li id="req-number">✗ At least one number</li>
+            <li id="req-special">✗ At least one special character</li>
+          </ul>
+        </div>
+
+        <button type="submit" class="signup-btn">
+          <span>Create Account</span>
+          <i class="fas fa-arrow-right"></i>
+        </button>
+      </form>
+
+      <!-- <div class="divider">
+        <span>or sign up with</span>
+      </div> -->
+
+      <!-- <div class="social-login">
+        <div
+          id="g_id_onload"
+          data-client_id="28528016565-mh7fu89ejf17lmddf1mtcot5e8btcap1.apps.googleusercontent.com"
+          data-callback="handleCredentialResponse"
+          data-auto_prompt="false"
+        ></div>
+        <div class="g_id_signin" data-type="standard"></div>
+        <button type="button" class="github-btn">
+          <i class="fab fa-github"></i>
+          GitHub
+        </button>
+      </div> -->
+
+      <p class="login-link">
+        Already have an account? <a href="login.html">Login</a>
+      </p>
+    </div>
+    <script>
+      function handleCredentialResponse(response) {
+        console.log("Encoded JWT ID token: " + response.credential);
+        // Handle the Google Sign-In response as needed here
+      }
+
+
+
+      //github
+      const githubClientId = "Ov23liQ5LGfqtPSy9zC3";
+      const redirectUri = "http://127.0.0.1:5503/MEDICINE/src/main/resources/login.html";
+
+      function startGitHubLogin() {
+        const scope = "read:user user:email";
+        const githubAuthUrl = `https://github.com/login/oauth/authorize?client_id=${githubClientId}&redirect_uri=${encodeURIComponent(
+          redirectUri
+        )}&scope=${scope}`;
+        window.location.href = githubAuthUrl;
+      }
+
+      async function handleGitHubCallback() {
+        console.log("Handling GitHub callback...");
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get("code");
+        console.log(code);
+        const error = urlParams.get("error");
+
+        if (error) {
+          console.error("GitHub OAuth error:", error);
+          window.location.href =
+            "login.html?error=" + encodeURIComponent(error);
+          return;
+        }
+
+        if (!code) {
+          console.log("No authorization code received");
+          return;
+        }
+
+        console.log("Received authorization code:", code);
+
+        try {
+          console.log("Attempting to exchange code for token...");
+
+          const response = await fetch("http://localhost:8080/auth/github", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+            body: JSON.stringify({ code }),
+          });
+
+          console.log("Response status:", response.status);
+
+          if (!response.ok) {
+            const errorText = await response.text();
+            console.error("Server responded with error:", errorText);
+            throw new Error(errorText || "Authentication failed");
+          }
+
+          const data = await response.json();
+          console.log("Token exchange successful. Data:", data);
+          if (data.user) {
+            const name=JSON.stringify(data.user)
+            console.log("Token exchange successful. Dataname:", name);
+            localStorage.setItem("user",name);
+          }
+
+          if (data.jwt) {
+            console.log("Storing JWT and user data...");
+            localStorage.setItem("authToken", data.jwt);
+            localStorage.setItem("email", data.email);
+
+            if (data.unique_id) {
+              localStorage.setItem("unique_id", data.unique_id);
+            }
+            console.log("Redirecting to index.html...");
+            window.location.href = "index.html";
+          } else {
+            throw new Error(
+              data.message || "Authentication failed - no token received"
+            );
+          }
+        } catch (error) {
+          console.error("Error during token exchange:", error);
+          window.location.href =
+            "login.html?error=" + encodeURIComponent(error.message);
+        }
+      }
+
+      // Initialize when DOM is loaded
+      document.addEventListener("DOMContentLoaded", function () {
+        console.log("DOM loaded. Initializing GitHub auth...");
+
+        // Add click handler for GitHub button
+        const githubBtn = document.getElementById("githubLoginBtn");
+        if (githubBtn) {
+          githubBtn.addEventListener("click", startGitHubLogin);
+        }
+
+        // Handle callback if we're on the login page
+        if (window.location.search.includes("code=")) {
+          handleGitHubCallback();
+        }
+      });
+    </script>
+    <!-- Particles.js for background animation -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="auth.js"></script>
+  </body>
+</html>
